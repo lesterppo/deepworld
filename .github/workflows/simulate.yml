@@ -1,0 +1,43 @@
+name: DeepWorld Continuous Simulation
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # Every 6 hours
+  workflow_dispatch:          # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300  # 5 hour max
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install openai pyyaml gemini-webapi
+
+      - name: Run DeepWorld v3 (continuous)
+        env:
+          GEMINI_SID: ${{ secrets.GEMINI_SID }}
+          GEMINI_TS: ${{ secrets.GEMINI_TS }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          cd v3
+          mkdir -p ../runs
+          python3 run_continuous.py --days 2 --ticks 8 --delay 0.5 --output ../runs 2>&1 | tee ../runs/latest.log
+
+      - name: Commit results
+        run: |
+          git config user.name "DeepWorld Bot"
+          git config user.email "bot@deepworld.sim"
+          git add runs/
+          git diff --staged --quiet || git commit -m "sim: $(date +%Y-%m-%d_%H:%M) run"
+          git push

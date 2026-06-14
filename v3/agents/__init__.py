@@ -67,8 +67,15 @@ class OmniTokAgent:
         self.death_tick = 0
 
         # ─── API Client ───
+        in_ci = os.environ.get("CI", "") == "true" or os.environ.get("GITHUB_ACTIONS", "") == "true"
         use_free = os.environ.get("DEEPWORLD_FREE", "") == "1"
-        if use_free:
+
+        if in_ci:
+            from agents.ci_adapter import CIAdapter
+            adapter = CIAdapter()
+            self.client = adapter
+            self.model = "gemini-flash" if adapter.backend == "gemini" else "deepseek-chat"
+        elif use_free:
             from agents.gemini_adapter import GeminiWebClient
             self.client = GeminiWebClient(model="flash")
             self.model = "gemini-flash"
