@@ -68,6 +68,6 @@ AGENT_CLASSES = [
 ]
 
 # ─── Simulation ───
-SIM_DAYS = 3
-TICKS_PER_DAY = 8
+SIM_DAYS = 5
+TICKS_PER_DAY = 12
 NUM_AGENTS = 8

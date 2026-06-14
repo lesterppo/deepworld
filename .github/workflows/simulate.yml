@@ -2,7 +2,7 @@ name: DeepWorld Continuous Simulation
 
 on:
   schedule:
-    - cron: '0 */6 * * *'   # Every 6 hours
+    - cron: '0 */2 * * *'   # Every 2 hours (was 6h)
   workflow_dispatch:          # Manual trigger
 
 permissions:
@@ -32,7 +32,7 @@ jobs:
         run: |
           cd v3
           mkdir -p ../runs
-          python3 run_continuous.py --days 2 --ticks 8 --delay 0.5 --output ../runs 2>&1 | tee ../runs/latest.log
+          python3 run_continuous.py --days 5 --ticks 12 --delay 0.1 --output ../runs 2>&1 | tee ../runs/latest.log
 
       - name: Commit results
         run: |
