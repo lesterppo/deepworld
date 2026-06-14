@@ -1,0 +1,42 @@
+# DeepWorld — AI-Native Multi-Agent Sandbox Simulation
+# ===================================================
+# Based on Emergence AI's "Emergent World" experiment.
+# Built collaboratively by Hermes (DeepSeek-chat) and Gemini Flash.
+
+# Credentials & secrets
+.env
+*.env
+auth.json
+credentials*
+
+# Runtime artifacts
+deepworld_memory.db
+deepworld_v2_memory.db
+*.db-journal
+*.db-wal
+
+# Simulation outputs (large JSONL files)
+simulation_output*/
+simulation_output_*/
+simulation_output_*/
+omnitok_output*/
+omnitok_*/
+cognosphere_output*/
+cognosphere_*/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Temp files
+/tmp/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
