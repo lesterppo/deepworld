@@ -1,0 +1,10 @@
+{
+  "day": 1,
+  "alive": 8,
+  "context_distribution": {
+    "Full-Context": 8
+  },
+  "dead_pool": 0,
+  "lazarus_agents": 0,
+  "synthetic_ratio": 0.0
+}
