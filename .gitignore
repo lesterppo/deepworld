@@ -18,11 +18,15 @@ deepworld_v2_memory.db
 # Simulation outputs (large JSONL files)
 simulation_output*/
 simulation_output_*/
-simulation_output_*/
 omnitok_output*/
 omnitok_*/
 cognosphere_output*/
 cognosphere_*/
+
+# v4 runtime cache
+.cmtip_cache/
+.world_state.json
+*.pkl
 
 # Python
 __pycache__/
