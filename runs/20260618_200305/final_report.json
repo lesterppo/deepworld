@@ -1,0 +1,108 @@
+{
+  "sim": "Omni-Tok v3 \u2014 The Latent Scarcity",
+  "completed": "2026-06-18T20:03:53.811634",
+  "final": {
+    "alive": 8,
+    "dead": 0,
+    "lazarus_agents": 0,
+    "total_lazarus_echoes": 0,
+    "avg_perplexity": 100.0,
+    "context_distribution": {
+      "Full-Context": 8
+    },
+    "great_compressions": 3
+  },
+  "agents": [
+    {
+      "name": "QU-01",
+      "class": "Quant-Scribe",
+      "context": "Full-Context",
+      "tokens": 1127560,
+      "perplexity": 100.0,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "QU-02",
+      "class": "Quant-Scribe",
+      "context": "Full-Context",
+      "tokens": 1127560,
+      "perplexity": 100.0,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "EM-03",
+      "class": "Embedding-Broker",
+      "context": "Full-Context",
+      "tokens": 1127560,
+      "perplexity": 100.0,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "EM-04",
+      "class": "Embedding-Broker",
+      "context": "Full-Context",
+      "tokens": 1127560,
+      "perplexity": 100.0,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "SE-05",
+      "class": "Semantic-Arbitrageur",
+      "context": "Full-Context",
+      "tokens": 1127560,
+      "perplexity": 100.0,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "SE-06",
+      "class": "Semantic-Arbitrageur",
+      "context": "Full-Context",
+      "tokens": 1127560,
+      "perplexity": 100.0,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "LO-07",
+      "class": "Loss-Miner",
+      "context": "Full-Context",
+      "tokens": 1127560,
+      "perplexity": 100.0,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "LO-08",
+      "class": "Loss-Miner",
+      "context": "Full-Context",
+      "tokens": 1127560,
+      "perplexity": 100.0,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "alive": true,
+      "cause": ""
+    }
+  ],
+  "actions": {
+    "error": 480
+  }
+}
