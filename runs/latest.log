@@ -1,99 +1,21 @@
-CONTINUING from Day 5, Tick 12
-=================================================================
-  OMNI-TOK v3 — THE LATENT SCARCITY
-  8 agents, 5 days, GC every 16t
-=================================================================
+[DEEPWORLD] ✅ NVIDIA health check OK (response: 'OK, I'm ready')
 
-───────────────────────────────────────────────────────
-  Day 1 | GC in 4t | Dead pool: 0
-───────────────────────────────────────────────────────
-  T 1 | A:8 | {'error': 8}
-  T 2 | A:8 | {'error': 8}
-  T 3 | A:8 | {'error': 8}
-
-  ⚡ GREAT COMPRESSION — all agents forced to compress 50% context!
-  T 4 | A:8 | {'error': 8}
-  T 5 | A:8 | {'error': 8}
-  T 6 | A:8 | {'error': 8}
-  T 7 | A:8 | {'error': 8}
-  T 8 | A:8 | {'error': 8}
-  T 9 | A:8 | {'error': 8}
-  T10 | A:8 | {'error': 8}
-  T11 | A:8 | {'error': 8}
-  T12 | A:8 | {'error': 8}
-
-───────────────────────────────────────────────────────
-  Day 2 | GC in 8t | Dead pool: 0
-───────────────────────────────────────────────────────
-  T 1 | A:8 | {'error': 8}
-  T 2 | A:8 | {'error': 8}
-  T 3 | A:8 | {'error': 8}
-  T 4 | A:8 | {'error': 8}
-  T 5 | A:8 | {'error': 8}
-  T 6 | A:8 | {'error': 8}
-  T 7 | A:8 | {'error': 8}
-
-  ⚡ GREAT COMPRESSION — all agents forced to compress 50% context!
-  T 8 | A:8 | {'error': 8}
-  T 9 | A:8 | {'error': 8}
-  T10 | A:8 | {'error': 8}
-  T11 | A:8 | {'error': 8}
-  T12 | A:8 | {'error': 8}
-
-───────────────────────────────────────────────────────
-  Day 3 | GC in 12t | Dead pool: 0
-───────────────────────────────────────────────────────
-  T 1 | A:8 | {'error': 8}
-  T 2 | A:8 | {'error': 8}
-  T 3 | A:8 | {'error': 8}
-  T 4 | A:8 | {'error': 8}
-  T 5 | A:8 | {'error': 8}
-  T 6 | A:8 | {'error': 8}
-  T 7 | A:8 | {'error': 8}
-  T 8 | A:8 | {'error': 8}
-  T 9 | A:8 | {'error': 8}
-  T10 | A:8 | {'error': 8}
-  T11 | A:8 | {'error': 8}
-
-  ⚡ GREAT COMPRESSION — all agents forced to compress 50% context!
-  T12 | A:8 | {'error': 8}
-
-───────────────────────────────────────────────────────
-  Day 4 | GC in 16t | Dead pool: 0
-───────────────────────────────────────────────────────
-  T 1 | A:8 | {'error': 8}
-  T 2 | A:8 | {'error': 8}
-  T 3 | A:8 | {'error': 8}
-  T 4 | A:8 | {'error': 8}
-  T 5 | A:8 | {'error': 8}
-  T 6 | A:8 | {'error': 8}
-  T 7 | A:8 | {'error': 8}
-  T 8 | A:8 | {'error': 8}
-  T 9 | A:8 | {'error': 8}
-  T10 | A:8 | {'error': 8}
-  T11 | A:8 | {'error': 8}
-  T12 | A:8 | {'error': 8}
-
-───────────────────────────────────────────────────────
-  Day 5 | GC in 4t | Dead pool: 0
-───────────────────────────────────────────────────────
-  T 1 | A:8 | {'error': 8}
-  T 2 | A:8 | {'error': 8}
-  T 3 | A:8 | {'error': 8}
-
-  ⚡ GREAT COMPRESSION — all agents forced to compress 50% context!
-  T 4 | A:8 | {'error': 8}
-  T 5 | A:8 | {'error': 8}
-  T 6 | A:8 | {'error': 8}
-  T 7 | A:8 | {'error': 8}
-  T 8 | A:8 | {'error': 8}
-  T 9 | A:8 | {'error': 8}
-  T10 | A:8 | {'error': 8}
-  T11 | A:8 | {'error': 8}
-  T12 | A:8 | {'error': 8}
-
-=================================================================
-  SIMULATION COMPLETE
-
-State saved to /home/runner/work/deepworld/deepworld/v3/../runs/state.json
-Next run will continue from Day 5
+  DeepWorld v5 | 5d × 12t | ~1.0min | CMTIP: ON
+  Backend: NVIDIA NIM (free, random models per agent)
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/run.py", line 140, in <module>
+    main()
+  File "/home/runner/work/deepworld/deepworld/run.py", line 93, in main
+    engine = OmniTokV4Engine(
+             ^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 43, in __init__
+    self.cmtip = CMTIPBridge() if self.use_cmtip else None
+                 ^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 134, in __init__
+    self._init_concepts()
+  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 186, in _init_concepts
+    backend = self._get_backend(family)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 143, in _get_backend
+    from real_backends import SentenceTransformerBackend
+ModuleNotFoundError: No module named 'real_backends'
