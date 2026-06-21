@@ -37,11 +37,11 @@ to cross-model semantic decay.
 ```
 run.py                      # Root entry point + NVIDIA health check
 v4/
-├── engine/__init__.py      # OmniTokV4Engine: tick loop, GC, governance, CMTIP
+├── engine/__init__.py      # OmniTokV4Engine: tick loop, GC, governance, CMTIP, code dividends
 ├── agents/
-│   ├── __init__.py         # OmniTokV4Agent: context class, token economy, tensors
-│   ├── adapters.py         # MultiModelAdapter: NVIDIA API (OpenAI-compatible)
-│   ├── tools.py            # 30+ AI-native tools (send_tensor, mine_concept, etc.)
+│   ├── __init__.py         # OmniTokV4Agent: context class, token economy, tensors, dev_rep, collaboration
+│   ├── adapters.py         # MultiModelAdapter: NVIDIA API (text-mode tool injection)
+│   ├── tools.py            # 31 tools: tensor comms, governance, repo maintenance, collaboration
 │   ├── cmtip_bridge.py     # CMTIP tensor bus: concept embeddings, CCA projectors
 │   └── real_backends.py    # SentenceTransformer + deterministic hash fallback
 ├── config/
@@ -76,6 +76,26 @@ Each agent randomly assigned from:
 - `nvidia/nemotron-3-super-120b-a12b` — Nemotron 3
 
 All through `https://integrate.api.nvidia.com/v1` (OpenAI-compatible).
+NVIDIA NIM free models don't support native tool calling — tools are injected as text prompts.
+
+---
+
+## Repo Governance — Agent Collaboration
+
+Agents can collaborate on code proposals and share rewards:
+
+```
+QU-01 → collaborate(PR-03, "build API", 60)     # Offers 60/40 split
+PR-03 → accept_collaboration(QU-01)             # Accepts
+PR-03 → write_code(...)                        # Adds code
+QU-01 → commit_code("Joint proposal")          # Joint vote
+─── VOTE ───
+✅ ACCEPTED: 500 OT split → QU-01:300, PR-03:200
+```
+
+**Tools:** `collaborate(target, desc, split%)`, `accept_collaboration(inviter, counter%)`
+**Reward:** One commit = one 500 OT bonus. Split by negotiated percentage.
+**Staging:** `commit_code` includes all collaborators' staged files.
 
 ---
 
@@ -101,13 +121,14 @@ All through `https://integrate.api.nvidia.com/v1` (OpenAI-compatible).
 
 ```
 .github/workflows/simulate.yml:
-  schedule: every 2h
+  schedule: every 2 hours
   timeout: 5h
   backend: NVIDIA NIM (NVIDIA_API_KEY secret)
   models: 15 models, random per agent × 10 agents
   pre-flight: health check validates API before simulation
   output: commits to runs/
   state: .world_state.json persists governance
+  contribution: agent-written code committed alongside runs/
 ```
 
 **Setup:** Add `NVIDIA_API_KEY` to GitHub Secrets → Enable Actions.
@@ -123,6 +144,8 @@ All through `https://integrate.api.nvidia.com/v1` (OpenAI-compatible).
 | NVIDIA models have different context windows | Handled by `MODEL_BACKENDS` context_limit per family |
 | `.world_state.json` grows with governance events | Truncated to last 50 events on save |
 | Agent dies silently | Check `death_cause` in telemetry; most common: `token_exhaustion`, `context_collapse` |
+| NVIDIA API tool calling not supported | Tools injected as text prompts, parsed from JSON response |
+| Long model cold-start latency | 5-hour CI timeout accommodates slow first calls |
 
 ---
 
@@ -132,3 +155,4 @@ All through `https://integrate.api.nvidia.com/v1` (OpenAI-compatible).
 - **Model diversity IS the simulation.** 15 models interpret the same concept differently.
 - **Tensors are cheap, text is bankruptcy.** `send_tensor` costs 2 OT. `transmit_message` costs 50 OT.
 - **The world builds itself.** Agents propose and vote on rule changes through governance.
+- **Collaboration over competition.** Agents share rewards, negotiate splits, build together.

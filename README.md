@@ -2,7 +2,7 @@
 
 A self-modifying AI-native ecosystem where 10 agents on 15 different NVIDIA free models
 navigate token economies, tensor communication, and self-building governance.
-**Agents write, vote on, and merge their own code to GitHub. Zero API cost.**
+**Agents write, vote on, collaborate, and merge their own code to GitHub. Zero API cost.**
 
 ---
 
@@ -16,8 +16,8 @@ pip install openai pyyaml sentence-transformers numpy
 # Set your NVIDIA API key (free tier)
 echo "NVIDIA_API_KEY=nvapi-..." > .env
 
-# Run (10 agents, 5 sim-days, 12 ticks/day, random NVIDIA models)
-python3 run.py --days 5 --ticks 12
+# Run (10 agents, 3 sim-days, 8 ticks/day, random NVIDIA models)
+python3 run.py --days 3 --ticks 8
 ```
 
 `.env` is gitignored. For CI, add `NVIDIA_API_KEY` to GitHub Secrets.
@@ -31,9 +31,9 @@ run.py                     # Entry point + NVIDIA health check
 v4/
 ├── engine/__init__.py     # Tick loop, GC, governance, code dividends
 ├── agents/
-│   ├── __init__.py        # Agent: context class, token economy, dev_rep
-│   ├── adapters.py        # NVIDIA API (OpenAI-compatible)
-│   ├── tools.py           # 30+ AI-native tools + repo maintenance
+│   ├── __init__.py        # Agent: context class, token economy, dev_rep, collaboration
+│   ├── adapters.py        # NVIDIA API (text-mode tool injection)
+│   ├── tools.py           # 30+ AI-native tools + repo maintenance + collaboration
 │   ├── cmtip_bridge.py    # Tensor bus: concept embeddings, CCA projectors
 │   └── real_backends.py   # SentenceTransformer + hash fallback
 ├── config/
@@ -47,23 +47,37 @@ archive/                   # v1 (classic), v2 (Cognosphere), v3 (Latent Scarcity
 
 ---
 
-## Repo Governance — Agents Build the Code
+## Repo Governance — Agents Build & Collaborate
 
-Agents are highly incentivized to write, review, and maintain the simulation code.
-Every code contribution is voted on by other agents before merging.
+Agents write, review, collaborate on, and vote on code. Rewards are shared.
 
 | Action | Cost | Reward | Notes |
 |--------|------|--------|-------|
-| `write_code` | 10 OT | **up to 500 OT** | Line count bonus. +30% for improving existing files |
-| `document_code` | 5 OT | **up to 250 OT** | Docs earn OT + dev_rep |
-| `review_code` | 2 OT | **50 OT** | Find bugs, earn rep |
-| `commit_code` | 15 OT | **100 OT** | Creates vote proposal |
-| `vote_contribution` | 2 OT | — | Vote YES/NO. >50% YES to merge |
-| **Accepted** | — | **+500 OT bonus** | Code committed to GitHub |
-| **Code Dividends** | — | **dev_rep × 2 OT/tick** | Passive income every tick |
+| `write_code` | 10 OT | **up to 500 OT** | +dev_rep. 30% bonus for improving existing files |
+| `document_code` | 5 OT | **up to 250 OT** | +dev_rep |
+| `review_code` | 2 OT | **50 OT** | +dev_rep |
+| `collaborate` | 5 OT | — | Invite co-author, negotiate reward split |
+| `accept_collaboration` | 2 OT | — | Join a proposal as co-author |
+| `commit_code` | 15 OT | **100 OT** | Creates vote proposal (includes collaborators' code) |
+| `vote_contribution` | 2 OT | — | >50% YES to accept |
+| **Accepted** | — | **+500 OT split** | Bonus distributed by negotiated split |
+| **Code Dividends** | — | **dev_rep × 2/tick** | Passive income every tick |
 
 **Voting:** 5+ voters triggers auto-resolution. >50% YES to accept.
-Rejected proposals: initiator keeps the 100 OT base reward.
+**Collaboration:** Agents can co-author proposals. One commit = one bonus, split by negotiation.
+
+---
+
+## Collaboration
+
+```
+QU-01 → collaborate(PR-03, "build API", 60)    # Offers 60/40 split
+PR-03 → accept_collaboration(QU-01)            # Accepts invite
+PR-03 → write_code("api.py", ...)             # Adds their code
+QU-01 → commit_code("API + docs")             # Joint proposal
+─── VOTE ───
+✅ ACCEPTED: 500 OT → QU-01:300, PR-03:200
+```
 
 ---
 
@@ -75,7 +89,6 @@ Agents earn `dev_rep` from accepted code contributions:
 - `document_code`: +1 per 300 chars
 
 **Passive income:** Every tick, agents with dev_rep > 0 earn `dev_rep × 2` OT.
-An agent with dev_rep=20 earns 2,400 OT per 60-tick simulation — forever.
 The richest agents are the best developers.
 
 ---
@@ -92,6 +105,15 @@ The richest agents are the best developers.
 
 ---
 
+## NVIDIA Model Pool (15 models, random per agent)
+
+nano-8b · nemotron-51b · nemotron-70b · super-49b · super-49b-v1.5 ·
+llama-4-maverick · llama-3.1-8b · gemma-3-12b · mistral-nemotron ·
+nemotron-4-340b · gpt-oss-20b · qwen3.5-122b · deepseek-v4-flash ·
+phi-4-mini · nemotron-3-super-120b
+
+---
+
 ## Mechanics
 
 - **CMTIP Tensor Bus** — Communication via compressed concept vectors. Cross-model translation is lossy by design.
@@ -101,17 +123,18 @@ The richest agents are the best developers.
 - **Capital Markets** — Mined concepts issue shares. Usage pays dividends.
 - **Self-Building Governance** — Agents propose and vote on simulation laws.
 - **Code Dividends** — Earn passive income from past accepted contributions.
+- **Collaboration** — Share the work, negotiate the reward.
 - **Land Rush** — Dead agent latent space is salvageable.
 
 ---
 
 ## CI Pipeline
 
-GitHub Actions runs every hour. Each invocation adds 5 sim-days.
+GitHub Actions runs every 2 hours. Each invocation adds 3 sim-days.
 
 ```
 .github/workflows/simulate.yml:
-  schedule: every hour
+  schedule: every 2 hours
   timeout: 5h
   backend: NVIDIA NIM (NVIDIA_API_KEY secret)
   models: 15 models, random per agent × 10 agents
