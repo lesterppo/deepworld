@@ -29,7 +29,7 @@ jobs:
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
         run: |
           mkdir -p runs
-          python3 run.py --days 5 --ticks 12 --delay 0.1 --output runs 2>&1 | tee runs/latest.log
+          python3 run.py --days 3 --ticks 8 --delay 0.1 --output runs 2>&1 | tee runs/latest.log
 
       - name: Commit results
         if: always()  # Commit even on errors for debugging
