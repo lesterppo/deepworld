@@ -22,9 +22,8 @@ import sys, os, json, math, time
 import numpy as np
 from collections import defaultdict
 
-sys.path.insert(0, os.path.expanduser("~/llm-native-language"))
-from real_backends import SentenceTransformerBackend
-from cmtip import CmtipBus
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from agents.real_backends import SentenceTransformerBackend
 
 # ─── Concept Test Suite ───
 # 10 concepts spanning economic, social, cognitive, and emotional domains

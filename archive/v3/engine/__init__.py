@@ -195,7 +195,13 @@ class OmniTokEngine:
                 alive = sum(1 for a in self.agents.values() if a.alive)
                 laz = sum(1 for a in self._active() if a.lazarus_echoes)
                 laz_str = f" | 👻 LAZARUS: {laz}" if laz else ""
-                print(f"  T{tick:2d} | A:{alive} | {dict(sorted(acts.items()))}{laz_str}")
+                err_str = ""
+                if "error" in acts:
+                    # Show first error detail for debugging
+                    first_err = next((e for e in evts if e["action"] == "error"), None)
+                    if first_err and first_err.get("args", {}).get("error_type"):
+                        err_str = f" | ⚠ {first_err['args']['error_type']}: {first_err['args'].get('error_msg','')[:60]}"
+                print(f"  T{tick:2d} | A:{alive} | {dict(sorted(acts.items()))}{laz_str}{err_str}")
 
         print(f"\n{'=' * 65}")
         print("  SIMULATION COMPLETE")

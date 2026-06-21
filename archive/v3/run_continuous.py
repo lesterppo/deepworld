@@ -92,6 +92,29 @@ def main():
 
     engine = OmniTokEngine(args.days, args.ticks, args.delay)
 
+    # ─── Pre-flight health check ───
+    # Verify the backend works before wasting hours of CI time on 480 error calls.
+    in_ci = os.environ.get("CI", "") == "true" or os.environ.get("GITHUB_ACTIONS", "") == "true"
+    if in_ci:
+        print("Running pre-flight health check...", file=sys.stderr)
+        # Use the first agent's client to test
+        test_agent = list(engine.agents.values())[0]
+        try:
+            # Import CIAdapter if we're in CI
+            from agents.ci_adapter import CIAdapter
+            adapter = CIAdapter()
+            health = adapter.health_check()
+            if not health.get("ok"):
+                print(f"\n[DEEPWORLD] ❌ PRE-FLIGHT FAILED: {health.get('error', 'unknown')}", file=sys.stderr)
+                print("[DEEPWORLD] The simulation backend is not responding.", file=sys.stderr)
+                print("[DEEPWORLD] Check: GEMINI_SID/TS freshness, API key validity, network access.", file=sys.stderr)
+                sys.exit(1)
+            print("[DEEPWORLD] ✅ Pre-flight health check passed.\n", file=sys.stderr)
+        except Exception as e:
+            print(f"\n[DEEPWORLD] ❌ PRE-FLIGHT CRASHED: {type(e).__name__}: {e}", file=sys.stderr)
+            import traceback; traceback.print_exc(file=sys.stderr)
+            sys.exit(1)
+
     # Try to continue from previous state
     continued = False
     if not args.fresh:

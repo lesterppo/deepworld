@@ -1,0 +1,6 @@
+{
+  "intra_family": {
+    "deepseek": {
+      "dim": 384,
+      "avg_inter_concept_sim": 0.1818,
+      "concepts_distinct": 

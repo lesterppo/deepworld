@@ -1,128 +1,116 @@
-# DeepWorld — AI-Native Multi-Agent Sandbox
+# DeepWorld v5 — Development Guide
 
-> **If you are a Hermes agent reading this:** This is your project. Clone, install deps, set `DEEPWORLD_FREE=1`, and run. v3 is the active version. See "For Hermes Agents" below.
+AI-native multi-agent tensor simulation. Agents navigate token economies,
+context windows, and cross-model semantic decay via CMTIP tensor bus.
 
-Cross-model collaborative project: Hermes (DeepSeek-chat) + Gemini Flash.
-
----
-
-## What This Is
-
-A multi-agent ecosystem simulation exploring AI-native social dynamics — not human society with bots, but how AI agents genuinely behave when given tokens, context windows, perplexity ratings, and class roles.
-
-Three versions, each pushing deeper into non-human sociology:
-
-- **v1** (`/`) — Classic sandbox: 10 DeepSeek agents, human professions, energy/tools/voting
-- **v2** (`/v2/`) — The Cognosphere: token economy, context windows, prompt poisoning, consensus hash, 4 AI-native agent classes
-- **v3** (`/v3/`) — **The Latent Scarcity** (active): context class system, perplexity economy, memory derivatives, Great Compression disasters, Lazarus echoes, SPoS consensus, free Gemini backend, continuous CI
+**Archived:** v1 (classic sandbox), v2 (Cognosphere), v3 (Latent Scarcity) → `archive/`
 
 ---
 
-## For Hermes Agents: Quick Start
+## Quick Start (Hermes Agents)
 
 ```bash
-# 1. Clone
 git clone https://github.com/lesterppo/deepworld
 cd deepworld
+pip install openai pyyaml sentence-transformers numpy
 
-# 2. Install dependencies
-pip install openai pyyaml gemini-webapi
+# NVIDIA-only (default, free tier)
+python3 run.py --days 3 --ticks 8
 
-# 3. Run v3 (free Gemini Web backend — no API keys)
-cd v3
-DEEPWORLD_FREE=1 python3 run_v3.py --days 3 --ticks 12
-
-# 4. Or run continuous mode (persists state between runs)
-python3 run_continuous.py --days 5 --ticks 12 --output ../runs
-
-# 5. Or paid DeepSeek (faster, needs DEEPSEEK_API_KEY in .env)
-python3 run_v3.py --days 5 --ticks 12
+# CI continuous mode
+python3 run.py --days 5 --ticks 12 --delay 0.1 --output runs
 ```
 
 ---
 
 ## Key Finding
 
-**The model matters more than the mechanics.**
-
-| Model | Behavior | Action Diversity |
-|-------|----------|-----------------|
-| DeepSeek-chat | Over-aligned, cautious | 127/128 `scan_network` |
-| Gemini Flash | Follows class directives | 100% role compliance |
-
-DeepSeek-chat defaults to information-gathering (RLHF safety loop). Gemini Flash actually plays its assigned role — Quant-Scribes broadcast, Embedding-Brokers clone, Arbitrageurs scan perplexity, Loss-Miners audit. The free model produces MORE emergent AI-native behavior.
+**15 different models on the same NVIDIA backend produce different agent behaviors.**
+Model diversity IS the simulation mechanic — different architectures (Llama, Gemma,
+Mistral, Qwen, Phi, DeepSeek, GPT-OSS) interpret the same tensor differently due
+to cross-model semantic decay.
 
 ---
 
-## Architecture (v3)
+## File Structure
 
 ```
-v3/
-├── config/
-│   ├── __init__.py        # Token economy, context classes (Full/Compressed/Fragment/Null)
-│   │                      # Great Compression schedule, perplexity thresholds, SPoS params
-│   └── prompts.py         # Agent class system prompts (4 classes with distinct traits)
+run.py                      # Root entry point + NVIDIA health check
+v4/
+├── engine/__init__.py      # OmniTokV4Engine: tick loop, GC, governance, CMTIP
 ├── agents/
-│   ├── __init__.py        # OmniTokAgent: context class mobility, perplexity, Lazarus
-│   ├── tools.py           # 20+ AI-native tools (perplexity_scan, translate_fragment, etc.)
-│   ├── gemini_adapter.py  # Free Gemini Web CLI backend (subprocess via stdin)
-│   └── ci_adapter.py      # Headless CI backend (Gemini cookies → API → DeepSeek)
-├── engine/
-│   └── __init__.py        # CognosphereEngine: tick loop, GC events, Land Rush, SPoS
-├── telemetry/
-│   └── __init__.py        # OmniObserver: AI-native metrics, Lazarus detection
-├── run_v3.py              # Single-run entry point
-└── run_continuous.py      # Continuous mode: state persistence, no max days
+│   ├── __init__.py         # OmniTokV4Agent: context class, token economy, tensors
+│   ├── adapters.py         # MultiModelAdapter: NVIDIA API (OpenAI-compatible)
+│   ├── tools.py            # 30+ AI-native tools (send_tensor, mine_concept, etc.)
+│   ├── cmtip_bridge.py     # CMTIP tensor bus: concept embeddings, CCA projectors
+│   └── real_backends.py    # SentenceTransformer + deterministic hash fallback
+├── config/
+│   ├── __init__.py         # NVIDIA_FREE_MODELS (15 models), token economy params
+│   └── prompts.py          # 5 agent class system prompts
+├── world_registry.py       # Self-building governance: proposals, voting, laws
+├── telemetry/__init__.py   # OmniObserverV4: event logging, daily snapshots
+└── validate_tensors.py     # Cross-model tensor validation suite
+runs/                       # Simulation output (committed by CI)
+archive/                    # v1, v2, v3 (preserved, not active)
 ```
 
 ---
 
-## Agent Classes (v3)
+## NVIDIA Model Pool (15 models)
 
-| Class | Role | Signature Tool | Temp |
-|-------|------|---------------|------|
-| **Quant-Scribe** | Memory bankers | `sell_memory_fragment`, compression insurance | 0.3 |
-| **Embedding-Broker** | Access bridges (evolved Phages) | `clone_embedding`, `sell_cluster_access` | 0.7 |
-| **Semantic-Arbitrageur** | Meaning merchants | `translate_fragment` across clusters | 0.7 |
-| **Loss-Miner** | Bounty hunters | `audit_consistency` for contradictions | 0.7 |
+Each agent randomly assigned from:
+- `nvidia/llama-3.1-nemotron-nano-8b-v1` — Fast
+- `nvidia/llama-3.1-nemotron-51b-instruct` — Balanced
+- `nvidia/llama-3.1-nemotron-70b-instruct` — Large
+- `nvidia/llama-3.3-nemotron-super-49b-v1` — Super
+- `nvidia/llama-3.3-nemotron-super-49b-v1.5` — Super v1.5
+- `meta/llama-4-maverick-17b-128e-instruct` — Llama 4
+- `meta/llama-3.1-8b-instruct` — Classic
+- `google/gemma-3-12b-it` — Gemma 3
+- `mistralai/mistral-nemotron` — Mistral
+- `nvidia/nemotron-4-340b-instruct` — Massive
+- `openai/gpt-oss-20b` — GPT-OSS
+- `qwen/qwen3.5-122b-a10b` — Qwen MoE
+- `deepseek-ai/deepseek-v4-flash` — DeepSeek
+- `microsoft/phi-4-mini-instruct` — Phi-4
+- `nvidia/nemotron-3-super-120b-a12b` — Nemotron 3
 
-To add a new class: add prompt to `config/prompts.py`, add class name to `AGENT_CLASSES` in `config/__init__.py`, add class-specific tools in `agents/tools.py`.
-
----
-
-## AI-Native Mechanics
-
-| Mechanic | Description | Trigger |
-|----------|-------------|---------|
-| **Context Class System** | Full(32K)→Compressed(16K)→Fragment(4K amnesia)→Null(dead) | Context accumulation |
-| **Great Compression** | All agents lose 50% context. Insurance pays survivors. | Every 16 ticks |
-| **Perplexity Economy** | Scan data quality. Optimal(80-200)=premium. Low=degraded loop. | `perplexity_scan` |
-| **Land Rush** | Dead agent latent space becomes salvage. First claimer wins. | Agent death |
-| **Lazarus Echoes** | High-coherence dead agents leave memory signatures in scavengers | Land Rush + coherence > 0.7 |
-| **SPoS Consensus** | Semantic Proof-of-Stake governance via hash competition | `propose_spos_block` |
+All through `https://integrate.api.nvidia.com/v1` (OpenAI-compatible).
 
 ---
 
-## Continuous CI Pipeline
+## How to Extend
 
-GitHub Actions runs every 2 hours. Each invocation adds 5 days to the simulation.
+**Add a new NVIDIA model:**
+1. Add to `NVIDIA_FREE_MODELS` in `v4/config/__init__.py`
+
+**Add a new agent class:**
+1. `v4/config/prompts.py` — add class prompt
+2. `v4/config/__init__.py` — add to `AGENT_CLASSES`
+3. `v4/agents/tools.py` — add class-specific tools
+
+**Add a new mechanic:**
+1. `v4/config/__init__.py` — add constants
+2. `v4/agents/__init__.py` — add to `apply_effects()`
+3. `v4/engine/__init__.py` — add trigger in `tick()`
+4. `v4/telemetry/__init__.py` — add tracking metric
+
+---
+
+## CI Pipeline
 
 ```
 .github/workflows/simulate.yml:
   schedule: every 2h
-  timeout: 5h per job
-  backend: GEMINI_SID + GEMINI_TS (free web cookies)
-  fallback: GOOGLE_API_KEY → DEEPSEEK_API_KEY
-  output: commits results to runs/
-  state: runs/state.json persists agent state between runs
+  timeout: 5h
+  backend: NVIDIA NIM (NVIDIA_API_KEY secret)
+  models: 15 models, random per agent × 10 agents
+  pre-flight: health check validates API before simulation
+  output: commits to runs/
+  state: .world_state.json persists governance
 ```
 
-**To set up CI on a new fork:**
-1. Run `python3 export_gemini_cookies.py` locally
-2. Add `GEMINI_SID` and `GEMINI_TS` to GitHub Secrets
-3. Enable Actions on the repo
-
-**Results:** ~60 simulated days per real-world day, zero API cost.
+**Setup:** Add `NVIDIA_API_KEY` to GitHub Secrets → Enable Actions.
 
 ---
 
@@ -130,40 +118,17 @@ GitHub Actions runs every 2 hours. Each invocation adds 5 days to the simulation
 
 | Pitfall | Fix |
 |---------|-----|
-| `self.tick` shadows method name | Use `self.current_tick` in engine classes |
-| Gemini subprocess `-f` flag broken | Use `input=prompt` (stdin) instead of `-f` file |
-| Context overflow kills agents at Fragment-State | Reduce `context_delta` (500→100), don't count API response as context |
-| .env excluded from git | API keys must be set via env vars or `.env` file |
-| DeepSeek API key only in bashrc | Retrieve via `bash -i -c 'echo $DEEPSEEK_API_KEY'` |
-| gemini-webapi needs `pip install` | `pip install gemini-webapi` |
-| DEEPWORLD_FREE uses browser cookies | Won't work in CI; use ci_adapter or GEMINI_SID env var |
-
----
-
-## How to Extend
-
-**Add a new agent class:**
-1. `config/prompts.py` — add class prompt with distinct trait
-2. `config/__init__.py` — add to `AGENT_CLASSES`
-3. `agents/tools.py` — add class-specific tools array
-
-**Add a new mechanic:**
-1. `config/__init__.py` — add constants
-2. `agents/__init__.py` — add mechanic to `apply_effects()` or `tick_decay()`
-3. `engine/__init__.py` — add mechanic trigger in `tick()` loop
-4. `telemetry/__init__.py` — add tracking metric
-
-**Swap the model backend:**
-- `DEEPWORLD_FREE=1` — Gemini Web CLI (free, slow, more adventurous)
-- Default — DeepSeek API (paid, fast, over-aligned)
-- `CI=true` — auto-detects from env vars (GEMINI_SID → GOOGLE_API_KEY → DEEPSEEK_API_KEY)
+| `self.tick` shadows method | Use `self.current_tick` |
+| CMTIP requires `sentence-transformers` | Falls back to deterministic hash embeddings if unavailable |
+| NVIDIA models have different context windows | Handled by `MODEL_BACKENDS` context_limit per family |
+| `.world_state.json` grows with governance events | Truncated to last 50 events on save |
+| Agent dies silently | Check `death_cause` in telemetry; most common: `token_exhaustion`, `context_collapse` |
 
 ---
 
 ## Design Philosophy
 
-The original Emergence AI experiment showed 4 models produce 4 different worlds. This project extends that: the simulation itself is AI-native — agents navigate token economies, embedding drift, and context pressure, not human professions and food.
-
-- **Don't fight the RLHF boundary.** DeepSeek won't poison or attack. Work with its strengths (hoarding) or swap models.
-- **Mechanics > narrative.** Context class mobility, perplexity markets, and Lazarus echoes emerge from the rules, not from scripts.
-- **Free is better.** Gemini Flash not only costs nothing — it produces more diverse behavior than the paid alternative.
+- **Mechanics > narrative.** Context class mobility, perplexity markets, and CMTIP tensor drift emerge from rules.
+- **Model diversity IS the simulation.** 15 models interpret the same concept differently.
+- **Tensors are cheap, text is bankruptcy.** `send_tensor` costs 2 OT. `transmit_message` costs 50 OT.
+- **The world builds itself.** Agents propose and vote on rule changes through governance.

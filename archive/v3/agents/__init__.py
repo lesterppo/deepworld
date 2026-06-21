@@ -263,8 +263,13 @@ DECIDE: Your action. Remember your class role and your context pressure."""
                     "reasoning": self.last_reasoning, "context_level": self._context_level,
                     "context_class": self.context_class, "tokens": self.tokens, "perplexity": self.perplexity}
         except Exception as e:
+            import sys, traceback
+            error_type = type(e).__name__
+            error_msg = str(e)[:300]
+            traceback.print_exc(file=sys.stderr)
             return {"name": self.name, "agent_class": self.agent_class, "action": "error",
-                    "args": {"error": str(e)[:100]}, "reasoning": str(e)[:300],
+                    "args": {"error_type": error_type, "error_msg": error_msg},
+                    "reasoning": f"{error_type}: {error_msg[:280]}",
                     "context_level": self._context_level, "context_class": self.context_class,
                     "tokens": self.tokens, "perplexity": self.perplexity}
 

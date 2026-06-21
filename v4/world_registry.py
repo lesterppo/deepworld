@@ -158,7 +158,10 @@ class WorldParamRegistry:
         
         # Governance dividend pool
         self.dividend_pool: float = 0.0
-        
+
+        # Per-agent pending dividends (earned by voting on passed proposals)
+        self._pending_dividends: Dict[str, float] = {}
+
         # Thread safety
         self._lock = threading.Lock()
         
@@ -345,7 +348,6 @@ class WorldParamRegistry:
             # Pay governance dividend to majority voters from this proposal's pool
             if proposal.total_yes > 0 and proposal.dividend_pool > 0:
                 dividend_per_power = proposal.dividend_pool / proposal.total_yes
-                self._pending_dividends = getattr(self, '_pending_dividends', {})
                 for voter, power in proposal.votes_yes.items():
                     self._pending_dividends[voter] = self._pending_dividends.get(voter, 0) + dividend_per_power * power
             
@@ -401,7 +403,6 @@ class WorldParamRegistry:
     
     def collect_governance_dividends(self, agent: str) -> float:
         """Collect governance dividends earned from voting on passed proposals."""
-        self._pending_dividends = getattr(self, '_pending_dividends', {})
         amount = self._pending_dividends.pop(agent, 0)
         return round(amount, 2)
     

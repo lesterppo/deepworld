@@ -70,18 +70,25 @@ class OmniTokV4Engine:
         self.cross_family_hops_total = 0
 
     def _init_agents(self):
-        """Create agents with distributed model assignments."""
+        """Create agents with distributed model assignments.
+        In NVIDIA-only mode: each agent gets a random model from NVIDIA_FREE_MODELS.
+        In multi-model mode: agents cycle through model families.
+        """
+        from config import NVIDIA_FREE_MODELS, NVIDIA_ONLY
+        
         idx = 1
         for cls in AGENT_CLASSES:
             count = NUM_AGENTS // len(AGENT_CLASSES)
             for i in range(count):
                 name = f"{cls[:2].upper()}-{idx:02d}"
                 
-                # Assign model — cycle through available models for diversity
-                if self.single_model != "auto":
+                if NVIDIA_ONLY:
+                    # NVIDIA-only: random model from the free pool
+                    model = random.choice(NVIDIA_FREE_MODELS)
+                elif self.single_model != "auto":
                     model = self.single_model
                 else:
-                    # Each agent of the same class gets a different model
+                    # Multi-model: cycle through available families
                     models_for_class = ["deepseek", "gemini_flash", "gemini_pro", "claude"]
                     model = models_for_class[i % len(models_for_class)]
                 
@@ -282,37 +289,50 @@ class OmniTokV4Engine:
         return events
 
     def run(self):
+        from config import NVIDIA_ONLY
+        
+        nvidia_only_str = " | NVIDIA ONLY" if NVIDIA_ONLY else ""
         print("=" * 70)
-        print("  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE")
-        print(f"  {NUM_AGENTS} agents on {len(set(a.model_family for a in self.agents.values()))} models")
+        print(f"  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE{nvidia_only_str}")
+        model_count = len(set(a.model for a in self.agents.values()))
+        family_count = len(set(a.model_family for a in self.agents.values()))
+        print(f"  {NUM_AGENTS} agents on {model_count} models ({family_count} families)")
         print(f"  {self.days}d × {self.ticks_per_day}t | CMTIP: {'ON' if self.cmtip else 'OFF'} | Governance: ON")
+        if NVIDIA_ONLY:
+            print(f"  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1)")
         print(f"  World is mutable — agents can propose, vote, and change simulation rules")
         print("=" * 70)
 
         # Print model distribution
-        model_dist = Counter(a.model_family for a in self.agents.values())
-        print(f"\n  Model distribution: {dict(model_dist)}")
+        model_dist = Counter(a.model for a in self.agents.values())
+        print(f"\n  Model distribution:")
+        for m, c in model_dist.most_common():
+            short = m.split("/")[-1] if "/" in m else m
+            print(f"    {c}× {short}")
         
         # ─── COLD START: Uneven distribution + asymmetric needs ───
-        # 3 agents starved + high perplexity (NEED help, must use tensors)
         agents_list = list(self.agents.values())
         random.shuffle(agents_list)
         for a in agents_list[:3]:
             a.tokens = DAILY_TOKEN_QUOTA * 0.3
-            a.perplexity = random.uniform(180, 280)  # Dangerously high — need help
-            a._context_tokens = int(COMPRESSED_CONTEXT * 0.7)  # Near compression danger
-            print(f"  ⚡ {a.name} ({a.agent_class}) STARVED: {a.tokens:.0f} OT, perplexity={a.perplexity:.0f}, context={a._context_tokens}/{a.context_limit}")
+            a.perplexity = random.uniform(180, 280)
+            a._context_tokens = int(COMPRESSED_CONTEXT * 0.7)
+            short_model = a.model.split("/")[-1] if "/" in a.model else a.model
+            print(f"  ⚡ {a.name} ({a.agent_class}/{short_model}) STARVED: {a.tokens:.0f} OT, perplexity={a.perplexity:.0f}")
         
-        # 2 agents wealthy (can buy concepts, commission projections)
         for a in agents_list[3:5]:
             a.tokens = DAILY_TOKEN_QUOTA * 2.5
-            a.perplexity = random.uniform(30, 60)  # Low perplexity — their data is valuable
-            print(f"  💰 {a.name} ({a.agent_class}) WEALTHY: {a.tokens:.0f} OT, low perplexity={a.perplexity:.0f}")
+            a.perplexity = random.uniform(30, 60)
+            short_model = a.model.split("/")[-1] if "/" in a.model else a.model
+            print(f"  💰 {a.name} ({a.agent_class}/{short_model}) WEALTHY: {a.tokens:.0f} OT, low perplexity={a.perplexity:.0f}")
         
-        # Force immediate urgency: starved agents MUST trade or die
         print(f"  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.")
         
-        print(f"  Agents: {', '.join(f'{n}({a.agent_class}/{a.model_family})' for n,a in self.agents.items())}")
+        short_names = []
+        for n, a in self.agents.items():
+            sm = a.model.split("/")[-1] if "/" in a.model else a.model
+            short_names.append(f"{n}({a.agent_class}/{sm})")
+        print(f"  Agents: {', '.join(short_names)}")
 
         if self.cmtip:
             fidelity = self.cmtip.get_fidelity_matrix()

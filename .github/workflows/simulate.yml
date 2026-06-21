@@ -1,8 +1,8 @@
-name: DeepWorld Continuous Simulation
+name: DeepWorld v5 — NVIDIA Continuous Simulation
 
 on:
   schedule:
-    - cron: '0 */2 * * *'   # Every 2 hours (was 6h)
+    - cron: '0 */2 * * *'   # Every 2 hours
   workflow_dispatch:          # Manual trigger
 
 permissions:
@@ -22,22 +22,20 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install openai pyyaml gemini-webapi
+          pip install openai pyyaml sentence-transformers numpy
 
-      - name: Run DeepWorld v3 (continuous)
+      - name: Run DeepWorld v5 (NVIDIA)
         env:
-          GEMINI_SID: ${{ secrets.GEMINI_SID }}
-          GEMINI_TS: ${{ secrets.GEMINI_TS }}
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
         run: |
-          cd v3
-          mkdir -p ../runs
-          python3 run_continuous.py --days 5 --ticks 12 --delay 0.1 --output ../runs 2>&1 | tee ../runs/latest.log
+          mkdir -p runs
+          python3 run.py --days 5 --ticks 12 --delay 0.1 --output runs 2>&1 | tee runs/latest.log
 
       - name: Commit results
+        if: always()  # Commit even on errors for debugging
         run: |
           git config user.name "DeepWorld Bot"
           git config user.email "bot@deepworld.sim"
           git add runs/
-          git diff --staged --quiet || git commit -m "sim: $(date +%Y-%m-%d_%H:%M) run"
+          git diff --staged --quiet || git commit -m "sim: $(date +%Y-%m-%d_%H:%M) run [NVIDIA v5]"
           git push

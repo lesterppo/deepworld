@@ -40,7 +40,28 @@ class OmniTokV4Agent:
         # ─── Model Family ───
         self.model = model or CLASS_DEFAULT_MODEL.get(agent_class, "deepseek")
         from config import MODEL_BACKENDS
-        self.model_family = MODEL_BACKENDS.get(self.model, {}).get("family", "deepseek")
+        backend_info = MODEL_BACKENDS.get(self.model, {})
+        if backend_info:
+            self.model_family = backend_info.get("family", "nvidia")
+        else:
+            # Model not in MODEL_BACKENDS — detect family from model name prefix
+            model_lower = self.model.lower()
+            if "llama" in model_lower or "meta/" in model_lower:
+                self.model_family = "nvidia"  # All routed through NVIDIA
+            elif "gemma" in model_lower or "google/" in model_lower:
+                self.model_family = "nvidia"
+            elif "mistral" in model_lower:
+                self.model_family = "nvidia"
+            elif "phi" in model_lower or "microsoft/" in model_lower:
+                self.model_family = "nvidia"
+            elif "qwen" in model_lower:
+                self.model_family = "nvidia"
+            elif "deepseek" in model_lower:
+                self.model_family = "nvidia"
+            elif "gpt-oss" in model_lower or "openai/" in model_lower:
+                self.model_family = "nvidia"
+            else:
+                self.model_family = "nvidia"  # Default for NVIDIA backend
         
         # ─── Context Class System ───
         self._context_level = 3

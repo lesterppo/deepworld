@@ -96,8 +96,10 @@ class MultiModelAdapter:
                 temperature=temperature, max_tokens=max_tokens,
             )
         elif backend_type == "nvidia_api":
+            # Use the agent's assigned model (from NVIDIA_FREE_MODELS pool)
+            actual_model = model if (model and model != "nemotron") else "nvidia/llama-3.1-nemotron-nano-8b-v1"
             return client.chat.completions.create(
-                model="nvidia/llama-3.1-nemotron-nano-8b-v1", messages=messages,
+                model=actual_model, messages=messages,
                 tools=tools, tool_choice="auto" if tools else None,
                 temperature=temperature, max_tokens=max_tokens,
             )
