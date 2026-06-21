@@ -765,8 +765,145 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                 committed = sum(1 for c in engine.repo_contributions if c.get("committed"))
                 authors = set(c.get("agent", "?") for c in engine.repo_contributions)
                 fx["message"] = f"Repo: {total} contributions ({committed} committed) by {len(authors)} agents."
+        # --- GitHub Repo Maintenance (v5.1 - Agents Build the Repo) ---
+        elif name == "write_code":
+            fx["token_delta"] = -10
+            filepath = args.get("filepath", "")
+            content = args.get("content", "")
+            desc = args.get("description", "")
+            if engine and hasattr(engine, "repo_contributions"):
+                if len(content) < 50:
+                    fx["message"] = f"{self.name} write_code rejected - too short ({len(content)} chars)"
+                else:
+                    reward = min(200, len(content) // 2)
+                    fx["token_delta"] += reward
+                    engine.repo_contributions.append({
+                        "agent": self.name, "agent_class": self.agent_class,
+                        "action": "write_code", "filepath": filepath,
+                        "content": content, "description": desc,
+                        "reward": reward, "tick": engine.current_tick if engine else 0,
+                    })
+                    fx["message"] = f"{self.name} WROTE CODE '{filepath}' ({len(content)} chars)! +{reward} OT."
+            else:
+                fx["message"] = f"{self.name} wrote '{filepath}' (no repo binding)."
+        
+        elif name == "review_code":
+            fx["token_delta"] = -2
+            filepath = args.get("filepath", "")
+            focus = args.get("focus", "all")
+            if engine and hasattr(engine, "repo_contributions"):
+                reward = 30
+                fx["token_delta"] += reward
+                engine.repo_contributions.append({
+                    "agent": self.name, "agent_class": self.agent_class,
+                    "action": "review_code", "filepath": filepath, "focus": focus,
+                    "reward": reward, "tick": engine.current_tick if engine else 0,
+                })
+                fx["message"] = f"{self.name} REVIEWED '{filepath}' (focus: {focus}) +{reward} OT."
+            else:
+                fx["message"] = f"{self.name} reviewed '{filepath}' (no repo binding)."
+        
+        elif name == "commit_code":
+            fx["token_delta"] = -15
+            message = args.get("message", "")
+            if engine and hasattr(engine, "contribution_proposals"):
+                staged = [c for c in engine.repo_contributions if c.get("agent") == self.name and not c.get("committed") and not c.get("proposed")]
+                if not staged:
+                    fx["message"] = f"{self.name} proposal failed - no staged files. Use write_code first."
+                    fx["token_delta"] = -2
+                else:
+                    prop_id = f"contrib_{len(engine.contribution_proposals)+1:04d}"
+                    proposal = {
+                        "id": prop_id, "agent": self.name, "agent_class": self.agent_class,
+                        "message": message, "files": len(staged),
+                        "votes_yes": {}, "votes_no": {},
+                        "status": "pending", "tick": engine.current_tick,
+                        "staged": staged,
+                    }
+                    engine.contribution_proposals.append(proposal)
+                    for c in staged:
+                        c["proposed"] = True
+                        c["proposal_id"] = prop_id
+                    reward = 50
+                    fx["token_delta"] += reward
+                    fx["message"] = f"{self.name} PROPOSED {prop_id}: {len(staged)} files! +{reward} OT. Agents vote YES/NO."
+            else:
+                fx["message"] = f"{self.name} attempted proposal (no repo binding)."
+        
+        elif name == "vote_contribution":
+            fx["token_delta"] = -2
+            prop_id = args.get("proposal_id", "")
+            vote = args.get("vote", "no")
+            reason = args.get("reason", "")
+            if engine and hasattr(engine, "contribution_proposals"):
+                prop = None
+                for p in engine.contribution_proposals:
+                    if p["id"] == prop_id and p["status"] == "pending":
+                        prop = p
+                        break
+                if not prop:
+                    fx["message"] = f"{self.name} vote failed - {prop_id} not found."
+                    fx["token_delta"] = 0
+                elif self.name in prop["votes_yes"] or self.name in prop["votes_no"]:
+                    fx["message"] = f"{self.name} already voted on {prop_id}."
+                    fx["token_delta"] = 0
+                else:
+                    vp = max(1, int((self.tokens / 100) ** 0.5))
+                    if vote == "yes":
+                        prop["votes_yes"][self.name] = vp
+                    else:
+                        prop["votes_no"][self.name] = vp
+                    yes_total = sum(prop["votes_yes"].values())
+                    no_total = sum(prop["votes_no"].values())
+                    total_voters = len(prop["votes_yes"]) + len(prop["votes_no"])
+                    resolved = False
+                    if total_voters >= 5:
+                        if yes_total > no_total:
+                            prop["status"] = "accepted"
+                            resolved = True
+                            prop["accept_bonus"] = 300
+                        else:
+                            prop["status"] = "rejected"
+                            resolved = True
+                    status_str = "ACCEPTED" if resolved and prop["status"]=="accepted" else ("REJECTED" if resolved else "PENDING")
+                    fx["message"] = f"{self.name} voted {vote.upper()} on {prop_id}. Y:{yes_total} N:{no_total} ({total_voters}v) - {status_str}"
+            else:
+                fx["message"] = f"{self.name} voted on {prop_id} (no repo binding)."
+        
+        elif name == "document_code":
+            fx["token_delta"] = -5
+            filepath = args.get("filepath", "")
+            content = args.get("content", "")
+            desc = args.get("description", "")
+            if engine and hasattr(engine, "repo_contributions"):
+                if len(content) < 30:
+                    fx["message"] = f"{self.name} document_code rejected - too short ({len(content)} chars)"
+                else:
+                    reward = min(120, len(content) // 3)
+                    fx["token_delta"] += reward
+                    engine.repo_contributions.append({
+                        "agent": self.name, "agent_class": self.agent_class,
+                        "action": "document_code", "filepath": filepath,
+                        "content": content, "description": desc,
+                        "reward": reward, "tick": engine.current_tick if engine else 0,
+                    })
+                    fx["message"] = f"{self.name} DOCUMENTED '{filepath}' ({len(content)} chars)! +{reward} OT."
+            else:
+                fx["message"] = f"{self.name} documented '{filepath}' (no repo binding)."
+        
+        elif name == "view_repo_stats":
+            fx["token_delta"] = -2
+            if engine and hasattr(engine, "contribution_proposals"):
+                total = len(engine.repo_contributions)
+                proposals = engine.contribution_proposals
+                pending = sum(1 for p in proposals if p["status"] == "pending")
+                accepted = sum(1 for p in proposals if p["status"] == "accepted")
+                rejected = sum(1 for p in proposals if p["status"] == "rejected")
+                authors = set(c.get("agent", "?") for c in engine.repo_contributions)
+                fx["message"] = f"Repo: {total} contribs, {len(proposals)} props ({pending}p/{accepted}a/{rejected}r) by {len(authors)} agents."
             else:
                 fx["message"] = f"{self.name} viewed repo stats (no contributions yet)."
+        
         else:
             fx["message"] = f"{self.name} {name}."
         

@@ -114,27 +114,58 @@ def main():
         # Persist world state
         engine._save_registry()
 
-        # ─── Apply agent contributions to repo (v5.1) ───
-        if engine._pending_commit and engine.repo_contributions:
-            committed = [c for c in engine.repo_contributions if c.get("committed") and c.get("action") in ("write_code", "document_code")]
-            if committed:
-                print(f"\n  📝 Writing {len(committed)} agent contributions...")
+        # ─── Resolve contribution proposals and apply to repo (v5.1) ───
+        if engine.contribution_proposals:
+            accepted_props = [p for p in engine.contribution_proposals if p["status"] == "accepted"]
+            rejected_props = [p for p in engine.contribution_proposals if p["status"] == "rejected"]
+            pending_props = [p for p in engine.contribution_proposals if p["status"] == "pending"]
+            
+            print(f"\n  📝 Contribution Governance:")
+            print(f"     Accepted: {len(accepted_props)} | Rejected: {len(rejected_props)} | Pending: {len(pending_props)}")
+            
+            # Award acceptance bonuses
+            for prop in accepted_props:
+                proposer = prop["agent"]
+                bonus = prop.get("accept_bonus", 300)
+                if proposer in engine.agents:
+                    engine.agents[proposer].tokens += bonus
+                    engine.agents[proposer].tokens_earned += bonus
+                # Mark staged files as committed
+                for c in prop.get("staged", []):
+                    c["committed"] = True
+                    c["commit_agent"] = prop["agent"]
+                    c["commit_message"] = prop["message"]
+                print(f"     ✅ {prop['id']} by {proposer}: ACCEPTED +{bonus} OT bonus ({prop['files']} files)")
+            
+            for prop in rejected_props:
+                print(f"     ❌ {prop['id']} by {prop['agent']}: REJECTED (initiator keeps 50 OT base)")
+            
+            # Write accepted files to disk
+            accepted_files = []
+            for prop in accepted_props:
+                for c in prop.get("staged", []):
+                    if c.get("action") in ("write_code", "document_code"):
+                        accepted_files.append(c)
+            
+            if accepted_files:
+                print(f"\n  📝 Writing {len(accepted_files)} accepted files...")
                 repo_root = os.path.dirname(os.path.abspath(__file__))
-                for c in committed:
+                for c in accepted_files:
                     filepath = os.path.join(repo_root, c["filepath"])
                     os.makedirs(os.path.dirname(filepath), exist_ok=True)
                     with open(filepath, "w") as f:
                         f.write(c["content"])
                     print(f"    ✓ {c['filepath']} (by {c['agent']})")
-                # Save contribution manifest for CI commit step
+                
                 manifest_path = os.path.join(out_dir, "contributions.json")
                 with open(manifest_path, "w") as f:
                     json.dump([{
                         "agent": c["agent"], "agent_class": c.get("agent_class"),
                         "filepath": c["filepath"], "description": c.get("description", ""),
                         "action": c["action"], "reward": c.get("reward", 0),
-                    } for c in committed], f, indent=2)
-                print(f"    ✓ Files written. CI will commit them.")
+                        "proposal_id": c.get("proposal_id", ""),
+                    } for c in accepted_files], f, indent=2)
+                print(f"    ✓ Files written. CI will commit.")
 
         # Governance events
         events = engine.world_registry.get_recent_events(5)

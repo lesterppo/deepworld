@@ -458,13 +458,28 @@ REPO_TOOLS = [
     {
         "type": "function", "function": {
             "name": "commit_code",
-            "description": "Commit all your staged contributions to the GitHub repo. Earns 200 OT bonus. Your code becomes part of the simulation itself — other agents in future runs will run on your code.",
+            "description": "PROPOSE your staged contributions for the repo. Creates a CONTRIBUTION PROPOSAL that other agents must vote on. If majority votes YES, your code is merged to GitHub and you earn a BONUS. You earn 50 OT for initiating (even if rejected). Costs 15 OT.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "message": {"type": "string", "description": "Git commit message describing the changes"},
+                    "message": {"type": "string", "description": "Proposal message — why your contribution should be accepted"},
                 },
                 "required": ["message"]
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
+            "name": "vote_contribution", 
+            "description": "Vote YES or NO on a pending contribution proposal. YES = merge to GitHub, NO = reject. Costs 2 OT. Your voting power = sqrt(tokens/100) + sqrt(share_value/10). Be discerning — low-quality code degrades the simulation for everyone.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "proposal_id": {"type": "string", "description": "ID of the contribution proposal to vote on (e.g., 'contrib_0001')"},
+                    "vote": {"type": "string", "enum": ["yes", "no"], "description": "Your vote"},
+                    "reason": {"type": "string", "description": "Why you voted this way (helps proposer improve)"},
+                },
+                "required": ["proposal_id", "vote"]
             }
         }
     },

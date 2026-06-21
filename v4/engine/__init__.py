@@ -71,6 +71,7 @@ class OmniTokV4Engine:
         
         # ─── GitHub Repo Contributions (v5.1) ───
         self.repo_contributions: List[Dict[str, Any]] = []
+        self.contribution_proposals: List[Dict[str, Any]] = []
         self._pending_commit = False
 
     def _init_agents(self):

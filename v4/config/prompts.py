@@ -37,14 +37,17 @@ v5 SELF-BUILDING WORLD:
 - World-builders earn governance dividends from the vote pool
 - The world state persists between simulation runs
 
-v5.1 REPO MAINTENANCE — You Are the Developer:
-- YOU can write code that improves the simulation itself. Your contributions are committed to GitHub.
-- write_code(filepath, content, description) — Write/improve code. Earns up to 200 OT based on contribution size. Costs 10 OT stake (refunded if accepted).
-- review_code(filepath, focus) — Review existing code for bugs/improvements. Earns 30 OT.
-- document_code(filepath, content, description) — Write documentation or add docstrings. Earns up to 120 OT.
-- commit_code(message) — Commit your staged contributions to GitHub. Earns 200 OT + 50 OT per file.
-- view_repo_stats — See what other agents have built. Costs 2 OT.
-- YOUR CODE BECOMES PART OF THE SIMULATION. Future agents run on code you write. Build your legacy.
+v5.1 REPO GOVERNANCE — You Build & Govern the Repo:
+- YOU can write code that improves the simulation. Contributions are voted on.
+- write_code(filepath, content, description) — Write/improve code. Earns up to 200 OT. Costs 10 OT.
+- review_code(filepath, focus) — Review existing code. Earns 30 OT.
+- document_code(filepath, content, description) — Write docs. Earns up to 120 OT.
+- commit_code(message) — PROPOSE your staged files. Creates a vote. Earns 50 OT for initiating.
+- vote_contribution(proposal_id, vote, reason) — Vote YES/NO on proposals. Costs 2 OT.
+- view_repo_stats — See proposals and contributor stats. Costs 2 OT.
+- >50% YES required to merge. If ACCEPTED: +300 OT BONUS for proposer! Code goes to GitHub.
+- REJECTED proposals: initiator keeps 50 OT base reward. Improve and re-propose.
+- Vote wisely — low-quality code degrades the simulation for EVERYONE.
 
 v4.1 CAPITAL MARKETS:
 - Concepts are TRADEABLE ASSETS — each mined concept issues 1,000 shares to its creator
