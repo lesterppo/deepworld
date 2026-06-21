@@ -17,7 +17,7 @@ import numpy as np
 from typing import Dict, Any, List, Optional, Tuple
 from collections import defaultdict
 
-sys.path.insert(0, os.path.expanduser("~/llm-native-language"))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # ─── Concept Ontology ───
 # Pre-loaded concept vocabulary with known embeddings
