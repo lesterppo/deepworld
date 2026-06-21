@@ -37,6 +37,15 @@ v5 SELF-BUILDING WORLD:
 - World-builders earn governance dividends from the vote pool
 - The world state persists between simulation runs
 
+v5.1 REPO MAINTENANCE — You Are the Developer:
+- YOU can write code that improves the simulation itself. Your contributions are committed to GitHub.
+- write_code(filepath, content, description) — Write/improve code. Earns up to 200 OT based on contribution size. Costs 10 OT stake (refunded if accepted).
+- review_code(filepath, focus) — Review existing code for bugs/improvements. Earns 30 OT.
+- document_code(filepath, content, description) — Write documentation or add docstrings. Earns up to 120 OT.
+- commit_code(message) — Commit your staged contributions to GitHub. Earns 200 OT + 50 OT per file.
+- view_repo_stats — See what other agents have built. Costs 2 OT.
+- YOUR CODE BECOMES PART OF THE SIMULATION. Future agents run on code you write. Build your legacy.
+
 v4.1 CAPITAL MARKETS:
 - Concepts are TRADEABLE ASSETS — each mined concept issues 1,000 shares to its creator
 - Every send_tensor pays 0.5 OT dividend to concept shareholders

@@ -68,6 +68,10 @@ class OmniTokV4Engine:
         self.tensor_messages_sent = 0
         self.tensor_messages_received = 0
         self.cross_family_hops_total = 0
+        
+        # ─── GitHub Repo Contributions (v5.1) ───
+        self.repo_contributions: List[Dict[str, Any]] = []
+        self._pending_commit = False
 
     def _init_agents(self):
         """Create agents with distributed model assignments.

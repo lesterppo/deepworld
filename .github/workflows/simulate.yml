@@ -37,5 +37,7 @@ jobs:
           git config user.name "DeepWorld Bot"
           git config user.email "bot@deepworld.sim"
           git add runs/
+          # Include any agent-written files (v5.1 repo maintenance)
+          git add contributions/ v4/ --all
           git diff --staged --quiet || git commit -m "sim: $(date +%Y-%m-%d_%H:%M) run [NVIDIA v5]"
           git push

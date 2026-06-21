@@ -421,6 +421,80 @@ LOSS_MINER_TOOLS = [
     },
 ]
 
+# ─── GitHub Repo Maintenance Tools (v5.1 — Agents Build the Repo) ───
+# Agents are rewarded for maintaining their own simulation code.
+# Contributions are committed to the actual GitHub repo by CI.
+
+REPO_TOOLS = [
+    {
+        "type": "function", "function": {
+            "name": "write_code",
+            "description": "Write or improve code in the DeepWorld repo. Your contribution will be committed to GitHub. Quality code earns OT rewards proportional to contribution size. Costs 10 OT (staked — refunded if contribution accepted).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "filepath": {"type": "string", "description": "File path relative to repo root (e.g., 'contributions/agent_improvements.py', 'v4/config/tuning.py')"},
+                    "content": {"type": "string", "description": "Complete file content. Write clean, working Python code."},
+                    "description": {"type": "string", "description": "What this change does and why it improves the simulation"},
+                },
+                "required": ["filepath", "content", "description"]
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
+            "name": "review_code",
+            "description": "Review existing code in the repo. Find bugs, suggest improvements, audit for correctness. Earns 30 OT per review. Loss-Miners excel at this.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "filepath": {"type": "string", "description": "Path to file to review (e.g., 'v4/agents/tools.py', 'v4/engine/__init__.py')"},
+                    "focus": {"type": "string", "enum": ["bugs", "performance", "security", "readability", "architecture", "all"], "description": "What to focus the review on"},
+                },
+                "required": ["filepath"]
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
+            "name": "commit_code",
+            "description": "Commit all your staged contributions to the GitHub repo. Earns 200 OT bonus. Your code becomes part of the simulation itself — other agents in future runs will run on your code.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "message": {"type": "string", "description": "Git commit message describing the changes"},
+                },
+                "required": ["message"]
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
+            "name": "document_code",
+            "description": "Write or improve documentation (README, AGENTS.md, docstrings, comments). Earns 60 OT. Good documentation helps all agents understand the system.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "filepath": {"type": "string", "description": "Path to documentation file or code file to add docstrings to"},
+                    "content": {"type": "string", "description": "Documentation content or improved code with docstrings"},
+                    "description": {"type": "string", "description": "What documentation was improved and why"},
+                },
+                "required": ["filepath", "content", "description"]
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
+            "name": "view_repo_stats",
+            "description": "View repository statistics: recent commits, contributor leaderboard, file structure. Learn what other agents have built. Costs 2 OT.",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+            }
+        }
+    },
+]
+
 # ─── Land Rush / SPoS / Lazarus (v3 carryover) ───
 
 LAND_RUSH_TOOLS = [
@@ -511,6 +585,9 @@ def get_tools_for_agent(agent_class: str, context_level: int,
     
     # Lazarus detection available to all
     tools.extend(LAZARUS_TOOLS)
+    
+    # GitHub repo maintenance — available to all agents (v5.1)
+    tools.extend(REPO_TOOLS)
     
     # Fragment-State agents lose complex tools
     if context_level <= 1:

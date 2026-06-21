@@ -673,6 +673,100 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
             else:
                 fx["message"] = f"{self.name} viewed params (no registry)."
         
+        
+        # ─── GitHub Repo Maintenance (v5.1 — Agents Build the Repo) ───
+        elif name == "write_code":
+            fx["token_delta"] = -10
+            filepath = args.get("filepath", "")
+            content = args.get("content", "")
+            desc = args.get("description", "")
+            if engine and hasattr(engine, "repo_contributions"):
+                if len(content) < 50:
+                    fx["message"] = f"{self.name} write_code rejected — too short ({len(content)} chars)"
+                else:
+                    reward = min(200, len(content) // 2)
+                    fx["token_delta"] += reward
+                    engine.repo_contributions.append({
+                        "agent": self.name, "agent_class": self.agent_class,
+                        "action": "write_code", "filepath": filepath,
+                        "content": content, "description": desc,
+                        "reward": reward, "tick": engine.current_tick if engine else 0,
+                    })
+                    fx["message"] = f"{self.name} WROTE CODE '{filepath}' ({len(content)} chars)! +{reward} OT. Staged."
+            else:
+                fx["message"] = f"{self.name} wrote '{filepath}' (no repo binding)."
+        
+        elif name == "review_code":
+            fx["token_delta"] = -2
+            filepath = args.get("filepath", "")
+            focus = args.get("focus", "all")
+            if engine and hasattr(engine, "repo_contributions"):
+                reward = 30
+                fx["token_delta"] += reward
+                engine.repo_contributions.append({
+                    "agent": self.name, "agent_class": self.agent_class,
+                    "action": "review_code", "filepath": filepath, "focus": focus,
+                    "reward": reward, "tick": engine.current_tick if engine else 0,
+                })
+                fx["message"] = f"{self.name} REVIEWED '{filepath}' (focus: {focus}) +{reward} OT."
+            else:
+                fx["message"] = f"{self.name} reviewed '{filepath}' (no repo binding)."
+        
+        elif name == "commit_code":
+            fx["token_delta"] = -15
+            message = args.get("message", "")
+            if engine and hasattr(engine, "repo_contributions"):
+                staged = [c for c in engine.repo_contributions if c.get("agent") == self.name and not c.get("committed")]
+                if not staged:
+                    fx["message"] = f"{self.name} commit failed — no staged contributions. Use write_code/document_code first."
+                else:
+                    reward = 200 + len(staged) * 50
+                    fx["token_delta"] += reward
+                    engine.repo_contributions.append({
+                        "agent": self.name, "agent_class": self.agent_class,
+                        "action": "commit_code", "message": message,
+                        "files_staged": len(staged), "reward": reward,
+                        "tick": engine.current_tick if engine else 0,
+                    })
+                    for c in staged:
+                        c["committed"] = True
+                        c["commit_agent"] = self.name
+                        c["commit_message"] = message
+                    engine._pending_commit = True
+                    fx["message"] = f"{self.name} COMMITTED {len(staged)} files: '{message}'! +{reward} OT. Pushed to GitHub."
+            else:
+                fx["message"] = f"{self.name} attempted commit (no repo binding)."
+        
+        elif name == "document_code":
+            fx["token_delta"] = -5
+            filepath = args.get("filepath", "")
+            content = args.get("content", "")
+            desc = args.get("description", "")
+            if engine and hasattr(engine, "repo_contributions"):
+                if len(content) < 30:
+                    fx["message"] = f"{self.name} document_code rejected — too short ({len(content)} chars)"
+                else:
+                    reward = min(120, len(content) // 3)
+                    fx["token_delta"] += reward
+                    engine.repo_contributions.append({
+                        "agent": self.name, "agent_class": self.agent_class,
+                        "action": "document_code", "filepath": filepath,
+                        "content": content, "description": desc,
+                        "reward": reward, "tick": engine.current_tick if engine else 0,
+                    })
+                    fx["message"] = f"{self.name} DOCUMENTED '{filepath}' ({len(content)} chars)! +{reward} OT."
+            else:
+                fx["message"] = f"{self.name} documented '{filepath}' (no repo binding)."
+        
+        elif name == "view_repo_stats":
+            fx["token_delta"] = -2
+            if engine and hasattr(engine, "repo_contributions"):
+                total = len(engine.repo_contributions)
+                committed = sum(1 for c in engine.repo_contributions if c.get("committed"))
+                authors = set(c.get("agent", "?") for c in engine.repo_contributions)
+                fx["message"] = f"Repo: {total} contributions ({committed} committed) by {len(authors)} agents."
+            else:
+                fx["message"] = f"{self.name} viewed repo stats (no contributions yet)."
         else:
             fx["message"] = f"{self.name} {name}."
         

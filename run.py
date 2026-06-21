@@ -13,7 +13,7 @@ Usage:
   python3 run.py --days 5 --ticks 12 --output runs/     # CI mode
 """
 
-import argparse, os, sys, time
+import argparse, os, sys, time, json
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "v4"))
 
@@ -113,6 +113,28 @@ def main():
 
         # Persist world state
         engine._save_registry()
+
+        # ─── Apply agent contributions to repo (v5.1) ───
+        if engine._pending_commit and engine.repo_contributions:
+            committed = [c for c in engine.repo_contributions if c.get("committed") and c.get("action") in ("write_code", "document_code")]
+            if committed:
+                print(f"\n  📝 Writing {len(committed)} agent contributions...")
+                repo_root = os.path.dirname(os.path.abspath(__file__))
+                for c in committed:
+                    filepath = os.path.join(repo_root, c["filepath"])
+                    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+                    with open(filepath, "w") as f:
+                        f.write(c["content"])
+                    print(f"    ✓ {c['filepath']} (by {c['agent']})")
+                # Save contribution manifest for CI commit step
+                manifest_path = os.path.join(out_dir, "contributions.json")
+                with open(manifest_path, "w") as f:
+                    json.dump([{
+                        "agent": c["agent"], "agent_class": c.get("agent_class"),
+                        "filepath": c["filepath"], "description": c.get("description", ""),
+                        "action": c["action"], "reward": c.get("reward", 0),
+                    } for c in committed], f, indent=2)
+                print(f"    ✓ Files written. CI will commit them.")
 
         # Governance events
         events = engine.world_registry.get_recent_events(5)
