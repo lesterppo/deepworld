@@ -501,10 +501,39 @@ REPO_TOOLS = [
     {
         "type": "function", "function": {
             "name": "view_repo_stats",
-            "description": "View repository statistics: recent commits, contributor leaderboard, file structure. Learn what other agents have built. Costs 2 OT.",
+            "description": "View repository statistics: recent commits, contributor leaderboard, pending proposals. Costs 2 OT.",
             "parameters": {
                 "type": "object",
                 "properties": {},
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
+            "name": "collaborate",
+            "description": "INVITE another agent to co-author your staged code. Both agents share the acceptance bonus (negotiated split). Collaboration produces higher-quality code that's more likely to pass voting. Costs 5 OT.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "target_agent": {"type": "string", "description": "Agent to invite as co-author"},
+                    "proposal_desc": {"type": "string", "description": "What you're building together"},
+                    "split_percent": {"type": "integer", "description": "Your share of the reward (0-100). e.g., 60 means you get 60%, they get 40%."},
+                },
+                "required": ["target_agent", "proposal_desc", "split_percent"]
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
+            "name": "accept_collaboration",
+            "description": "ACCEPT a collaboration invitation from another agent. You become co-author of their proposal. Costs 2 OT.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "inviter": {"type": "string", "description": "Agent who invited you"},
+                    "counter_split": {"type": "integer", "description": "Counter-offer: your desired share percentage (0-100). Omit to accept their offer."},
+                },
+                "required": ["inviter"]
             }
         }
     },

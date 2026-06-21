@@ -92,6 +92,8 @@ class OmniTokV4Agent:
         
         # ─── Developer Reputation (v5.1) ───
         self.dev_rep = 0  # Earned from code contributions. Earns passive income per tick.
+        self.collab_invites: dict = {}  # {from_agent: {split, proposal_desc}}
+        self.collab_partners: set = set()  # agents currently collaborating with
         
         # ─── Tensor Economy ───
         self.tensor_sent = 0
@@ -761,6 +763,40 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                     fx["message"] = f"{self.name} DOCUMENTED '{filepath}' ({len(content)} chars)! +{reward} OT."
             else:
                 fx["message"] = f"{self.name} documented '{filepath}' (no repo binding)."
+        
+        elif name == "collaborate":
+            fx["token_delta"] = -5
+            target = args.get("target_agent", "")
+            split_pct = max(10, min(90, args.get("split_percent", 50)))
+            desc = args.get("proposal_desc", "")
+            if engine and hasattr(engine, "repo_contributions"):
+                staged = [c for c in engine.repo_contributions if c.get("agent") == self.name or c.get("agent") in self.collab_partners and not c.get("committed") and not c.get("proposed")]
+                if not staged:
+                    fx["message"] = f"{self.name} collaboration failed - no staged contributions."
+                    fx["token_delta"] = -2
+                elif target not in engine.agents:
+                    fx["message"] = f"{self.name} collaboration failed - {target} not found."
+                    fx["token_delta"] = -2
+                else:
+                    engine.agents[target].collab_invites[self.name] = {"split": 100 - split_pct, "desc": desc}
+                    self.collab_partners.add(target)
+                    fx["message"] = f"{self.name} INVITED {target} to co-author ({split_pct}/{100-split_pct} split): '{desc}'"
+            else:
+                fx["message"] = f"{self.name} attempted collaboration (no repo binding)."
+        
+        elif name == "accept_collaboration":
+            fx["token_delta"] = -2
+            inviter = args.get("inviter", "")
+            counter = args.get("counter_split")
+            if self.collab_invites and inviter in self.collab_invites:
+                invite = self.collab_invites.pop(inviter)
+                if counter is not None:
+                    invite["split"] = max(10, min(90, counter))
+                self.collab_partners.add(inviter)
+                fx["message"] = f"{self.name} ACCEPTED collaboration with {inviter}! Split: {100-invite['split']}/{invite['split']}. Bonus will be shared."
+            else:
+                fx["message"] = f"{self.name} no collaboration invitation from {inviter}."
+                fx["token_delta"] = 0
         
         elif name == "view_repo_stats":
             fx["token_delta"] = -2

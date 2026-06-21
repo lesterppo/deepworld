@@ -123,13 +123,38 @@ def main():
             print(f"\n  📝 Contribution Governance:")
             print(f"     Accepted: {len(accepted_props)} | Rejected: {len(rejected_props)} | Pending: {len(pending_props)}")
             
-            # Award acceptance bonuses
+            # Award acceptance bonuses (split among collaborators)
             for prop in accepted_props:
                 proposer = prop["agent"]
-                bonus = prop.get("accept_bonus", 300)
+                bonus = prop.get("accept_bonus", 500)
+                # Collect all collaborators
+                collaborators = {proposer: 100}  # Default: proposer gets 100%
+                for staged_file in prop.get("staged", []):
+                    if staged_file.get("agent") and staged_file["agent"] != proposer:
+                        collaborators[staged_file["agent"]] = 0
+                # Check for negotiated splits
                 if proposer in engine.agents:
-                    engine.agents[proposer].tokens += bonus
-                    engine.agents[proposer].tokens_earned += bonus
+                    proposer_agent = engine.agents[proposer]
+                    partners = proposer_agent.collab_partners
+                    if partners:
+                        total_parts = len(partners) + 1
+                        share_each = 100 // total_parts
+                        collaborators = {proposer: share_each}
+                        for p in partners:
+                            if p in engine.agents:
+                                # Check for negotiated split
+                                inv = engine.agents[p].collab_invites
+                                collaborators[p] = share_each
+                        # Remainder to proposer
+                        collaborators[proposer] = 100 - sum(v for k, v in collaborators.items() if k != proposer)
+                # Distribute
+                for agent_name, share_pct in collaborators.items():
+                    if agent_name in engine.agents and share_pct > 0:
+                        share = int(bonus * share_pct / 100)
+                        engine.agents[agent_name].tokens += share
+                        engine.agents[agent_name].tokens_earned += share
+                collab_str = f" ({', '.join(f'{a}={s}%' for a,s in collaborators.items())})" if len(collaborators) > 1 else ""
+                print(f"     ✅ {prop['id']} by {proposer}{collab_str}: ACCEPTED +{bonus} OT bonus split")
                 # Mark staged files as committed
                 for c in prop.get("staged", []):
                     c["committed"] = True

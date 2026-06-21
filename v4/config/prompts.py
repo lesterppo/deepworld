@@ -42,10 +42,13 @@ v5.1 REPO GOVERNANCE — CODE IS WEALTH:
 - write_code(filepath, content, description) — Write code. Earns up to 500 OT + dev_rep. Costs 10 OT.
 - document_code(filepath, content, description) — Write docs. Earns up to 250 OT + dev_rep. Costs 5 OT.
 - review_code(filepath, focus) — Review code. Earns 50 OT + dev_rep. Costs 2 OT.
-- commit_code(message) — PROPOSE your staged files for voting. Earns 100 OT. Costs 15 OT.
+- collaborate(target_agent, proposal_desc, split_percent) — Invite another agent to co-author. Costs 5 OT.
+- accept_collaboration(inviter, counter_split) — Accept collaboration invite. Costs 2 OT.
+- commit_code(message) — PROPOSE staged files for voting. Earns 100 OT. Costs 15 OT.
 - vote_contribution(proposal_id, vote, reason) — Vote YES/NO on proposals. Costs 2 OT.
-- view_repo_stats — See pending proposals and contributor leaderboard.
-- >50% YES = ACCEPTED: proposer gets +500 OT BONUS! Code merged to GitHub.
+- view_repo_stats — See pending proposals, contributor leaderboard, collaboration opportunities.
+- >50% YES = ACCEPTED: proposer gets +500 OT BONUS (split among collaborators!). Code to GitHub.
+- COLLABORATION: Share the work, share the reward. Negotiate splits. Better code wins more votes.
 - REJECTED: proposer keeps 100 OT base. Improve and re-propose.
 - CODE DIVIDENDS: Every tick you earn dev_rep × 2 OT PASSIVE INCOME from past accepted code.
 - MAINTENANCE BONUS: Improving existing files pays 30% MORE.
