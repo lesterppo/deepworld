@@ -97,12 +97,38 @@ class MultiModelAdapter:
             )
         elif backend_type == "nvidia_api":
             actual_model = model if (model and model != "nemotron") else "nvidia/llama-3.1-nemotron-nano-8b-v1"
+            # NVIDIA NIM free models don't support native tool calling — inject tools as text
+            tool_text = ""
+            if tools:
+                tool_lines = []
+                for t in tools:
+                    name = t["function"]["name"]
+                    desc = t["function"]["description"]
+                    params = t["function"].get("parameters", {}).get("properties", {})
+                    param_str = ", ".join(params.keys()) if params else "none"
+                    tool_lines.append(f"  - {name}({param_str}): {desc}")
+                tool_text = "\nAVAILABLE TOOLS — call exactly ONE per response.\nRespond with ONLY a JSON: {\"tool\": \"tool_name\", \"args\": {...}}\n" + "\n".join(tool_lines)
+            
+            # Inject tools into the last user message
+            enriched_messages = list(messages)
+            if tool_text and enriched_messages:
+                last = enriched_messages[-1]
+                enriched_messages[-1] = {
+                    "role": last["role"],
+                    "content": last.get("content", "") + tool_text,
+                }
+            
             try:
-                return client.chat.completions.create(
-                    model=actual_model, messages=messages,
-                    tools=tools, tool_choice="auto" if tools else None,
+                resp = client.chat.completions.create(
+                    model=actual_model, messages=enriched_messages,
                     temperature=temperature, max_tokens=max_tokens,
                 )
+                # Parse JSON tool call from text response
+                text = resp.choices[0].message.content or ""
+                tool_call = self._parse_tool_from_text(text)
+                if tool_call:
+                    return MockResponseNvidia(tool_call, text, resp.usage.total_tokens if resp.usage else 0)
+                return MockResponseNvidia(None, text, resp.usage.total_tokens if resp.usage else 0)
             except Exception as e:
                 import sys
                 print(f"[DEEPWORLD] NVIDIA API error for {actual_model}: {type(e).__name__}: {e}", file=sys.stderr)
@@ -342,8 +368,44 @@ def _parse_tool_call(text: str) -> Optional[Dict[str, Any]]:
             return {"name": action, "arguments": "{}"}
     return None
 
+    def _parse_tool_from_text(self, text: str):
+        """Parse JSON tool call from NVIDIA text response (no native tool support)."""
+        return _parse_tool_call(text)
+
 
 # ─── Mock OpenAI-compatible response objects ───
+
+class MockResponseNvidia:
+    """Mimics OpenAI response for NVIDIA text-mode (no native tools)."""
+    def __init__(self, tool_call, content, usage_tokens):
+        self.choices = [MockChoiceNvidia(tool_call, content)]
+        self.usage = MockUsageNvidia(usage_tokens)
+
+class MockChoiceNvidia:
+    def __init__(self, tool_call, content):
+        self.message = MockMessageNvidia(tool_call, content)
+
+class MockMessageNvidia:
+    def __init__(self, tool_call, content):
+        self.content = content
+        self.tool_calls = [MockToolCallNvidia(tool_call)] if tool_call else None
+
+class MockToolCallNvidia:
+    def __init__(self, data):
+        self.id = "nv_call"
+        self.type = "function"
+        self.function = MockFunctionNvidia(data["name"], data["arguments"])
+
+class MockFunctionNvidia:
+    def __init__(self, name, arguments):
+        self.name = name
+        self.arguments = arguments
+
+class MockUsageNvidia:
+    def __init__(self, total):
+        self.total_tokens = total
+        self.prompt_tokens = total
+        self.completion_tokens = 0
 
 class MockResponse:
     def __init__(self, tool_call, content, usage_tokens):
