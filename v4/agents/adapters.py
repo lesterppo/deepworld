@@ -40,8 +40,15 @@ class MultiModelAdapter:
         return client
 
     def _get_backend_info(self, model: str) -> dict:
-        from config import MODEL_BACKENDS
-        info = MODEL_BACKENDS.get(model, MODEL_BACKENDS["deepseek"])
+        from config import MODEL_BACKENDS, NVIDIA_ONLY
+        info = MODEL_BACKENDS.get(model)
+        if info:
+            return {"type": info["adapter"], **info}
+        # Unknown models default to NVIDIA in NVIDIA-only mode
+        if NVIDIA_ONLY:
+            return {"type": "nvidia_api", "adapter": "nvidia_api", "family": "nvidia", "token_multiplier": 1.0, "context_limit": 131072}
+        # Fallback to deepseek for multi-model mode
+        info = MODEL_BACKENDS["deepseek"]
         return {"type": info["adapter"], **info}
 
     def _create_openai_client(self, info: dict) -> Any:
