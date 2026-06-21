@@ -73,7 +73,7 @@ class MultiModelAdapter:
                                 api_key = line.split("=", 1)[1]
             base_url = "https://api.deepseek.com/v1"
         
-        return OpenAI(api_key=api_key, base_url=base_url)
+        return OpenAI(api_key=api_key, base_url=base_url, timeout=120.0)
 
     def _create_gemini_web_client(self, info: dict) -> Any:
         """Gemini Web CLI adapter (returns an OpenAI-compatible facade)."""
@@ -96,13 +96,17 @@ class MultiModelAdapter:
                 temperature=temperature, max_tokens=max_tokens,
             )
         elif backend_type == "nvidia_api":
-            # Use the agent's assigned model (from NVIDIA_FREE_MODELS pool)
             actual_model = model if (model and model != "nemotron") else "nvidia/llama-3.1-nemotron-nano-8b-v1"
-            return client.chat.completions.create(
-                model=actual_model, messages=messages,
-                tools=tools, tool_choice="auto" if tools else None,
-                temperature=temperature, max_tokens=max_tokens,
-            )
+            try:
+                return client.chat.completions.create(
+                    model=actual_model, messages=messages,
+                    tools=tools, tool_choice="auto" if tools else None,
+                    temperature=temperature, max_tokens=max_tokens,
+                )
+            except Exception as e:
+                import sys
+                print(f"[DEEPWORLD] NVIDIA API error for {actual_model}: {type(e).__name__}: {e}", file=sys.stderr)
+                raise
         else:
             # Web CLI backends use the adapter's create method
             return client.chat.completions.create(
