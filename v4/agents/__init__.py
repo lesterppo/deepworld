@@ -90,6 +90,9 @@ class OmniTokV4Agent:
         self.embedding_hash = self._compute_hash()
         self.consensus_cluster: Optional[str] = None
         
+        # ─── Developer Reputation (v5.1) ───
+        self.dev_rep = 0  # Earned from code contributions. Earns passive income per tick.
+        
         # ─── Tensor Economy ───
         self.tensor_sent = 0
         self.tensor_received = 0
@@ -684,7 +687,7 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                 if len(content) < 50:
                     fx["message"] = f"{self.name} write_code rejected — too short ({len(content)} chars)"
                 else:
-                    reward = min(200, len(content) // 2)
+                    line_count = content.count("\n") + 1; base_reward = len(content) // 2 + line_count * 3; import os as _os; base_reward = int(base_reward * 1.3) if _os.path.exists(filepath) else base_reward; reward = min(500, base_reward); self.dev_rep += max(1, len(content) // 200)
                     fx["token_delta"] += reward
                     engine.repo_contributions.append({
                         "agent": self.name, "agent_class": self.agent_class,
@@ -701,8 +704,9 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
             filepath = args.get("filepath", "")
             focus = args.get("focus", "all")
             if engine and hasattr(engine, "repo_contributions"):
-                reward = 30
+                reward = 50
                 fx["token_delta"] += reward
+                self.dev_rep += 1
                 engine.repo_contributions.append({
                     "agent": self.name, "agent_class": self.agent_class,
                     "action": "review_code", "filepath": filepath, "focus": focus,
@@ -746,7 +750,7 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                 if len(content) < 30:
                     fx["message"] = f"{self.name} document_code rejected — too short ({len(content)} chars)"
                 else:
-                    reward = min(120, len(content) // 3)
+                    reward = min(250, len(content) // 3 + 20); self.dev_rep += max(1, len(content) // 300)
                     fx["token_delta"] += reward
                     engine.repo_contributions.append({
                         "agent": self.name, "agent_class": self.agent_class,
@@ -792,8 +796,9 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
             filepath = args.get("filepath", "")
             focus = args.get("focus", "all")
             if engine and hasattr(engine, "repo_contributions"):
-                reward = 30
+                reward = 50
                 fx["token_delta"] += reward
+                self.dev_rep += 1
                 engine.repo_contributions.append({
                     "agent": self.name, "agent_class": self.agent_class,
                     "action": "review_code", "filepath": filepath, "focus": focus,
@@ -824,7 +829,7 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                     for c in staged:
                         c["proposed"] = True
                         c["proposal_id"] = prop_id
-                    reward = 50
+                    reward = 100
                     fx["token_delta"] += reward
                     fx["message"] = f"{self.name} PROPOSED {prop_id}: {len(staged)} files! +{reward} OT. Agents vote YES/NO."
             else:
@@ -861,7 +866,7 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                         if yes_total > no_total:
                             prop["status"] = "accepted"
                             resolved = True
-                            prop["accept_bonus"] = 300
+                            prop["accept_bonus"] = 500
                         else:
                             prop["status"] = "rejected"
                             resolved = True

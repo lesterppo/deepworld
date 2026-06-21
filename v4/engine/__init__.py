@@ -198,6 +198,12 @@ class OmniTokV4Engine:
         ontology_size = len(self.cmtip.concept_registry) if self.cmtip else 0
 
         for agent in self._active():
+            # ─── Code Dividends (v5.1) — passive income from dev_rep ───
+            if agent.dev_rep > 0:
+                dividend = agent.dev_rep * 2
+                agent.tokens += dividend
+                agent.tokens_earned += dividend
+            
             nearby = [
                 f"{o.name}({o.agent_class}, {o.model_family}, ctx={o.context_class})"
                 for o in self._active() if o.name != agent.name
@@ -258,6 +264,7 @@ class OmniTokV4Engine:
                 "alive": agent.alive, "lazarus_echoes": len(agent.lazarus_echoes),
                 "tensor_sent": agent.tensor_sent, "tensor_received": agent.tensor_received,
                 "owned_concepts": len(agent.owned_concepts),
+                "dev_rep": agent.dev_rep,
                 "message": effects.get("message", ""),
             }
             self.observer.log_event(event)
@@ -364,6 +371,9 @@ class OmniTokV4Engine:
                 
                 laz_str = f" | 👻:{laz}" if laz else ""
                 concept_str = f" | 🏷:{concepts}" if concepts else ""
+                # Show top dev agents
+                devs = sorted([a for a in self._active() if a.dev_rep > 0], key=lambda a: a.dev_rep, reverse=True)
+                dev_str = f" | 💻:{','.join(f'{a.name}={a.dev_rep}' for a in devs[:3])}" if devs else ""
                 
                 # Show tensor actions vs regular actions
                 tensor_acts = {k: v for k, v in acts.items() if k in 
@@ -373,7 +383,7 @@ class OmniTokV4Engine:
                 
                 print(f"  T{tick:2d} | A:{alive} | "
                       f"📊{dict(sorted(regular_acts.items()))} | "
-                      f"🔮{dict(sorted(tensor_acts.items()))}{laz_str}{concept_str}")
+                      f"🔮{dict(sorted(tensor_acts.items()))}{laz_str}{concept_str}{dev_str}")
 
         print(f"\n{'=' * 70}")
         print("  SIMULATION COMPLETE")

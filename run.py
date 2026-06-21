@@ -180,8 +180,10 @@ def main():
         for agent_info in summary["agents"]:
             alive_str = "✓" if agent_info["alive"] else "✗"
             short_model = agent_info.get("model", "?").split("/")[-1]
+            rep = agent_info.get("dev_rep", 0)
+            rep_str = f" 💻:{rep}" if rep > 0 else ""
             print(f"    {alive_str} {agent_info['name']} ({agent_info.get('class','?')}/{short_model}) "
-                  f"OT={agent_info.get('tokens', 0):.0f}")
+                  f"OT={agent_info.get('tokens', 0):.0f}{rep_str}")
 
     except KeyboardInterrupt:
         print("\n  Interrupted.")
