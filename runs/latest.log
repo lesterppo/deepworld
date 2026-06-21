@@ -1,21 +1,141 @@
 [DEEPWORLD] ✅ NVIDIA health check OK (response: 'OK, I'm ready')
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 
   DeepWorld v5 | 5d × 12t | ~1.0min | CMTIP: ON
   Backend: NVIDIA NIM (free, random models per agent)
-Traceback (most recent call last):
-  File "/home/runner/work/deepworld/deepworld/run.py", line 140, in <module>
-    main()
-  File "/home/runner/work/deepworld/deepworld/run.py", line 93, in main
-    engine = OmniTokV4Engine(
-             ^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 43, in __init__
-    self.cmtip = CMTIPBridge() if self.use_cmtip else None
-                 ^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 134, in __init__
-    self._init_concepts()
-  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 186, in _init_concepts
-    backend = self._get_backend(family)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 143, in _get_backend
-    from real_backends import SentenceTransformerBackend
-ModuleNotFoundError: No module named 'real_backends'
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3627.86it/s]
+======================================================================
+  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
+  10 agents on 8 models (1 families)
+  5d × 12t | CMTIP: ON | Governance: ON
+  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1)
+  World is mutable — agents can propose, vote, and change simulation rules
+======================================================================
+
+  Model distribution:
+    2× mistral-nemotron
+    2× llama-3.1-nemotron-51b-instruct
+    1× gemma-3-12b-it
+    1× gpt-oss-20b
+    1× llama-4-maverick-17b-128e-instruct
+    1× qwen3.5-122b-a10b
+    1× llama-3.1-nemotron-nano-8b-v1
+    1× nemotron-3-super-120b-a12b
+  ⚡ EM-10 (Embedding-Broker/nemotron-3-super-120b-a12b) STARVED: 1500 OT, perplexity=222
+  ⚡ CO-05 (Concept-Miner/qwen3.5-122b-a10b) STARVED: 1500 OT, perplexity=257
+  ⚡ LO-07 (Loss-Miner/llama-3.1-nemotron-51b-instruct) STARVED: 1500 OT, perplexity=238
+  💰 QU-01 (Quant-Scribe/gemma-3-12b-it) WEALTHY: 12500 OT, low perplexity=59
+  💰 EM-09 (Embedding-Broker/llama-3.1-nemotron-nano-8b-v1) WEALTHY: 12500 OT, low perplexity=52
+  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
+  Agents: QU-01(Quant-Scribe/gemma-3-12b-it), QU-02(Quant-Scribe/gpt-oss-20b), PR-03(Projection-Weaver/llama-4-maverick-17b-128e-instruct), PR-04(Projection-Weaver/mistral-nemotron), CO-05(Concept-Miner/qwen3.5-122b-a10b), CO-06(Concept-Miner/mistral-nemotron), LO-07(Loss-Miner/llama-3.1-nemotron-51b-instruct), LO-08(Loss-Miner/llama-3.1-nemotron-51b-instruct), EM-09(Embedding-Broker/llama-3.1-nemotron-nano-8b-v1), EM-10(Embedding-Broker/nemotron-3-super-120b-a12b)
+  Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
+
+─────────────────────────────────────────────────────────────────
+  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:10 | 📊{'error': 10} | 🔮{}
+  T 2 | A:10 | 📊{'error': 10} | 🔮{}
+  T 3 | A:10 | 📊{'error': 10} | 🔮{}
+  T 4 | A:10 | 📊{'error': 10} | 🔮{}
+  T 5 | A:10 | 📊{'error': 10} | 🔮{}
+  T 6 | A:10 | 📊{'error': 10} | 🔮{}
+  T 7 | A:10 | 📊{'error': 10} | 🔮{}
+  T 8 | A:10 | 📊{'error': 10} | 🔮{}
+  T 9 | A:10 | 📊{'error': 10} | 🔮{}
+  T10 | A:10 | 📊{'error': 10} | 🔮{}
+  T11 | A:10 | 📊{'error': 10} | 🔮{}
+  T12 | A:10 | 📊{'error': 10} | 🔮{}
+
+─────────────────────────────────────────────────────────────────
+  Day 2 | GC in 4t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:10 | 📊{'error': 10} | 🔮{}
+  T 2 | A:10 | 📊{'error': 10} | 🔮{}
+  T 3 | A:10 | 📊{'error': 10} | 🔮{}
+
+  ⚡ GREAT COMPRESSION — 50% context purge!
+  T 4 | A:10 | 📊{'error': 10} | 🔮{}
+  T 5 | A:10 | 📊{'error': 10} | 🔮{}
+  T 6 | A:10 | 📊{'error': 10} | 🔮{}
+  T 7 | A:10 | 📊{'error': 10} | 🔮{}
+  T 8 | A:10 | 📊{'error': 10} | 🔮{}
+  T 9 | A:10 | 📊{'error': 10} | 🔮{}
+  T10 | A:10 | 📊{'error': 10} | 🔮{}
+  T11 | A:10 | 📊{'error': 10} | 🔮{}
+  T12 | A:10 | 📊{'error': 10} | 🔮{}
+
+─────────────────────────────────────────────────────────────────
+  Day 3 | GC in 8t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:10 | 📊{'error': 10} | 🔮{}
+  T 2 | A:10 | 📊{'error': 10} | 🔮{}
+  T 3 | A:10 | 📊{'error': 10} | 🔮{}
+  T 4 | A:10 | 📊{'error': 10} | 🔮{}
+  T 5 | A:10 | 📊{'error': 10} | 🔮{}
+  T 6 | A:10 | 📊{'error': 10} | 🔮{}
+  T 7 | A:10 | 📊{'error': 10} | 🔮{}
+
+  ⚡ GREAT COMPRESSION — 50% context purge!
+  T 8 | A:10 | 📊{'error': 10} | 🔮{}
+  T 9 | A:10 | 📊{'error': 10} | 🔮{}
+  T10 | A:10 | 📊{'error': 10} | 🔮{}
+  T11 | A:10 | 📊{'error': 10} | 🔮{}
+  T12 | A:10 | 📊{'error': 10} | 🔮{}
+
+─────────────────────────────────────────────────────────────────
+  Day 4 | GC in 12t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:10 | 📊{'error': 10} | 🔮{}
+  T 2 | A:10 | 📊{'error': 10} | 🔮{}
+  T 3 | A:10 | 📊{'error': 10} | 🔮{}
+  T 4 | A:10 | 📊{'error': 10} | 🔮{}
+  T 5 | A:10 | 📊{'error': 10} | 🔮{}
+  T 6 | A:10 | 📊{'error': 10} | 🔮{}
+  T 7 | A:10 | 📊{'error': 10} | 🔮{}
+  T 8 | A:10 | 📊{'error': 10} | 🔮{}
+  T 9 | A:10 | 📊{'error': 10} | 🔮{}
+  T10 | A:10 | 📊{'error': 10} | 🔮{}
+  T11 | A:10 | 📊{'error': 10} | 🔮{}
+
+  ⚡ GREAT COMPRESSION — 50% context purge!
+  T12 | A:10 | 📊{'error': 10} | 🔮{}
+
+─────────────────────────────────────────────────────────────────
+  Day 5 | GC in 16t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:10 | 📊{'error': 10} | 🔮{}
+  T 2 | A:10 | 📊{'error': 10} | 🔮{}
+  T 3 | A:10 | 📊{'error': 10} | 🔮{}
+  T 4 | A:10 | 📊{'error': 10} | 🔮{}
+  T 5 | A:10 | 📊{'error': 10} | 🔮{}
+  T 6 | A:10 | 📊{'error': 10} | 🔮{}
+  T 7 | A:10 | 📊{'error': 10} | 🔮{}
+  T 8 | A:10 | 📊{'error': 10} | 🔮{}
+  T 9 | A:10 | 📊{'error': 10} | 🔮{}
+  T10 | A:10 | 📊{'error': 10} | 🔮{}
+  T11 | A:10 | 📊{'error': 10} | 🔮{}
+  T12 | A:10 | 📊{'error': 10} | 🔮{}
+
+======================================================================
+  SIMULATION COMPLETE
+
+  Tensor Economy Final:
+    Total tensor sends: 0
+    Total tensor receives: 0
+    Ontology: 34 concepts
+    Royalties: {}
+    Top concepts: [('resource_scarcity', 0), ('abundance', 0), ('trust', 0), ('betrayal', 0), ('cooperation', 0)]
+
+  Done in 60s. Report: runs/20260621_121038/final_report.md
+
+  Agent Summary:
+    ✓ QU-01 (Quant-Scribe/nvidia) OT=37320
+    ✓ EM-09 (Embedding-Broker/nvidia) OT=37320
+    ✓ QU-02 (Quant-Scribe/nvidia) OT=29820
+    ✓ PR-03 (Projection-Weaver/nvidia) OT=29820
+    ✓ PR-04 (Projection-Weaver/nvidia) OT=29820
+    ✓ CO-06 (Concept-Miner/nvidia) OT=29820
+    ✓ LO-08 (Loss-Miner/nvidia) OT=29820
+    ✓ CO-05 (Concept-Miner/nvidia) OT=26320
+    ✓ LO-07 (Loss-Miner/nvidia) OT=26320
+    ✓ EM-10 (Embedding-Broker/nvidia) OT=26320
