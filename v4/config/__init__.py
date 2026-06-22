@@ -51,15 +51,11 @@ MODEL_BACKENDS = {
 # All models are available via NVIDIA NIM free tier (integrate.api.nvidia.com/v1).
 NVIDIA_FREE_MODELS = [
     "nvidia/llama-3.1-nemotron-nano-8b-v1",       # Fast, small
-    "nvidia/llama-3.1-nemotron-51b-instruct",      # Mid-size
-    "nvidia/llama-3.1-nemotron-70b-instruct",      # Large
     "nvidia/llama-3.3-nemotron-super-49b-v1",      # Super
     "nvidia/llama-3.3-nemotron-super-49b-v1.5",    # Super v1.5
     "meta/llama-4-maverick-17b-128e-instruct",     # Llama 4
     "meta/llama-3.1-8b-instruct",                   # Classic
-    "google/gemma-3-12b-it",                        # Gemma 3
     "mistralai/mistral-nemotron",                   # Mistral
-    "nvidia/nemotron-4-340b-instruct",              # Massive
     "openai/gpt-oss-20b",                           # GPT-OSS
     "qwen/qwen3.5-122b-a10b",                       # Qwen MoE
     "deepseek-ai/deepseek-v4-flash",                # DeepSeek

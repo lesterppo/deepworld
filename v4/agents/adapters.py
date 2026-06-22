@@ -90,6 +90,10 @@ class MultiModelAdapter:
         """Claude Web CLI adapter."""
         return ClaudeWebClient()
 
+    def _parse_tool_from_text(self, text: str):
+        """Parse JSON tool call from NVIDIA text response (no native tool support)."""
+        return _parse_tool_call(text)
+
     def create_completion(self, model: str, messages: list, tools: list = None,
                           temperature: float = 0.7, max_tokens: int = 512) -> Any:
         """Route completion to the correct backend."""
@@ -374,10 +378,6 @@ def _parse_tool_call(text: str) -> Optional[Dict[str, Any]]:
         if keyword.lower() in text.lower():
             return {"name": action, "arguments": "{}"}
     return None
-
-    def _parse_tool_from_text(self, text: str):
-        """Parse JSON tool call from NVIDIA text response (no native tool support)."""
-        return _parse_tool_call(text)
 
 
 # ─── Mock OpenAI-compatible response objects ───
