@@ -3,85 +3,34 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 
   DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
   Backend: NVIDIA NIM (free, random models per agent)
-Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3687.32it/s]
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: BadRequestError: Error code: 400 - {'status': 400, 'title': 'Bad Request', 'detail': "Function id 'f81394d8-63c0-4023-afa2-7ad11aa54ca3': DEGRADED function cannot be invoked"}
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for nvidia/llama-3.1-nemotron-nano-8b-v1: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: BadRequestError: Error code: 400 - {'status': 400, 'title': 'Bad Request', 'detail': "Function id 'f81394d8-63c0-4023-afa2-7ad11aa54ca3': DEGRADED function cannot be invoked"}
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3529.15it/s]
 ======================================================================
   DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
-  10 agents on 9 models (1 families)
+  10 agents on 5 models (1 families)
   3d × 8t | CMTIP: ON | Governance: ON
   Backend: NVIDIA NIM (integrate.api.nvidia.com/v1)
   World is mutable — agents can propose, vote, and change simulation rules
 ======================================================================
 
   Model distribution:
+    3× llama-3.1-nemotron-nano-8b-v1
+    3× llama-3.1-8b-instruct
     2× llama-3.3-nemotron-super-49b-v1
-    1× llama-3.3-nemotron-super-49b-v1.5
-    1× nemotron-3-super-120b-a12b
-    1× mistral-nemotron
-    1× llama-3.1-8b-instruct
-    1× phi-4-mini-instruct
     1× llama-4-maverick-17b-128e-instruct
-    1× deepseek-v4-flash
-    1× llama-3.1-nemotron-nano-8b-v1
-  ⚡ LO-07 (Loss-Miner/deepseek-v4-flash) STARVED: 1500 OT, perplexity=273
-  ⚡ CO-06 (Concept-Miner/llama-4-maverick-17b-128e-instruct) STARVED: 1500 OT, perplexity=239
-  ⚡ EM-10 (Embedding-Broker/llama-3.3-nemotron-super-49b-v1) STARVED: 1500 OT, perplexity=238
-  💰 QU-02 (Quant-Scribe/nemotron-3-super-120b-a12b) WEALTHY: 12500 OT, low perplexity=53
-  💰 EM-09 (Embedding-Broker/llama-3.3-nemotron-super-49b-v1) WEALTHY: 12500 OT, low perplexity=43
+    1× phi-4-mini-instruct
+  ⚡ EM-10 (Embedding-Broker/llama-3.3-nemotron-super-49b-v1) STARVED: 1500 OT, perplexity=280
+  ⚡ LO-08 (Loss-Miner/llama-3.1-8b-instruct) STARVED: 1500 OT, perplexity=219
+  ⚡ CO-05 (Concept-Miner/llama-3.1-nemotron-nano-8b-v1) STARVED: 1500 OT, perplexity=224
+  💰 PR-03 (Projection-Weaver/phi-4-mini-instruct) WEALTHY: 12500 OT, low perplexity=59
+  💰 LO-07 (Loss-Miner/llama-3.1-8b-instruct) WEALTHY: 12500 OT, low perplexity=42
   ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/llama-3.3-nemotron-super-49b-v1.5), QU-02(Quant-Scribe/nemotron-3-super-120b-a12b), PR-03(Projection-Weaver/mistral-nemotron), PR-04(Projection-Weaver/llama-3.1-8b-instruct), CO-05(Concept-Miner/phi-4-mini-instruct), CO-06(Concept-Miner/llama-4-maverick-17b-128e-instruct), LO-07(Loss-Miner/deepseek-v4-flash), LO-08(Loss-Miner/llama-3.1-nemotron-nano-8b-v1), EM-09(Embedding-Broker/llama-3.3-nemotron-super-49b-v1), EM-10(Embedding-Broker/llama-3.3-nemotron-super-49b-v1)
+  Agents: QU-01(Quant-Scribe/llama-3.1-nemotron-nano-8b-v1), QU-02(Quant-Scribe/llama-4-maverick-17b-128e-instruct), PR-03(Projection-Weaver/phi-4-mini-instruct), PR-04(Projection-Weaver/llama-3.1-8b-instruct), CO-05(Concept-Miner/llama-3.1-nemotron-nano-8b-v1), CO-06(Concept-Miner/llama-3.1-nemotron-nano-8b-v1), LO-07(Loss-Miner/llama-3.1-8b-instruct), LO-08(Loss-Miner/llama-3.1-8b-instruct), EM-09(Embedding-Broker/llama-3.3-nemotron-super-49b-v1), EM-10(Embedding-Broker/llama-3.3-nemotron-super-49b-v1)
   Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
 
 ─────────────────────────────────────────────────────────────────
   Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
 ─────────────────────────────────────────────────────────────────
-  T 1 | A:10 | 📊{'audit_consistency': 1, 'compress_context': 1, 'error': 2, 'idle': 1, 'scan_network': 2} | 🔮{'mine_concept': 1, 'send_tensor': 1, 'train_projection': 1} | 🏷:1
-  T 2 | A:10 | 📊{'audit_consistency': 1, 'error': 3, 'idle': 1, 'scan_network': 2, 'transmit_message': 1} | 🔮{'mine_concept': 1, 'send_tensor': 1} | 🏷:1
-  T 3 | A:10 | 📊{'audit_consistency': 1, 'error': 3, 'idle': 1, 'scan_network': 2, 'transmit_message': 1} | 🔮{'mine_concept': 1, 'train_projection': 1} | 🏷:1
-  T 4 | A:10 | 📊{'error': 3, 'idle': 1, 'scan_latent_space': 1, 'scan_network': 3} | 🔮{'mine_concept': 1, 'send_tensor': 1} | 🏷:2
-  T 5 | A:10 | 📊{'audit_consistency': 1, 'error': 2, 'idle': 1, 'scan_network': 2, 'transmit_message': 1} | 🔮{'mine_concept': 1, 'send_tensor': 1, 'train_projection': 1} | 🏷:2
-  T 6 | A:10 | 📊{'audit_consistency': 1, 'error': 3, 'idle': 1, 'scan_network': 2, 'transmit_message': 1} | 🔮{'mine_concept': 1, 'send_tensor': 1} | 🏷:2
-  T 7 | A:10 | 📊{'audit_consistency': 1, 'error': 2, 'idle': 1, 'scan_network': 2, 'transmit_message': 1} | 🔮{'mine_concept': 1, 'send_tensor': 2} | 🏷:2
-  T 8 | A:10 | 📊{'audit_consistency': 1, 'error': 2, 'harvest_tokens': 1, 'idle': 1, 'scan_network': 2} | 🔮{'mine_concept': 1, 'send_tensor': 1, 'train_projection': 1} | 🏷:2
-
-─────────────────────────────────────────────────────────────────
-  Day 2 | GC in 8t | Dead: 0 | Tensors: 8s/0r
-─────────────────────────────────────────────────────────────────
-  T 1 | A:10 | 📊{'audit_consistency': 1, 'compress_context': 1, 'error': 2, 'idle': 1, 'scan_network': 2} | 🔮{'mine_concept': 1, 'train_projection': 2} | 🏷:2
-  T 2 | A:10 | 📊{'audit_consistency': 1, 'error': 2, 'idle': 1, 'scan_network': 2, 'transmit_message': 1} | 🔮{'mine_concept': 1, 'send_tensor': 1, 'train_projection': 1} | 🏷:2
-  T 3 | A:10 | 📊{'audit_consistency': 1, 'error': 2, 'harvest_tokens': 1, 'idle': 1, 'scan_network': 1, 'transmit_message': 1} | 🔮{'mine_concept': 1, 'send_tensor': 1, 'train_projection': 1} | 🏷:2
-  T 4 | A:10 | 📊{'audit_consistency': 1, 'error': 2, 'idle': 1, 'scan_network': 2, 'transmit_message': 1} | 🔮{'mine_concept': 1, 'send_tensor': 1, 'train_projection': 1} | 🏷:2
-  T 5 | A:10 | 📊{'audit_consistency': 1, 'compress_context': 1, 'error': 2, 'idle': 1, 'scan_network': 2} | 🔮{'mine_concept': 1, 'send_tensor': 1, 'train_projection': 1} | 🏷:2
+  T 1 | A:10 | 📊{'scan_network': 2, 'sell_memory_fragment': 1} | 🔮{'mine_concept': 2, 'send_tensor': 4, 'train_projection': 1} | 🏷:2
 Traceback (most recent call last):
   File "/home/runner/work/deepworld/deepworld/run.py", line 220, in <module>
     main()
@@ -94,7 +43,7 @@ Traceback (most recent call last):
   File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 225, in tick
     effects = agent.apply_effects(action, self, self.cmtip)
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 344, in apply_effects
-    fx["message"] = f"{self.name} audited {args.get('target','?')} — clean."
-                                           ^^^^^^^^
-AttributeError: 'list' object has no attribute 'get'
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 316, in apply_effects
+    fx["token_delta"] = price - 5
+                        ~~~~~~^~~
+TypeError: unsupported operand type(s) for -: 'str' and 'int'
