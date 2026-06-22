@@ -1,0 +1,17 @@
+{
+  "day": 1,
+  "alive": 10,
+  "context_distribution": {
+    "Full-Context": 10
+  },
+  "model_distribution": {
+    "nvidia": 10
+  },
+  "dead_pool": 0,
+  "lazarus_agents": 0,
+  "synthetic_ratio": 0.028,
+  "tensor_sent": 1,
+  "tensor_received": 0,
+  "concepts_owned": 16,
+  "tensor_messages_total": 1
+}
