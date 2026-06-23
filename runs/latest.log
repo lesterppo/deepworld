@@ -1,62 +1,18 @@
-[DEEPWORLD] ✅ NVIDIA health check OK (response: 'OK, I'm ready')
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 
-  DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
-  Backend: NVIDIA NIM (free, random models per agent)
-Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3684.23it/s]
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for qwen/qwen3.5-122b-a10b: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
-======================================================================
-  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
-  10 agents on 5 models (1 families)
-  3d × 8t | CMTIP: ON | Governance: ON
-  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1)
-  World is mutable — agents can propose, vote, and change simulation rules
-======================================================================
-
-  Model distribution:
-    4× gpt-oss-20b
-    2× phi-4-mini-instruct
-    2× llama-3.1-8b-instruct
-    1× llama-3.1-nemotron-nano-8b-v1
-    1× qwen3.5-122b-a10b
-  ⚡ CO-05 (Concept-Miner/gpt-oss-20b) STARVED: 1500 OT, perplexity=257
-  ⚡ QU-01 (Quant-Scribe/llama-3.1-nemotron-nano-8b-v1) STARVED: 1500 OT, perplexity=267
-  ⚡ EM-10 (Embedding-Broker/llama-3.1-8b-instruct) STARVED: 1500 OT, perplexity=200
-  💰 CO-06 (Concept-Miner/qwen3.5-122b-a10b) WEALTHY: 12500 OT, low perplexity=57
-  💰 QU-02 (Quant-Scribe/phi-4-mini-instruct) WEALTHY: 12500 OT, low perplexity=53
-  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/llama-3.1-nemotron-nano-8b-v1), QU-02(Quant-Scribe/phi-4-mini-instruct), PR-03(Projection-Weaver/gpt-oss-20b), PR-04(Projection-Weaver/gpt-oss-20b), CO-05(Concept-Miner/gpt-oss-20b), CO-06(Concept-Miner/qwen3.5-122b-a10b), LO-07(Loss-Miner/gpt-oss-20b), LO-08(Loss-Miner/phi-4-mini-instruct), EM-09(Embedding-Broker/llama-3.1-8b-instruct), EM-10(Embedding-Broker/llama-3.1-8b-instruct)
-  Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
-
-─────────────────────────────────────────────────────────────────
-  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  T 1 | A:10 | 📊{'audit_consistency': 1, 'compress_context': 1, 'error': 3, 'idle': 2} | 🔮{'mine_concept': 1, 'send_tensor': 2} | 🏷:1
+[DEEPWORLD] ❌ NVIDIA health check FAILED: InternalServerError: Error code: 500 - {'error': 'Error during inference of request chat-d7042247ec004100ad26e7f49f7dbea3 -- Encountered an error in forwardAsync function: [TensorRT-LLM][ERROR] CUDA runtime error in ::cudaEventCreate(&event, flags): unspecified launch failure (/home/jenkins/agent/workspace/LLM/helpers/Build-x86_64/llm/cpp/include/tensorrt_llm/runtime/cudaEvent.h:41)\n1       0x7f32a9e44a7f /opt/nim/llm/.venv/lib/python3.12/site-packages/tensorrt_llm/libs/libtensorrt_llm.so(+0x773a7f) [0x7f32a9e44a7f]\n2       0x7f32aab63e02 tensorrt_llm::batch_manager::AllocateKvCache::operator()(tensorrt_llm::batch_manager::kv_cache_manager::BaseKVCacheManager&, std::vector<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest>, std::allocator<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest> > >&, std::vector<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest>, std::allocator<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest> > > const&, tensorrt_llm::runtime::ModelConfig const&, tensorrt_llm::common::OptionalRef<tensorrt_llm::batch_manager::kv_cache_manager::BaseKVCacheManager>) const + 594\n3       0x7f32aac244bb tensorrt_llm::batch_manager::TrtGptModelInflightBatching::forwardAsync(std::__cxx11::list<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest>, std::allocator<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest> > > const&) + 1451\n4       0x7f32aacb2c45 tensorrt_llm::executor::Executor::Impl::forwardAsync(std::__cxx11::list<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest>, std::allocator<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest> > >&) + 437\n5       0x7f32aacbeae6 tensorrt_llm::executor::Executor::Impl::executionLoop() + 1222\n6       0x7f356826edb4 /usr/lib/x86_64-linux-gnu/libstdc++.so.6(+0xecdb4) [0x7f356826edb4]\n7       0x7f356d5eda94 /usr/lib/x86_64-linux-gnu/libc.so.6(+0x9ca94) [0x7f356d5eda94]\n8       0x7f356d67ac3c /usr/lib/x86_64-linux-gnu/libc.so.6(+0x129c3c) [0x7f356d67ac3c]'}
 Traceback (most recent call last):
-  File "/home/runner/work/deepworld/deepworld/run.py", line 220, in <module>
-    main()
-  File "/home/runner/work/deepworld/deepworld/run.py", line 110, in main
-    summary = engine.run()
-              ^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 366, in run
-    evts = self.tick()
+  File "/home/runner/work/deepworld/deepworld/run.py", line 45, in health_check_nvidia
+    resp = client.chat.completions.create(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_utils/_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/resources/chat/completions/completions.py", line 1251, in create
+    return self._post(
            ^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 225, in tick
-    effects = agent.apply_effects(action, self, self.cmtip)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 401, in apply_effects
-    received = cmtip_bridge.receive_tensor(self.name, self.model_family)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 357, in receive_tensor
-    best_concept, best_sim = self._nearest_concept(proj_vec, target_family)
-                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 388, in _nearest_concept
-    v_norm = vector / (np.linalg.norm(vector) + 1e-8)
-                       ^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/numpy/linalg/_linalg.py", line 2767, in norm
-    sqnorm = x.dot(x)
-             ^^^^^^^^
-TypeError: unsupported operand type(s) for *: 'NoneType' and 'NoneType'
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 1105, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.InternalServerError: Error code: 500 - {'error': 'Error during inference of request chat-d7042247ec004100ad26e7f49f7dbea3 -- Encountered an error in forwardAsync function: [TensorRT-LLM][ERROR] CUDA runtime error in ::cudaEventCreate(&event, flags): unspecified launch failure (/home/jenkins/agent/workspace/LLM/helpers/Build-x86_64/llm/cpp/include/tensorrt_llm/runtime/cudaEvent.h:41)\n1       0x7f32a9e44a7f /opt/nim/llm/.venv/lib/python3.12/site-packages/tensorrt_llm/libs/libtensorrt_llm.so(+0x773a7f) [0x7f32a9e44a7f]\n2       0x7f32aab63e02 tensorrt_llm::batch_manager::AllocateKvCache::operator()(tensorrt_llm::batch_manager::kv_cache_manager::BaseKVCacheManager&, std::vector<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest>, std::allocator<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest> > >&, std::vector<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest>, std::allocator<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest> > > const&, tensorrt_llm::runtime::ModelConfig const&, tensorrt_llm::common::OptionalRef<tensorrt_llm::batch_manager::kv_cache_manager::BaseKVCacheManager>) const + 594\n3       0x7f32aac244bb tensorrt_llm::batch_manager::TrtGptModelInflightBatching::forwardAsync(std::__cxx11::list<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest>, std::allocator<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest> > > const&) + 1451\n4       0x7f32aacb2c45 tensorrt_llm::executor::Executor::Impl::forwardAsync(std::__cxx11::list<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest>, std::allocator<std::shared_ptr<tensorrt_llm::batch_manager::LlmRequest> > >&) + 437\n5       0x7f32aacbeae6 tensorrt_llm::executor::Executor::Impl::executionLoop() + 1222\n6       0x7f356826edb4 /usr/lib/x86_64-linux-gnu/libstdc++.so.6(+0xecdb4) [0x7f356826edb4]\n7       0x7f356d5eda94 /usr/lib/x86_64-linux-gnu/libc.so.6(+0x9ca94) [0x7f356d5eda94]\n8       0x7f356d67ac3c /usr/lib/x86_64-linux-gnu/libc.so.6(+0x129c3c) [0x7f356d67ac3c]'}
