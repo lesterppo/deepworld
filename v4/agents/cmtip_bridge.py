@@ -347,10 +347,18 @@ class CMTIPBridge:
         
         msg = self.inbox[agent_name].pop(0)
         target_family = msg.get("target_family", source_family)
+
+        # Validate input vector
+        raw_vector = msg.get("vector")
+        if raw_vector is None:
+            return {"error": "Empty vector in message", "fidelity": 0}
+        vector = np.array(raw_vector, dtype=np.float64)
+        if not np.isfinite(vector).all():
+            return {"error": "Non-finite vector values", "fidelity": 0}
         
         # Project the vector to receiver's model family
         proj_vec, fidelity = self.project(
-            msg["vector"], msg["source_family"], target_family
+            vector, msg["source_family"], target_family
         )
         
         # Nearest-neighbor lookup: find closest concept in receiver's space
@@ -384,7 +392,13 @@ class CMTIPBridge:
         """Find the nearest concept in the target model family's vocabulary."""
         best_concept = "unknown"
         best_sim = -1.0
-        
+
+        # Guard against None or invalid vectors
+        if vector is None or not isinstance(vector, np.ndarray):
+            return "noise", 0.0
+        if vector.dtype == object or not np.isfinite(vector).all():
+            return "noise", 0.0
+
         v_norm = vector / (np.linalg.norm(vector) + 1e-8)
         
         for concept, registry in self.concept_registry.items():
