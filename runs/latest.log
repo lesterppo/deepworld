@@ -3,7 +3,11 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 
   DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
   Backend: NVIDIA NIM (free, random models per agent)
-Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3529.15it/s]
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3684.23it/s]
+[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for qwen/qwen3.5-122b-a10b: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APITimeoutError: Request timed out.
 ======================================================================
   DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
   10 agents on 5 models (1 families)
@@ -13,24 +17,24 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 ======================================================================
 
   Model distribution:
-    3× llama-3.1-nemotron-nano-8b-v1
-    3× llama-3.1-8b-instruct
-    2× llama-3.3-nemotron-super-49b-v1
-    1× llama-4-maverick-17b-128e-instruct
-    1× phi-4-mini-instruct
-  ⚡ EM-10 (Embedding-Broker/llama-3.3-nemotron-super-49b-v1) STARVED: 1500 OT, perplexity=280
-  ⚡ LO-08 (Loss-Miner/llama-3.1-8b-instruct) STARVED: 1500 OT, perplexity=219
-  ⚡ CO-05 (Concept-Miner/llama-3.1-nemotron-nano-8b-v1) STARVED: 1500 OT, perplexity=224
-  💰 PR-03 (Projection-Weaver/phi-4-mini-instruct) WEALTHY: 12500 OT, low perplexity=59
-  💰 LO-07 (Loss-Miner/llama-3.1-8b-instruct) WEALTHY: 12500 OT, low perplexity=42
+    4× gpt-oss-20b
+    2× phi-4-mini-instruct
+    2× llama-3.1-8b-instruct
+    1× llama-3.1-nemotron-nano-8b-v1
+    1× qwen3.5-122b-a10b
+  ⚡ CO-05 (Concept-Miner/gpt-oss-20b) STARVED: 1500 OT, perplexity=257
+  ⚡ QU-01 (Quant-Scribe/llama-3.1-nemotron-nano-8b-v1) STARVED: 1500 OT, perplexity=267
+  ⚡ EM-10 (Embedding-Broker/llama-3.1-8b-instruct) STARVED: 1500 OT, perplexity=200
+  💰 CO-06 (Concept-Miner/qwen3.5-122b-a10b) WEALTHY: 12500 OT, low perplexity=57
+  💰 QU-02 (Quant-Scribe/phi-4-mini-instruct) WEALTHY: 12500 OT, low perplexity=53
   ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/llama-3.1-nemotron-nano-8b-v1), QU-02(Quant-Scribe/llama-4-maverick-17b-128e-instruct), PR-03(Projection-Weaver/phi-4-mini-instruct), PR-04(Projection-Weaver/llama-3.1-8b-instruct), CO-05(Concept-Miner/llama-3.1-nemotron-nano-8b-v1), CO-06(Concept-Miner/llama-3.1-nemotron-nano-8b-v1), LO-07(Loss-Miner/llama-3.1-8b-instruct), LO-08(Loss-Miner/llama-3.1-8b-instruct), EM-09(Embedding-Broker/llama-3.3-nemotron-super-49b-v1), EM-10(Embedding-Broker/llama-3.3-nemotron-super-49b-v1)
+  Agents: QU-01(Quant-Scribe/llama-3.1-nemotron-nano-8b-v1), QU-02(Quant-Scribe/phi-4-mini-instruct), PR-03(Projection-Weaver/gpt-oss-20b), PR-04(Projection-Weaver/gpt-oss-20b), CO-05(Concept-Miner/gpt-oss-20b), CO-06(Concept-Miner/qwen3.5-122b-a10b), LO-07(Loss-Miner/gpt-oss-20b), LO-08(Loss-Miner/phi-4-mini-instruct), EM-09(Embedding-Broker/llama-3.1-8b-instruct), EM-10(Embedding-Broker/llama-3.1-8b-instruct)
   Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
 
 ─────────────────────────────────────────────────────────────────
   Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
 ─────────────────────────────────────────────────────────────────
-  T 1 | A:10 | 📊{'scan_network': 2, 'sell_memory_fragment': 1} | 🔮{'mine_concept': 2, 'send_tensor': 4, 'train_projection': 1} | 🏷:2
+  T 1 | A:10 | 📊{'audit_consistency': 1, 'compress_context': 1, 'error': 3, 'idle': 2} | 🔮{'mine_concept': 1, 'send_tensor': 2} | 🏷:1
 Traceback (most recent call last):
   File "/home/runner/work/deepworld/deepworld/run.py", line 220, in <module>
     main()
@@ -43,7 +47,16 @@ Traceback (most recent call last):
   File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 225, in tick
     effects = agent.apply_effects(action, self, self.cmtip)
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 316, in apply_effects
-    fx["token_delta"] = price - 5
-                        ~~~~~~^~~
-TypeError: unsupported operand type(s) for -: 'str' and 'int'
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 401, in apply_effects
+    received = cmtip_bridge.receive_tensor(self.name, self.model_family)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 357, in receive_tensor
+    best_concept, best_sim = self._nearest_concept(proj_vec, target_family)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 388, in _nearest_concept
+    v_norm = vector / (np.linalg.norm(vector) + 1e-8)
+                       ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/numpy/linalg/_linalg.py", line 2767, in norm
+    sqnorm = x.dot(x)
+             ^^^^^^^^
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'NoneType'
