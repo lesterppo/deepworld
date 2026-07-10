@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 1
 
-      - uses: actions/setup-python@a26c6987eafdec18a21e17a7e496ee4935d4a52d  # v5.7.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
         with:
           python-version: '3.12'
 
