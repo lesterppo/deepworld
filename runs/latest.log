@@ -1,50 +1,18 @@
-[DEEPWORLD] ✅ NVIDIA health check OK (response: 'OK, I'm ready')
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 
-  DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
-  Backend: NVIDIA NIM (free, random models per agent)
-Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4428.59it/s]
-======================================================================
-  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
-  10 agents on 7 models (1 families)
-  3d × 8t | CMTIP: ON | Governance: ON
-  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1)
-  World is mutable — agents can propose, vote, and change simulation rules
-======================================================================
-
-  Model distribution:
-    3× gpt-oss-20b
-    2× mistral-nemotron
-    1× llama-3.1-8b-instruct
-    1× llama-3.3-nemotron-super-49b-v1
-    1× nemotron-3-super-120b-a12b
-    1× phi-4-mini-instruct
-    1× deepseek-v4-flash
-  ⚡ PR-04 (Projection-Weaver/gpt-oss-20b) STARVED: 1500 OT, perplexity=231
-  ⚡ QU-02 (Quant-Scribe/mistral-nemotron) STARVED: 1500 OT, perplexity=274
-  ⚡ LO-07 (Loss-Miner/mistral-nemotron) STARVED: 1500 OT, perplexity=231
-  💰 EM-10 (Embedding-Broker/deepseek-v4-flash) WEALTHY: 12500 OT, low perplexity=39
-  💰 CO-05 (Concept-Miner/gpt-oss-20b) WEALTHY: 12500 OT, low perplexity=32
-  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/gpt-oss-20b), QU-02(Quant-Scribe/mistral-nemotron), PR-03(Projection-Weaver/llama-3.1-8b-instruct), PR-04(Projection-Weaver/gpt-oss-20b), CO-05(Concept-Miner/gpt-oss-20b), CO-06(Concept-Miner/llama-3.3-nemotron-super-49b-v1), LO-07(Loss-Miner/mistral-nemotron), LO-08(Loss-Miner/nemotron-3-super-120b-a12b), EM-09(Embedding-Broker/phi-4-mini-instruct), EM-10(Embedding-Broker/deepseek-v4-flash)
-  Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
-
-─────────────────────────────────────────────────────────────────
-  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
+[DEEPWORLD] ❌ NVIDIA health check FAILED: InternalServerError: Error code: 504
 Traceback (most recent call last):
-  File "/home/runner/work/deepworld/deepworld/run.py", line 220, in <module>
-    main()
-  File "/home/runner/work/deepworld/deepworld/run.py", line 110, in main
-    summary = engine.run()
-              ^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 366, in run
-    evts = self.tick()
+  File "/home/runner/work/deepworld/deepworld/run.py", line 45, in health_check_nvidia
+    resp = client.chat.completions.create(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_utils/_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/resources/chat/completions/completions.py", line 1281, in create
+    return self._post(
            ^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 225, in tick
-    effects = agent.apply_effects(action, self, self.cmtip)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 404, in apply_effects
-    drift_flag = "⚠DEGRADED" if received.get("signal_degraded") else ("DRIFTED" if received["semantic_drift"] else "MATCH")
-                                                                                   ~~~~~~~~^^^^^^^^^^^^^^^^^^
-KeyError: 'semantic_drift'
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 1105, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.InternalServerError: Error code: 504
