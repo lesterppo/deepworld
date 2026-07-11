@@ -3,7 +3,7 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 
   DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
   Backend: NVIDIA NIM (free, random models per agent)
-Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4156.37it/s]
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4428.59it/s]
 ======================================================================
   DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
   10 agents on 7 models (1 families)
@@ -13,20 +13,20 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 ======================================================================
 
   Model distribution:
-    4× llama-3.1-nemotron-nano-8b-v1
-    1× deepseek-v4-flash
-    1× llama-3.3-nemotron-super-49b-v1.5
+    3× gpt-oss-20b
+    2× mistral-nemotron
+    1× llama-3.1-8b-instruct
     1× llama-3.3-nemotron-super-49b-v1
     1× nemotron-3-super-120b-a12b
-    1× gpt-oss-20b
-    1× mistral-nemotron
-  ⚡ LO-08 (Loss-Miner/gpt-oss-20b) STARVED: 1500 OT, perplexity=261
-  ⚡ LO-07 (Loss-Miner/nemotron-3-super-120b-a12b) STARVED: 1500 OT, perplexity=233
-  ⚡ QU-01 (Quant-Scribe/llama-3.1-nemotron-nano-8b-v1) STARVED: 1500 OT, perplexity=220
-  💰 EM-09 (Embedding-Broker/llama-3.1-nemotron-nano-8b-v1) WEALTHY: 12500 OT, low perplexity=58
-  💰 EM-10 (Embedding-Broker/mistral-nemotron) WEALTHY: 12500 OT, low perplexity=40
+    1× phi-4-mini-instruct
+    1× deepseek-v4-flash
+  ⚡ PR-04 (Projection-Weaver/gpt-oss-20b) STARVED: 1500 OT, perplexity=231
+  ⚡ QU-02 (Quant-Scribe/mistral-nemotron) STARVED: 1500 OT, perplexity=274
+  ⚡ LO-07 (Loss-Miner/mistral-nemotron) STARVED: 1500 OT, perplexity=231
+  💰 EM-10 (Embedding-Broker/deepseek-v4-flash) WEALTHY: 12500 OT, low perplexity=39
+  💰 CO-05 (Concept-Miner/gpt-oss-20b) WEALTHY: 12500 OT, low perplexity=32
   ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/llama-3.1-nemotron-nano-8b-v1), QU-02(Quant-Scribe/llama-3.1-nemotron-nano-8b-v1), PR-03(Projection-Weaver/deepseek-v4-flash), PR-04(Projection-Weaver/llama-3.3-nemotron-super-49b-v1.5), CO-05(Concept-Miner/llama-3.1-nemotron-nano-8b-v1), CO-06(Concept-Miner/llama-3.3-nemotron-super-49b-v1), LO-07(Loss-Miner/nemotron-3-super-120b-a12b), LO-08(Loss-Miner/gpt-oss-20b), EM-09(Embedding-Broker/llama-3.1-nemotron-nano-8b-v1), EM-10(Embedding-Broker/mistral-nemotron)
+  Agents: QU-01(Quant-Scribe/gpt-oss-20b), QU-02(Quant-Scribe/mistral-nemotron), PR-03(Projection-Weaver/llama-3.1-8b-instruct), PR-04(Projection-Weaver/gpt-oss-20b), CO-05(Concept-Miner/gpt-oss-20b), CO-06(Concept-Miner/llama-3.3-nemotron-super-49b-v1), LO-07(Loss-Miner/mistral-nemotron), LO-08(Loss-Miner/nemotron-3-super-120b-a12b), EM-09(Embedding-Broker/phi-4-mini-instruct), EM-10(Embedding-Broker/deepseek-v4-flash)
   Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
 
 ─────────────────────────────────────────────────────────────────
@@ -44,7 +44,7 @@ Traceback (most recent call last):
   File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 225, in tick
     effects = agent.apply_effects(action, self, self.cmtip)
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 373, in apply_effects
-    concept = args.get("concept", "unknown")
-              ^^^^^^^^
-AttributeError: 'list' object has no attribute 'get'
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 404, in apply_effects
+    drift_flag = "⚠DEGRADED" if received.get("signal_degraded") else ("DRIFTED" if received["semantic_drift"] else "MATCH")
+                                                                                   ~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'semantic_drift'
