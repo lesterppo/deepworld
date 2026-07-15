@@ -3,7 +3,7 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 
   DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
   Backend: NVIDIA NIM (free, random models per agent)
-Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4119.08it/s]
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3849.87it/s]
 ======================================================================
   DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
   10 agents on 7 models (1 families)
@@ -13,20 +13,20 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 ======================================================================
 
   Model distribution:
-    3× mistral-nemotron
-    2× llama-3.1-8b-instruct
-    1× llama-3.3-nemotron-super-49b-v1.5
-    1× deepseek-v4-flash
-    1× gpt-oss-20b
-    1× phi-4-mini-instruct
+    2× qwen3.5-122b-a10b
+    2× deepseek-v4-flash
+    2× mistral-nemotron
+    1× llama-3.1-nemotron-nano-8b-v1
     1× llama-4-maverick-17b-128e-instruct
-  ⚡ PR-03 (Projection-Weaver/llama-3.1-8b-instruct) STARVED: 1500 OT, perplexity=221
-  ⚡ EM-09 (Embedding-Broker/llama-3.1-8b-instruct) STARVED: 1500 OT, perplexity=271
-  ⚡ LO-07 (Loss-Miner/gpt-oss-20b) STARVED: 1500 OT, perplexity=200
-  💰 QU-02 (Quant-Scribe/llama-3.3-nemotron-super-49b-v1.5) WEALTHY: 12500 OT, low perplexity=52
-  💰 LO-08 (Loss-Miner/phi-4-mini-instruct) WEALTHY: 12500 OT, low perplexity=32
+    1× llama-3.1-8b-instruct
+    1× gpt-oss-20b
+  ⚡ LO-08 (Loss-Miner/llama-3.1-8b-instruct) STARVED: 1500 OT, perplexity=180
+  ⚡ QU-02 (Quant-Scribe/llama-3.1-nemotron-nano-8b-v1) STARVED: 1500 OT, perplexity=265
+  ⚡ PR-03 (Projection-Weaver/deepseek-v4-flash) STARVED: 1500 OT, perplexity=235
+  💰 CO-05 (Concept-Miner/llama-4-maverick-17b-128e-instruct) WEALTHY: 12500 OT, low perplexity=55
+  💰 LO-07 (Loss-Miner/mistral-nemotron) WEALTHY: 12500 OT, low perplexity=42
   ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/mistral-nemotron), QU-02(Quant-Scribe/llama-3.3-nemotron-super-49b-v1.5), PR-03(Projection-Weaver/llama-3.1-8b-instruct), PR-04(Projection-Weaver/mistral-nemotron), CO-05(Concept-Miner/mistral-nemotron), CO-06(Concept-Miner/deepseek-v4-flash), LO-07(Loss-Miner/gpt-oss-20b), LO-08(Loss-Miner/phi-4-mini-instruct), EM-09(Embedding-Broker/llama-3.1-8b-instruct), EM-10(Embedding-Broker/llama-4-maverick-17b-128e-instruct)
+  Agents: QU-01(Quant-Scribe/qwen3.5-122b-a10b), QU-02(Quant-Scribe/llama-3.1-nemotron-nano-8b-v1), PR-03(Projection-Weaver/deepseek-v4-flash), PR-04(Projection-Weaver/qwen3.5-122b-a10b), CO-05(Concept-Miner/llama-4-maverick-17b-128e-instruct), CO-06(Concept-Miner/deepseek-v4-flash), LO-07(Loss-Miner/mistral-nemotron), LO-08(Loss-Miner/llama-3.1-8b-instruct), EM-09(Embedding-Broker/gpt-oss-20b), EM-10(Embedding-Broker/mistral-nemotron)
   Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
 
 ─────────────────────────────────────────────────────────────────
@@ -44,7 +44,7 @@ Traceback (most recent call last):
   File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 225, in tick
     effects = agent.apply_effects(action, self, self.cmtip)
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 404, in apply_effects
-    drift_flag = "⚠DEGRADED" if received.get("signal_degraded") else ("DRIFTED" if received["semantic_drift"] else "MATCH")
-                                                                                   ~~~~~~~~^^^^^^^^^^^^^^^^^^
-KeyError: 'semantic_drift'
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 316, in apply_effects
+    fx["token_delta"] = price - 5
+                        ~~~~~~^~~
+TypeError: unsupported operand type(s) for -: 'str' and 'int'
