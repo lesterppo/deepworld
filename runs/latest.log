@@ -1,82 +1,54 @@
+[DEEPWORLD] ✅ NVIDIA health check OK (response: 'OK, I'm ready')
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 
-[DEEPWORLD] ❌ NVIDIA health check FAILED: APIConnectionError: Connection error.
+  DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
+  Backend: NVIDIA NIM (free, random models per agent)
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4514.53it/s]
+[DEEPWORLD] NVIDIA API error for meta/llama-4-maverick-17b-128e-instruct: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
+[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'microsoft/phi-4-mini-instruct' has reached its end of life on 2026-07-15T00:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for microsoft/phi-4-mini-instruct: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'microsoft/phi-4-mini-instruct' has reached its end of life on 2026-07-15T00:00:00Z and is no longer available."}
+======================================================================
+  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
+  10 agents on 7 models (1 families)
+  3d × 8t | CMTIP: ON | Governance: ON
+  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1)
+  World is mutable — agents can propose, vote, and change simulation rules
+======================================================================
+
+  Model distribution:
+    2× qwen3.5-122b-a10b
+    2× phi-4-mini-instruct
+    2× gpt-oss-20b
+    1× llama-4-maverick-17b-128e-instruct
+    1× mistral-nemotron
+    1× llama-3.1-8b-instruct
+    1× nemotron-3-super-120b-a12b
+  ⚡ EM-09 (Embedding-Broker/qwen3.5-122b-a10b) STARVED: 1500 OT, perplexity=233
+  ⚡ PR-04 (Projection-Weaver/phi-4-mini-instruct) STARVED: 1500 OT, perplexity=207
+  ⚡ CO-06 (Concept-Miner/phi-4-mini-instruct) STARVED: 1500 OT, perplexity=210
+  💰 LO-07 (Loss-Miner/gpt-oss-20b) WEALTHY: 12500 OT, low perplexity=37
+  💰 LO-08 (Loss-Miner/llama-3.1-8b-instruct) WEALTHY: 12500 OT, low perplexity=50
+  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
+  Agents: QU-01(Quant-Scribe/qwen3.5-122b-a10b), QU-02(Quant-Scribe/llama-4-maverick-17b-128e-instruct), PR-03(Projection-Weaver/mistral-nemotron), PR-04(Projection-Weaver/phi-4-mini-instruct), CO-05(Concept-Miner/gpt-oss-20b), CO-06(Concept-Miner/phi-4-mini-instruct), LO-07(Loss-Miner/gpt-oss-20b), LO-08(Loss-Miner/llama-3.1-8b-instruct), EM-09(Embedding-Broker/qwen3.5-122b-a10b), EM-10(Embedding-Broker/nemotron-3-super-120b-a12b)
+  Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
+
+─────────────────────────────────────────────────────────────────
+  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
 Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
-    yield
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 250, in handle_request
-    resp = self._pool.handle_request(req)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
-    raise exc from None
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
-    response = connection.handle_request(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
-    return self._connection.handle_request(request)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_sync/http11.py", line 136, in handle_request
-    raise exc
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_sync/http11.py", line 106, in handle_request
-    ) = self._receive_response_headers(**kwargs)
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_sync/http11.py", line 177, in _receive_response_headers
-    event = self._receive_event(timeout=timeout)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_sync/http11.py", line 231, in _receive_event
-    raise RemoteProtocolError(msg)
-httpcore.RemoteProtocolError: Server disconnected without sending a response.
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 1037, in request
-    response = self._send_request(
-               ^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_client.py", line 478, in _send_request
-    response = self._send_with_auth_retry(request, stream=stream, **kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_client.py", line 456, in _send_with_auth_retry
-    response = super()._send_request(request, stream=stream, **kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 964, in _send_request
-    return self._client.send(request, stream=stream, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpx/_client.py", line 914, in send
-    response = self._send_handling_auth(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpx/_client.py", line 942, in _send_handling_auth
-    response = self._send_handling_redirects(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
-    response = self._send_single_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpx/_client.py", line 1014, in _send_single_request
-    response = transport.handle_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 249, in handle_request
-    with map_httpcore_exceptions():
-         ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/contextlib.py", line 158, in __exit__
-    self.gen.throw(value)
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
-    raise mapped_exc(message) from exc
-httpx.RemoteProtocolError: Server disconnected without sending a response.
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/runner/work/deepworld/deepworld/run.py", line 45, in health_check_nvidia
-    resp = client.chat.completions.create(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_utils/_utils.py", line 298, in wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/resources/chat/completions/completions.py", line 1281, in create
-    return self._post(
+  File "/home/runner/work/deepworld/deepworld/run.py", line 220, in <module>
+    main()
+  File "/home/runner/work/deepworld/deepworld/run.py", line 110, in main
+    summary = engine.run()
+              ^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 366, in run
+    evts = self.tick()
            ^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 1332, in post
-    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 1072, in request
-    raise APIConnectionError(request=request) from err
-openai.APIConnectionError: Connection error.
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 225, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 404, in apply_effects
+    drift_flag = "⚠DEGRADED" if received.get("signal_degraded") else ("DRIFTED" if received["semantic_drift"] else "MATCH")
+                                                                                   ~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'semantic_drift'
