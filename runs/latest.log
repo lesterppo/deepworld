@@ -3,44 +3,36 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 
   DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
   Backend: NVIDIA NIM (free, random models per agent)
-Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3465.95it/s]
-[DEEPWORLD] NVIDIA API error for meta/llama-4-maverick-17b-128e-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for meta/llama-4-maverick-17b-128e-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for meta/llama-4-maverick-17b-128e-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for meta/llama-4-maverick-17b-128e-instruct: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for deepseek-ai/deepseek-v4-flash: InternalServerError: Error code: 503 - {'error': {'message': 'ResourceExhausted: All workers are busy, please retry later', 'type': 'Service Unavailable', 'code': 503}}
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3731.30it/s]
 ======================================================================
   DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
-  10 agents on 7 models (1 families)
+  10 agents on 6 models (1 families)
   3d × 8t | CMTIP: ON | Governance: ON
   Backend: NVIDIA NIM (integrate.api.nvidia.com/v1)
   World is mutable — agents can propose, vote, and change simulation rules
 ======================================================================
 
   Model distribution:
-    3× qwen3.5-122b-a10b
-    2× mistral-nemotron
-    1× llama-3.1-nemotron-nano-8b-v1
-    1× deepseek-v4-flash
-    1× nemotron-3-super-120b-a12b
+    4× mistral-nemotron
+    2× llama-3.1-nemotron-nano-8b-v1
     1× llama-3.3-nemotron-super-49b-v1
-    1× llama-4-maverick-17b-128e-instruct
-  ⚡ PR-04 (Projection-Weaver/deepseek-v4-flash) STARVED: 1500 OT, perplexity=200
-  ⚡ PR-03 (Projection-Weaver/qwen3.5-122b-a10b) STARVED: 1500 OT, perplexity=239
-  ⚡ EM-09 (Embedding-Broker/mistral-nemotron) STARVED: 1500 OT, perplexity=197
-  💰 LO-08 (Loss-Miner/qwen3.5-122b-a10b) WEALTHY: 12500 OT, low perplexity=46
-  💰 QU-02 (Quant-Scribe/llama-3.1-nemotron-nano-8b-v1) WEALTHY: 12500 OT, low perplexity=53
+    1× qwen3.5-122b-a10b
+    1× nemotron-3-super-120b-a12b
+    1× gpt-oss-20b
+  ⚡ CO-06 (Concept-Miner/mistral-nemotron) STARVED: 1500 OT, perplexity=218
+  ⚡ PR-04 (Projection-Weaver/mistral-nemotron) STARVED: 1500 OT, perplexity=191
+  ⚡ EM-09 (Embedding-Broker/mistral-nemotron) STARVED: 1500 OT, perplexity=276
+  💰 QU-02 (Quant-Scribe/llama-3.3-nemotron-super-49b-v1) WEALTHY: 12500 OT, low perplexity=35
+  💰 LO-08 (Loss-Miner/mistral-nemotron) WEALTHY: 12500 OT, low perplexity=31
   ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/mistral-nemotron), QU-02(Quant-Scribe/llama-3.1-nemotron-nano-8b-v1), PR-03(Projection-Weaver/qwen3.5-122b-a10b), PR-04(Projection-Weaver/deepseek-v4-flash), CO-05(Concept-Miner/nemotron-3-super-120b-a12b), CO-06(Concept-Miner/llama-3.3-nemotron-super-49b-v1), LO-07(Loss-Miner/qwen3.5-122b-a10b), LO-08(Loss-Miner/qwen3.5-122b-a10b), EM-09(Embedding-Broker/mistral-nemotron), EM-10(Embedding-Broker/llama-4-maverick-17b-128e-instruct)
+  Agents: QU-01(Quant-Scribe/llama-3.1-nemotron-nano-8b-v1), QU-02(Quant-Scribe/llama-3.3-nemotron-super-49b-v1), PR-03(Projection-Weaver/qwen3.5-122b-a10b), PR-04(Projection-Weaver/mistral-nemotron), CO-05(Concept-Miner/nemotron-3-super-120b-a12b), CO-06(Concept-Miner/mistral-nemotron), LO-07(Loss-Miner/gpt-oss-20b), LO-08(Loss-Miner/mistral-nemotron), EM-09(Embedding-Broker/mistral-nemotron), EM-10(Embedding-Broker/llama-3.1-nemotron-nano-8b-v1)
   Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
 
 ─────────────────────────────────────────────────────────────────
   Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
 ─────────────────────────────────────────────────────────────────
-  T 1 | A:10 | 📊{'audit_consistency': 2, 'error': 1, 'scan_network': 3, 'sell_memory_fragment': 1, 'transmit_message': 1} | 🔮{'mine_concept': 1, 'train_projection': 1} | 🏷:1
-  T 2 | A:10 | 📊{'audit_consistency': 2, 'error': 1, 'scan_network': 2, 'sell_memory_fragment': 1} | 🔮{'mine_concept': 1, 'route_tensor': 1, 'send_tensor': 1, 'train_projection': 1} | 🏷:2
-  T 3 | A:10 | 📊{'audit_consistency': 2, 'document_code': 1, 'error': 1, 'scan_network': 3, 'sell_memory_fragment': 1} | 🔮{'mine_concept': 1, 'train_projection': 1} | 🏷:3 | 💻:QU-01=2
-  T 4 | A:10 | 📊{'audit_consistency': 2, 'error': 1, 'scan_network': 3, 'sell_memory_fragment': 1, 'transmit_message': 1} | 🔮{'mine_concept': 1, 'train_projection': 1} | 🏷:4 | 💻:QU-01=2
+  T 1 | A:10 | 📊{'audit_consistency': 2, 'scan_latent_space': 1, 'scan_network': 3, 'sell_memory_fragment': 1} | 🔮{'route_tensor': 1, 'train_projection': 2}
+  T 2 | A:10 | 📊{'audit_consistency': 2, 'scan_latent_space': 1, 'scan_network': 3, 'sell_memory_fragment': 1} | 🔮{'send_tensor': 1, 'train_projection': 2}
 Traceback (most recent call last):
   File "/home/runner/work/deepworld/deepworld/run.py", line 220, in <module>
     main()
