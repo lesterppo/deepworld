@@ -1,5 +1,5 @@
 
-[DEEPWORLD] ❌ NVIDIA health check FAILED: APIConnectionError: Connection error.
+[DEEPWORLD] ❌ NVIDIA health check FAILED: APITimeoutError: Request timed out.
 Traceback (most recent call last):
   File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
     yield
@@ -22,9 +22,17 @@ Traceback (most recent call last):
   File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_sync/http11.py", line 177, in _receive_response_headers
     event = self._receive_event(timeout=timeout)
             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_sync/http11.py", line 231, in _receive_event
-    raise RemoteProtocolError(msg)
-httpcore.RemoteProtocolError: Server disconnected without sending a response.
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_sync/http11.py", line 217, in _receive_event
+    data = self._network_stream.read(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_backends/sync.py", line 126, in read
+    with map_exceptions(exc_map):
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadTimeout: The read operation timed out
 
 The above exception was the direct cause of the following exception:
 
@@ -60,7 +68,7 @@ Traceback (most recent call last):
     self.gen.throw(value)
   File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
     raise mapped_exc(message) from exc
-httpx.RemoteProtocolError: Server disconnected without sending a response.
+httpx.ReadTimeout: The read operation timed out
 
 The above exception was the direct cause of the following exception:
 
@@ -77,6 +85,6 @@ Traceback (most recent call last):
   File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 1360, in post
     return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 1100, in request
-    raise APIConnectionError(request=request) from err
-openai.APIConnectionError: Connection error.
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/openai/_base_client.py", line 1083, in request
+    raise APITimeoutError(request=request) from err
+openai.APITimeoutError: Request timed out.
