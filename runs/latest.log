@@ -3,37 +3,39 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 
   DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
   Backend: NVIDIA NIM (free, random models per agent)
-Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4923.73it/s]
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3541.03it/s]
+[DEEPWORLD] NVIDIA API error for meta/llama-4-maverick-17b-128e-instruct: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'meta/llama-4-maverick-17b-128e-instruct' has reached its end of life on 2026-07-27T00:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for meta/llama-4-maverick-17b-128e-instruct: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'meta/llama-4-maverick-17b-128e-instruct' has reached its end of life on 2026-07-27T00:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for meta/llama-4-maverick-17b-128e-instruct: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'meta/llama-4-maverick-17b-128e-instruct' has reached its end of life on 2026-07-27T00:00:00Z and is no longer available."}
 [DEEPWORLD] NVIDIA API error for meta/llama-4-maverick-17b-128e-instruct: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'meta/llama-4-maverick-17b-128e-instruct' has reached its end of life on 2026-07-27T00:00:00Z and is no longer available."}
 ======================================================================
   DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
-  10 agents on 8 models (1 families)
+  10 agents on 6 models (1 families)
   3d × 8t | CMTIP: ON | Governance: ON
   Backend: NVIDIA NIM (integrate.api.nvidia.com/v1)
   World is mutable — agents can propose, vote, and change simulation rules
 ======================================================================
 
   Model distribution:
-    2× gpt-oss-20b
+    3× llama-4-maverick-17b-128e-instruct
     2× llama-3.1-nemotron-nano-8b-v1
-    1× llama-3.1-8b-instruct
-    1× llama-3.3-nemotron-super-49b-v1.5
-    1× nemotron-3-super-120b-a12b
-    1× llama-4-maverick-17b-128e-instruct
+    2× llama-3.3-nemotron-super-49b-v1.5
+    1× gpt-oss-20b
+    1× mistral-nemotron
     1× deepseek-v4-flash
-    1× llama-3.3-nemotron-super-49b-v1
-  ⚡ CO-05 (Concept-Miner/llama-3.1-nemotron-nano-8b-v1) STARVED: 1500 OT, perplexity=188
-  ⚡ LO-07 (Loss-Miner/gpt-oss-20b) STARVED: 1500 OT, perplexity=196
-  ⚡ CO-06 (Concept-Miner/llama-4-maverick-17b-128e-instruct) STARVED: 1500 OT, perplexity=274
-  💰 QU-01 (Quant-Scribe/gpt-oss-20b) WEALTHY: 12500 OT, low perplexity=32
-  💰 QU-02 (Quant-Scribe/llama-3.1-8b-instruct) WEALTHY: 12500 OT, low perplexity=33
+  ⚡ PR-04 (Projection-Weaver/llama-4-maverick-17b-128e-instruct) STARVED: 1500 OT, perplexity=233
+  ⚡ QU-02 (Quant-Scribe/gpt-oss-20b) STARVED: 1500 OT, perplexity=237
+  ⚡ EM-10 (Embedding-Broker/deepseek-v4-flash) STARVED: 1500 OT, perplexity=193
+  💰 CO-06 (Concept-Miner/mistral-nemotron) WEALTHY: 12500 OT, low perplexity=31
+  💰 LO-07 (Loss-Miner/llama-3.1-nemotron-nano-8b-v1) WEALTHY: 12500 OT, low perplexity=42
   ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/gpt-oss-20b), QU-02(Quant-Scribe/llama-3.1-8b-instruct), PR-03(Projection-Weaver/llama-3.3-nemotron-super-49b-v1.5), PR-04(Projection-Weaver/nemotron-3-super-120b-a12b), CO-05(Concept-Miner/llama-3.1-nemotron-nano-8b-v1), CO-06(Concept-Miner/llama-4-maverick-17b-128e-instruct), LO-07(Loss-Miner/gpt-oss-20b), LO-08(Loss-Miner/deepseek-v4-flash), EM-09(Embedding-Broker/llama-3.1-nemotron-nano-8b-v1), EM-10(Embedding-Broker/llama-3.3-nemotron-super-49b-v1)
+  Agents: QU-01(Quant-Scribe/llama-3.1-nemotron-nano-8b-v1), QU-02(Quant-Scribe/gpt-oss-20b), PR-03(Projection-Weaver/llama-3.3-nemotron-super-49b-v1.5), PR-04(Projection-Weaver/llama-4-maverick-17b-128e-instruct), CO-05(Concept-Miner/llama-3.3-nemotron-super-49b-v1.5), CO-06(Concept-Miner/mistral-nemotron), LO-07(Loss-Miner/llama-3.1-nemotron-nano-8b-v1), LO-08(Loss-Miner/llama-4-maverick-17b-128e-instruct), EM-09(Embedding-Broker/llama-4-maverick-17b-128e-instruct), EM-10(Embedding-Broker/deepseek-v4-flash)
   Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
 
 ─────────────────────────────────────────────────────────────────
   Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
 ─────────────────────────────────────────────────────────────────
+  T 1 | A:10 | 📊{'audit_consistency': 1, 'error': 3, 'idle': 1, 'scan_latent_space': 1, 'scan_network': 1, 'sell_memory_fragment': 1, 'view_repo_stats': 1} | 🔮{'send_tensor': 1}
 Traceback (most recent call last):
   File "/home/runner/work/deepworld/deepworld/run.py", line 220, in <module>
     main()
@@ -46,7 +48,7 @@ Traceback (most recent call last):
   File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 225, in tick
     effects = agent.apply_effects(action, self, self.cmtip)
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 499, in apply_effects
-    concept = args.get("concept", "")
-              ^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 344, in apply_effects
+    fx["message"] = f"{self.name} audited {args.get('target','?')} — clean."
+                                           ^^^^^^^^
 AttributeError: 'list' object has no attribute 'get'
