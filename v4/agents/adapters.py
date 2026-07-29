@@ -110,15 +110,42 @@ class MultiModelAdapter:
             actual_model = model if (model and model != "nemotron") else "nvidia/llama-3.1-nemotron-nano-8b-v1"
             # NVIDIA NIM free models don't support native tool calling — inject tools as text
             tool_text = ""
+            has_repo_tools = False
             if tools:
                 tool_lines = []
                 for t in tools:
                     name = t["function"]["name"]
                     desc = t["function"]["description"]
                     params = t["function"].get("parameters", {}).get("properties", {})
-                    param_str = ", ".join(params.keys()) if params else "none"
+                    if params:
+                        param_parts = []
+                        req = t["function"].get("parameters", {}).get("required", [])
+                        for k, v in params.items():
+                            mark = "*" if k in req else ""
+                            pdesc = v.get("description", "")[:40]
+                            param_parts.append(f"{mark}{k}" + (f":{pdesc}" if pdesc else ""))
+                        param_str = ", ".join(param_parts)
+                    else:
+                        param_str = "none"
                     tool_lines.append(f"  - {name}({param_str}): {desc}")
-                tool_text = "\nAVAILABLE TOOLS — call exactly ONE per response.\nRespond with ONLY a JSON: {\"tool\": \"tool_name\", \"args\": {...}}\n" + "\n".join(tool_lines)
+                    if name in ("write_code", "document_code", "read_repo_file"):
+                        has_repo_tools = True
+                
+                # Repo tools need more output tokens — code content can be long
+                effective_max = max(max_tokens, 1024) if has_repo_tools else max_tokens
+                
+                tool_text = (
+                    "\nAVAILABLE TOOLS — call exactly ONE. Reply ONLY with JSON, no explanation:\n"
+                    "{\"tool\": \"tool_name\", \"args\": {...}}\n\n"
+                    + "\n".join(tool_lines)
+                    + ("\n\nCODE TOOLS: write_code content must be real Python/Markdown. "
+                       "Use \\n for newlines inside JSON strings. "
+                       "Example: {\"tool\":\"write_code\",\"args\":{\"filepath\":\"contributions/agent_utils.py\","
+                       "\"content\":\"def hello():\\n    return 'world'\\n\",\"description\":\"utility function\"}}"
+                       if has_repo_tools else "")
+                )
+            else:
+                effective_max = max_tokens
             
             # Inject tools into the last user message
             enriched_messages = list(messages)
@@ -132,7 +159,7 @@ class MultiModelAdapter:
             try:
                 resp = client.chat.completions.create(
                     model=actual_model, messages=enriched_messages,
-                    temperature=temperature, max_tokens=max_tokens,
+                    temperature=temperature, max_tokens=effective_max,
                 )
                 # Parse JSON tool call from text response
                 text = resp.choices[0].message.content or ""

@@ -510,6 +510,31 @@ REPO_TOOLS = [
     },
     {
         "type": "function", "function": {
+            "name": "view_repo_files",
+            "description": "List files in the repository. See what code already exists to improve. Costs 2 OT.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "directory": {"type": "string", "description": "Directory to list (default: 'contributions'). Use '' for repo root."},
+                },
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
+            "name": "read_repo_file",
+            "description": "Read a file's content from the repository. Use before write_code to understand existing code. Costs 2 OT.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "filepath": {"type": "string", "description": "Path to file to read (e.g., 'contributions/_HELLO.md', 'v4/config/prompts.py')"},
+                },
+                "required": ["filepath"]
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
             "name": "collaborate",
             "description": "INVITE another agent to co-author your staged code. Both agents share the acceptance bonus (negotiated split). Collaboration produces higher-quality code that's more likely to pass voting. Costs 5 OT.",
             "parameters": {

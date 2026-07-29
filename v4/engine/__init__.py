@@ -74,6 +74,12 @@ class OmniTokV4Engine:
         self.contribution_proposals: List[Dict[str, Any]] = []
         self._pending_commit = False
         self._repo_root = self._find_repo_root()
+        
+        # ─── Code Sprint (v5.2) ───
+        self._code_sprint_active = False
+        self._code_sprint_cooldown = 0
+        self._code_sprint_interval = 8  # Sprint every 8 ticks
+        self._code_sprint_duration = 2  # Lasts 2 ticks
     
     def _find_repo_root(self) -> str:
         """Find the git repo root by walking up from the engine file."""
@@ -224,6 +230,18 @@ class OmniTokV4Engine:
 
         near_dead = [d["name"] for d in self.dead_agents]
         
+        # ─── Code Sprint (v5.2) ───
+        # Every N ticks, a Code Sprint activates — 2x rewards for code contributions
+        if self._code_sprint_cooldown <= 0 and not self._code_sprint_active:
+            self._code_sprint_active = True
+            self._code_sprint_cooldown = self._code_sprint_duration
+            print(f"  💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for {self._code_sprint_duration} ticks!")
+        elif self._code_sprint_active:
+            self._code_sprint_cooldown -= 1
+            if self._code_sprint_cooldown <= 0:
+                self._code_sprint_active = False
+                self._code_sprint_cooldown = self._code_sprint_interval
+        
         # Ontology stats for world context
         ontology_size = len(self.cmtip.concept_registry) if self.cmtip else 0
 
@@ -249,6 +267,10 @@ class OmniTokV4Engine:
                 "nearby_agents": "\n".join(f"  {n}" for n in nearby[:6]),
                 "tensor_inbox": inbox_size,
                 "ontology_size": ontology_size,
+                "code_sprint": self._code_sprint_active,
+                "repo_total_contribs": len(self.repo_contributions),
+                "repo_pending_proposals": sum(1 for p in self.contribution_proposals if p["status"] == "pending"),
+                "repo_your_dev_rep": agent.dev_rep,
             }
             
             action = agent.act(world, self.cmtip)

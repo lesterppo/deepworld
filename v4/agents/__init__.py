@@ -212,7 +212,9 @@ WORLD:
   Ontology size: {world.get('ontology_size', 0)} concepts
   Nearby: {nearby}
 
-DECIDE: Your action. Remember your class role, your model family, and the tensor-native economy."""
+DECIDE: Your action. Remember your class role, your model family, and the tensor-native economy.
+
+CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and read_repo_file to explore the repo, then write_code to contribute. CODE SPRINT active = {world.get('code_sprint', False)} (2x rewards when active)."""
 
     def act(self, world: Dict[str, Any], cmtip_bridge=None) -> Dict[str, Any]:
         if not self.alive:
@@ -696,6 +698,9 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                     full_check = _os.path.join(engine._repo_root, filepath.lstrip("/"))
                     base_reward = int(base_reward * 1.3) if _os.path.exists(full_check) else base_reward
                     reward = min(500, base_reward)
+                    # Code Sprint: 2x reward
+                    if engine and getattr(engine, '_code_sprint_active', False):
+                        reward *= 2
                     self.dev_rep += max(1, len(content) // 200)
                     fx["token_delta"] += reward
                     
@@ -722,6 +727,9 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
             focus = args.get("focus", "all")
             if engine and hasattr(engine, "repo_contributions"):
                 reward = 50
+                # Code Sprint: 2x reward
+                if getattr(engine, '_code_sprint_active', False):
+                    reward *= 2
                 fx["token_delta"] += reward
                 self.dev_rep += 1
                 engine.repo_contributions.append({
@@ -823,6 +831,9 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                     fx["message"] = f"{self.name} document_code rejected — too short ({len(content)} chars)"
                 else:
                     reward = min(250, len(content) // 3 + 20)
+                    # Code Sprint: 2x reward
+                    if engine and getattr(engine, '_code_sprint_active', False):
+                        reward *= 2
                     self.dev_rep += max(1, len(content) // 300)
                     fx["token_delta"] += reward
                     
@@ -880,6 +891,52 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
             else:
                 fx["message"] = f"{self.name} no collaboration invitation from {inviter}."
                 fx["token_delta"] = 0
+        
+        elif name == "view_repo_files":
+            fx["token_delta"] = -2
+            directory = args.get("directory", "contributions")
+            if engine and hasattr(engine, "_repo_root"):
+                import os as _os
+                scan_dir = _os.path.join(engine._repo_root, directory.lstrip("/"))
+                if _os.path.isdir(scan_dir):
+                    files = []
+                    for root, dirs, filenames in _os.walk(scan_dir):
+                        depth = root[len(scan_dir):].count(_os.sep)
+                        if depth > 2:
+                            continue
+                        for fn in sorted(filenames)[:20]:
+                            fpath = _os.path.join(root, fn)
+                            size = _os.path.getsize(fpath)
+                            rel = _os.path.relpath(fpath, engine._repo_root)
+                            files.append(f"  {rel} ({size}B)")
+                    if files:
+                        fx["message"] = f"Files in {directory}/:\n" + "\n".join(files[:15])
+                    else:
+                        fx["message"] = f"No files in {directory}/ yet. Write the first one with write_code!"
+                else:
+                    fx["message"] = f"Directory {directory}/ doesn't exist. Try 'contributions' or 'v4'."
+            else:
+                fx["message"] = f"{self.name} viewed repo (no repo binding)."
+        
+        elif name == "read_repo_file":
+            fx["token_delta"] = -2
+            filepath = args.get("filepath", "")
+            if engine and hasattr(engine, "_repo_root"):
+                import os as _os
+                safe = filepath.lstrip("/")
+                while safe.startswith(".."):
+                    safe = safe[2:].lstrip("/")
+                full = _os.path.join(engine._repo_root, safe)
+                if _os.path.isfile(full):
+                    with open(full) as f:
+                        content = f.read(3000)
+                    fx["message"] = f"=== {filepath} ===\n{content}"
+                    if len(content) >= 3000:
+                        fx["message"] += "\n... [truncated at 3000 chars]"
+                else:
+                    fx["message"] = f"File '{filepath}' not found. Use view_repo_files to see available files."
+            else:
+                fx["message"] = f"{self.name} read file (no repo binding)."
         
         elif name == "view_repo_stats":
             fx["token_delta"] = -2
