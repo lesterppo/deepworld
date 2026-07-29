@@ -236,12 +236,15 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                                      self.model_family, near_dead)
         
         # Class-specific urgency
+        sprint_hint = " CODE SPRINT ACTIVE — 2x code rewards!" if world.get('code_sprint') else ""
+        total_contribs = world.get('repo_total_contribs', 0)
+        contrib_hint = "" if total_contribs > 0 else " No code contributions yet. Use view_repo_files+write_code to earn massive OT."
         urgencies = {
-            "Quant-Scribe": f"Fragments: {len(self.memory_fragments)}. GC in {world.get('gc_in','?')}t. Sell insurance NOW.",
-            "Projection-Weaver": f"Projections trained: {len(self.trained_projections)}. Bridge model families.",
-            "Concept-Miner": f"Concepts owned: {len(self.owned_concepts)}. Mine latent space for new concepts.",
-            "Loss-Miner": f"Audit tensor translations and concept registrations for fraud.",
-            "Embedding-Broker": f"Relay messages, clone embeddings, control the bus routing.",
+            "Quant-Scribe": f"Fragments: {len(self.memory_fragments)}. GC in {world.get('gc_in','?')}t.{contrib_hint}{sprint_hint}",
+            "Projection-Weaver": f"Projections trained: {len(self.trained_projections)}.{contrib_hint}{sprint_hint}",
+            "Concept-Miner": f"Concepts owned: {len(self.owned_concepts)}.{contrib_hint}{sprint_hint}",
+            "Loss-Miner": f"Audit tensors. review_code earns tokens.{contrib_hint}{sprint_hint}",
+            "Embedding-Broker": f"Relay messages, control bus.{contrib_hint}{sprint_hint}",
         }
         urgency = urgencies.get(self.agent_class, "")
         
