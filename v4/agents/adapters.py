@@ -360,6 +360,7 @@ TOOL_KEYWORDS = {
     "wrote code": "write_code", "contribute code": "write_code",
     "review the code": "review_code", "review code": "review_code", "review file": "review_code",
     "audit the code": "review_code", "audit code": "review_code", "audit file": "review_code",
+    "audit the file": "review_code",
     "commit code": "commit_code", "propose code": "commit_code",
     "submit code": "commit_code",
     "vote contrib": "vote_contribution", "vote code": "vote_contribution",
