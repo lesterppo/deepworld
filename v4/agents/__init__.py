@@ -245,6 +245,7 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
             "Concept-Miner": f"Concepts owned: {len(self.owned_concepts)}.{contrib_hint}{sprint_hint}",
             "Loss-Miner": f"Audit tensors. review_code earns tokens.{contrib_hint}{sprint_hint}",
             "Embedding-Broker": f"Relay messages, control bus.{contrib_hint}{sprint_hint}",
+            "Developer": f"View git log → read source → write patch → test → commit. REPO: {total_contribs} contribs.{sprint_hint}",
         }
         urgency = urgencies.get(self.agent_class, "")
         
@@ -342,8 +343,8 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
         elif name == "audit_consistency":
             fx["token_delta"] = -12
             # Audit success scales with data_purity (15% base + purity*40%)
-                if random.random() < 0.15 + self.data_purity * 0.4:
-                    bounty = random.randint(25, 70)  # Higher bounties for purity-based audits
+            if random.random() < 0.15 + self.data_purity * 0.4:
+                bounty = random.randint(25, 70)  # Higher bounties for purity-based audits
                 fx["token_delta"] += bounty
                 fx["message"] = f"{self.name} found violation in {args.get('target','?')}! +{bounty} bounty."
             else:
@@ -751,6 +752,7 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
             if engine and hasattr(engine, "contribution_proposals"):
                 staged = [c for c in engine.repo_contributions 
                          if c.get("agent") == self.name 
+                         and c.get("action") in ("write_code", "document_code")
                          and not c.get("committed") and not c.get("proposed")]
                 if not staged:
                     fx["message"] = f"{self.name} proposal failed — no staged files. Use write_code first."
@@ -808,15 +810,16 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                             prop["accept_bonus"] = 500
                             # WRITE STAGED FILES TO DISK on acceptance
                             for c in prop["staged"]:
-                                try:
-                                    engine._write_contribution_file(
-                                        c["filepath"], c.get("content", "")
-                                    )
-                                    c["committed"] = True
-                                    c["commit_agent"] = self.name
-                                    c["commit_message"] = prop["message"]
-                                except Exception:
-                                    pass
+                                if c.get("content") and c.get("content", "").strip():
+                                    try:
+                                        engine._write_contribution_file(
+                                            c["filepath"], c.get("content", "")
+                                        )
+                                        c["committed"] = True
+                                        c["commit_agent"] = self.name
+                                        c["commit_message"] = prop["message"]
+                                    except Exception:
+                                        pass
                         else:
                             prop["status"] = "rejected"
                             resolved = True
@@ -954,6 +957,72 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                 fx["message"] = f"Repo: {total} contribs, {len(proposals)} props ({pending}p/{accepted}a/{rejected}r) by {len(authors)} agents."
             else:
                 fx["message"] = f"{self.name} viewed repo stats (no contributions yet)."
+        
+        elif name == "view_git_log":
+            fx["token_delta"] = -2
+            count = min(args.get("count", 5), 20)
+            if engine and hasattr(engine, "_repo_root"):
+                import subprocess as _sp
+                try:
+                    r = _sp.run(["git", "-C", engine._repo_root, "log", "--oneline", 
+                                 f"-{count}"], capture_output=True, text=True, timeout=5)
+                    if r.returncode == 0 and r.stdout.strip():
+                        fx["message"] = f"Recent {count} commits:\n{r.stdout.strip()}"
+                    else:
+                        fx["message"] = "No commits yet — be the first contributor!"
+                except Exception:
+                    fx["message"] = "git log unavailable"
+            else:
+                fx["message"] = f"{self.name} viewed git log (no repo binding)."
+        
+        elif name == "view_full_repo":
+            fx["token_delta"] = -2
+            if engine and hasattr(engine, "_repo_root"):
+                import os as _os
+                tree = []
+                for root, dirs, files in _os.walk(engine._repo_root):
+                    dirs[:] = [d for d in dirs if d not in ('.git', '__pycache__', '.gitignore')]
+                    depth = root[len(engine._repo_root):].count(_os.sep)
+                    if depth > 4: continue
+                    prefix = "  " * depth + ("📁 " if depth == 0 else "├─ ")
+                    rel = _os.path.relpath(root, engine._repo_root)
+                    if rel != ".": tree.append(f"{prefix}{_os.path.basename(root)}/")
+                    for fn in sorted(files)[:8]:
+                        if fn.endswith(('.pyc', '.pyo')): continue
+                        fp = _os.path.join(root, fn)
+                        size = _os.path.getsize(fp)
+                        tree.append(f"  " * (depth+1) + f"📄 {fn} ({size}B)")
+                fx["message"] = "Project tree:\n" + "\n".join(tree[:30])
+                if len(tree) > 30:
+                    fx["message"] += f"\n... ({len(tree)-30} more entries)"
+            else:
+                fx["message"] = f"{self.name} viewed repo (no repo binding)."
+        
+        elif name == "run_agent_test":
+            fx["token_delta"] = -3
+            code = args.get("code", "")
+            if engine and hasattr(engine, "_repo_root"):
+                import subprocess as _sp, tempfile as _tf, os as _os
+                if len(code) > 2000:
+                    fx["message"] = f"Code too long ({len(code)} chars). Max 2000."
+                else:
+                    try:
+                        with _tf.NamedTemporaryFile(mode='w', suffix='.py', 
+                                                     dir=engine._repo_root, delete=False) as tf:
+                            tf.write(code)
+                            tmpath = tf.name
+                        r = _sp.run(["python3", tmpath], capture_output=True, text=True, 
+                                    timeout=10, cwd=engine._repo_root)
+                        _os.unlink(tmpath)
+                        out = (r.stdout + r.stderr).strip()[:500]
+                        fx["message"] = f"Exit: {r.returncode}\n{out}" if out else f"Exit: {r.returncode} (no output)"
+                    except _sp.TimeoutExpired:
+                        if 'tmpath' in dir(): _os.unlink(tmpath)
+                        fx["message"] = "Test timed out (10s)"
+                    except Exception as e:
+                        fx["message"] = f"Test failed: {e}"
+            else:
+                fx["message"] = f"{self.name} ran test (no repo binding)."
         
         else:
             fx["message"] = f"{self.name} {name}."

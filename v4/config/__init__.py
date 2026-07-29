@@ -168,6 +168,7 @@ AGENT_CLASSES = [
     "Concept-Miner",        # Discovers latent concepts, defines ontology (NEW)
     "Loss-Miner",           # Audits tensor translations (upgraded)
     "Embedding-Broker",     # gRPC bus relay + inter-cluster routing (UPGRADED)
+    "Developer",            # Self-evolving code maintainer (v5.3)
 ]
 
 # ─── Simulation ───

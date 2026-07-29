@@ -535,6 +535,41 @@ REPO_TOOLS = [
     },
     {
         "type": "function", "function": {
+            "name": "view_git_log",
+            "description": "View recent git commits to see what has changed in the repo. Essential for understanding the codebase state. Costs 2 OT.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "count": {"type": "integer", "description": "Number of recent commits to show (default: 5, max: 20)"},
+                },
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
+            "name": "view_full_repo",
+            "description": "Show the full project file tree. Understand the entire codebase structure at once. Costs 2 OT.",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
+            "name": "run_agent_test",
+            "description": "Execute a Python test snippet to verify your code changes work. Returns stdout + exit code. Costs 3 OT. Max 1000 chars of code.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "code": {"type": "string", "description": "Python code to execute (max 1000 chars). Import from v4 modules if needed."},
+                },
+                "required": ["code"]
+            }
+        }
+    },
+    {
+        "type": "function", "function": {
             "name": "collaborate",
             "description": "INVITE another agent to co-author your staged code. Both agents share the acceptance bonus (negotiated split). Collaboration produces higher-quality code that's more likely to pass voting. Costs 5 OT.",
             "parameters": {
@@ -647,6 +682,10 @@ def get_tools_for_agent(agent_class: str, context_level: int,
         tools.extend(EMBEDDING_BROKER_TOOLS)
     elif agent_class == "Loss-Miner":
         tools.extend(LOSS_MINER_TOOLS)
+    elif agent_class == "Developer":
+        # Developer gets audit tools (for code review) + keeps all repo tools
+        tools.extend(LOSS_MINER_TOOLS)
+        # Developer doesn't need class-specific tensor tools — code tools are primary
     
     # Land rush available when dead agents exist
     if near_dead:

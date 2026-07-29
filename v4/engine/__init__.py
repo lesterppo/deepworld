@@ -185,7 +185,9 @@ class OmniTokV4Engine:
             self.dead_agents = [d for d in self.dead_agents if d["name"] != dead_name]
     def _great_compression(self):
         """The Great Compression event — interval driven by world registry."""
-        interval = self.world_registry.get("gc_interval")
+        # Dynamic GC: faster when agents die (min 4, max 16)
+        dead_penalty = len(self.dead_agents) * 2
+        interval = max(4, self.world_registry.get("gc_interval") - dead_penalty)
         pressure = self.world_registry.get("gc_pressure")
         bonus = self.world_registry.get("gc_survival_bonus")
         
