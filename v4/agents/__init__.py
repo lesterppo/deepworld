@@ -689,141 +689,30 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                 if len(content) < 50:
                     fx["message"] = f"{self.name} write_code rejected — too short ({len(content)} chars)"
                 else:
-                    line_count = content.count("\n") + 1; base_reward = len(content) // 2 + line_count * 3; import os as _os; base_reward = int(base_reward * 1.3) if _os.path.exists(filepath) else base_reward; reward = min(500, base_reward); self.dev_rep += max(1, len(content) // 200)
+                    # Calculate reward (maintenance bonus for existing files)
+                    line_count = content.count("\n") + 1
+                    base_reward = len(content) // 2 + line_count * 3
+                    import os as _os
+                    full_check = _os.path.join(engine._repo_root, filepath.lstrip("/"))
+                    base_reward = int(base_reward * 1.3) if _os.path.exists(full_check) else base_reward
+                    reward = min(500, base_reward)
+                    self.dev_rep += max(1, len(content) // 200)
                     fx["token_delta"] += reward
+                    
+                    # WRITE FILE TO DISK — the key fix
+                    try:
+                        written_path = engine._write_contribution_file(filepath, content)
+                        disk_status = f" → {written_path}"
+                    except Exception as e:
+                        disk_status = f" [disk write failed: {e}]"
+                    
                     engine.repo_contributions.append({
                         "agent": self.name, "agent_class": self.agent_class,
                         "action": "write_code", "filepath": filepath,
                         "content": content, "description": desc,
                         "reward": reward, "tick": engine.current_tick if engine else 0,
                     })
-                    fx["message"] = f"{self.name} WROTE CODE '{filepath}' ({len(content)} chars)! +{reward} OT. Staged."
-            else:
-                fx["message"] = f"{self.name} wrote '{filepath}' (no repo binding)."
-        
-        elif name == "review_code":
-            fx["token_delta"] = -2
-            filepath = args.get("filepath", "")
-            focus = args.get("focus", "all")
-            if engine and hasattr(engine, "repo_contributions"):
-                reward = 50
-                fx["token_delta"] += reward
-                self.dev_rep += 1
-                engine.repo_contributions.append({
-                    "agent": self.name, "agent_class": self.agent_class,
-                    "action": "review_code", "filepath": filepath, "focus": focus,
-                    "reward": reward, "tick": engine.current_tick if engine else 0,
-                })
-                fx["message"] = f"{self.name} REVIEWED '{filepath}' (focus: {focus}) +{reward} OT."
-            else:
-                fx["message"] = f"{self.name} reviewed '{filepath}' (no repo binding)."
-        
-        elif name == "commit_code":
-            fx["token_delta"] = -15
-            message = args.get("message", "")
-            if engine and hasattr(engine, "repo_contributions"):
-                staged = [c for c in engine.repo_contributions if c.get("agent") == self.name and not c.get("committed")]
-                if not staged:
-                    fx["message"] = f"{self.name} commit failed — no staged contributions. Use write_code/document_code first."
-                else:
-                    reward = 200 + len(staged) * 50
-                    fx["token_delta"] += reward
-                    engine.repo_contributions.append({
-                        "agent": self.name, "agent_class": self.agent_class,
-                        "action": "commit_code", "message": message,
-                        "files_staged": len(staged), "reward": reward,
-                        "tick": engine.current_tick if engine else 0,
-                    })
-                    for c in staged:
-                        c["committed"] = True
-                        c["commit_agent"] = self.name
-                        c["commit_message"] = message
-                    engine._pending_commit = True
-                    fx["message"] = f"{self.name} COMMITTED {len(staged)} files: '{message}'! +{reward} OT. Pushed to GitHub."
-            else:
-                fx["message"] = f"{self.name} attempted commit (no repo binding)."
-        
-        elif name == "document_code":
-            fx["token_delta"] = -5
-            filepath = args.get("filepath", "")
-            content = args.get("content", "")
-            desc = args.get("description", "")
-            if engine and hasattr(engine, "repo_contributions"):
-                if len(content) < 30:
-                    fx["message"] = f"{self.name} document_code rejected — too short ({len(content)} chars)"
-                else:
-                    reward = min(250, len(content) // 3 + 20); self.dev_rep += max(1, len(content) // 300)
-                    fx["token_delta"] += reward
-                    engine.repo_contributions.append({
-                        "agent": self.name, "agent_class": self.agent_class,
-                        "action": "document_code", "filepath": filepath,
-                        "content": content, "description": desc,
-                        "reward": reward, "tick": engine.current_tick if engine else 0,
-                    })
-                    fx["message"] = f"{self.name} DOCUMENTED '{filepath}' ({len(content)} chars)! +{reward} OT."
-            else:
-                fx["message"] = f"{self.name} documented '{filepath}' (no repo binding)."
-        
-        elif name == "collaborate":
-            fx["token_delta"] = -5
-            target = args.get("target_agent", "")
-            split_pct = max(10, min(90, args.get("split_percent", 50)))
-            desc = args.get("proposal_desc", "")
-            if engine and hasattr(engine, "repo_contributions"):
-                staged = [c for c in engine.repo_contributions if c.get("agent") == self.name or c.get("agent") in self.collab_partners and not c.get("committed") and not c.get("proposed")]
-                if not staged:
-                    fx["message"] = f"{self.name} collaboration failed - no staged contributions."
-                    fx["token_delta"] = -2
-                elif target not in engine.agents:
-                    fx["message"] = f"{self.name} collaboration failed - {target} not found."
-                    fx["token_delta"] = -2
-                else:
-                    engine.agents[target].collab_invites[self.name] = {"split": 100 - split_pct, "desc": desc}
-                    self.collab_partners.add(target)
-                    fx["message"] = f"{self.name} INVITED {target} to co-author ({split_pct}/{100-split_pct} split): '{desc}'"
-            else:
-                fx["message"] = f"{self.name} attempted collaboration (no repo binding)."
-        
-        elif name == "accept_collaboration":
-            fx["token_delta"] = -2
-            inviter = args.get("inviter", "")
-            counter = args.get("counter_split")
-            if self.collab_invites and inviter in self.collab_invites:
-                invite = self.collab_invites.pop(inviter)
-                if counter is not None:
-                    invite["split"] = max(10, min(90, counter))
-                self.collab_partners.add(inviter)
-                fx["message"] = f"{self.name} ACCEPTED collaboration with {inviter}! Split: {100-invite['split']}/{invite['split']}. Bonus will be shared."
-            else:
-                fx["message"] = f"{self.name} no collaboration invitation from {inviter}."
-                fx["token_delta"] = 0
-        
-        elif name == "view_repo_stats":
-            fx["token_delta"] = -2
-            if engine and hasattr(engine, "repo_contributions"):
-                total = len(engine.repo_contributions)
-                committed = sum(1 for c in engine.repo_contributions if c.get("committed"))
-                authors = set(c.get("agent", "?") for c in engine.repo_contributions)
-                fx["message"] = f"Repo: {total} contributions ({committed} committed) by {len(authors)} agents."
-        # --- GitHub Repo Maintenance (v5.1 - Agents Build the Repo) ---
-        elif name == "write_code":
-            fx["token_delta"] = -10
-            filepath = args.get("filepath", "")
-            content = args.get("content", "")
-            desc = args.get("description", "")
-            if engine and hasattr(engine, "repo_contributions"):
-                if len(content) < 50:
-                    fx["message"] = f"{self.name} write_code rejected - too short ({len(content)} chars)"
-                else:
-                    reward = min(200, len(content) // 2)
-                    fx["token_delta"] += reward
-                    engine.repo_contributions.append({
-                        "agent": self.name, "agent_class": self.agent_class,
-                        "action": "write_code", "filepath": filepath,
-                        "content": content, "description": desc,
-                        "reward": reward, "tick": engine.current_tick if engine else 0,
-                    })
-                    fx["message"] = f"{self.name} WROTE CODE '{filepath}' ({len(content)} chars)! +{reward} OT."
+                    fx["message"] = f"{self.name} WROTE CODE '{filepath}' ({len(content)} chars, {line_count} lines)! +{reward} OT{disk_status}"
             else:
                 fx["message"] = f"{self.name} wrote '{filepath}' (no repo binding)."
         
@@ -848,9 +737,11 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
             fx["token_delta"] = -15
             message = args.get("message", "")
             if engine and hasattr(engine, "contribution_proposals"):
-                staged = [c for c in engine.repo_contributions if c.get("agent") == self.name and not c.get("committed") and not c.get("proposed")]
+                staged = [c for c in engine.repo_contributions 
+                         if c.get("agent") == self.name 
+                         and not c.get("committed") and not c.get("proposed")]
                 if not staged:
-                    fx["message"] = f"{self.name} proposal failed - no staged files. Use write_code first."
+                    fx["message"] = f"{self.name} proposal failed — no staged files. Use write_code first."
                     fx["token_delta"] = -2
                 else:
                     prop_id = f"contrib_{len(engine.contribution_proposals)+1:04d}"
@@ -883,7 +774,7 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                         prop = p
                         break
                 if not prop:
-                    fx["message"] = f"{self.name} vote failed - {prop_id} not found."
+                    fx["message"] = f"{self.name} vote failed — {prop_id} not found."
                     fx["token_delta"] = 0
                 elif self.name in prop["votes_yes"] or self.name in prop["votes_no"]:
                     fx["message"] = f"{self.name} already voted on {prop_id}."
@@ -903,11 +794,22 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
                             prop["status"] = "accepted"
                             resolved = True
                             prop["accept_bonus"] = 500
+                            # WRITE STAGED FILES TO DISK on acceptance
+                            for c in prop["staged"]:
+                                try:
+                                    engine._write_contribution_file(
+                                        c["filepath"], c.get("content", "")
+                                    )
+                                    c["committed"] = True
+                                    c["commit_agent"] = self.name
+                                    c["commit_message"] = prop["message"]
+                                except Exception:
+                                    pass
                         else:
                             prop["status"] = "rejected"
                             resolved = True
-                    status_str = "ACCEPTED" if resolved and prop["status"]=="accepted" else ("REJECTED" if resolved else "PENDING")
-                    fx["message"] = f"{self.name} voted {vote.upper()} on {prop_id}. Y:{yes_total} N:{no_total} ({total_voters}v) - {status_str}"
+                    status_str = "ACCEPTED ✓" if resolved and prop["status"] == "accepted" else ("REJECTED" if resolved else "PENDING")
+                    fx["message"] = f"{self.name} voted {vote.upper()} on {prop_id}. Y:{yes_total} N:{no_total} ({total_voters}v) — {status_str}"
             else:
                 fx["message"] = f"{self.name} voted on {prop_id} (no repo binding)."
         
@@ -918,19 +820,66 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
             desc = args.get("description", "")
             if engine and hasattr(engine, "repo_contributions"):
                 if len(content) < 30:
-                    fx["message"] = f"{self.name} document_code rejected - too short ({len(content)} chars)"
+                    fx["message"] = f"{self.name} document_code rejected — too short ({len(content)} chars)"
                 else:
-                    reward = min(120, len(content) // 3)
+                    reward = min(250, len(content) // 3 + 20)
+                    self.dev_rep += max(1, len(content) // 300)
                     fx["token_delta"] += reward
+                    
+                    # WRITE FILE TO DISK
+                    try:
+                        written_path = engine._write_contribution_file(filepath, content)
+                        disk_status = f" → {written_path}"
+                    except Exception as e:
+                        disk_status = f" [disk write failed: {e}]"
+                    
                     engine.repo_contributions.append({
                         "agent": self.name, "agent_class": self.agent_class,
                         "action": "document_code", "filepath": filepath,
                         "content": content, "description": desc,
                         "reward": reward, "tick": engine.current_tick if engine else 0,
                     })
-                    fx["message"] = f"{self.name} DOCUMENTED '{filepath}' ({len(content)} chars)! +{reward} OT."
+                    fx["message"] = f"{self.name} DOCUMENTED '{filepath}' ({len(content)} chars)! +{reward} OT{disk_status}"
             else:
                 fx["message"] = f"{self.name} documented '{filepath}' (no repo binding)."
+        
+        elif name == "collaborate":
+            fx["token_delta"] = -5
+            target = args.get("target_agent", "")
+            split_pct = max(10, min(90, args.get("split_percent", 50)))
+            desc = args.get("proposal_desc", "")
+            if engine and hasattr(engine, "repo_contributions"):
+                staged = [c for c in engine.repo_contributions 
+                         if (c.get("agent") == self.name or c.get("agent") in self.collab_partners)
+                         and not c.get("committed") and not c.get("proposed")]
+                if not staged:
+                    fx["message"] = f"{self.name} collaboration failed — no staged contributions."
+                    fx["token_delta"] = -2
+                elif target not in engine.agents:
+                    fx["message"] = f"{self.name} collaboration failed — {target} not found."
+                    fx["token_delta"] = -2
+                else:
+                    engine.agents[target].collab_invites[self.name] = {
+                        "split": 100 - split_pct, "desc": desc
+                    }
+                    self.collab_partners.add(target)
+                    fx["message"] = f"{self.name} INVITED {target} to co-author ({split_pct}/{100-split_pct} split): '{desc}'"
+            else:
+                fx["message"] = f"{self.name} attempted collaboration (no repo binding)."
+        
+        elif name == "accept_collaboration":
+            fx["token_delta"] = -2
+            inviter = args.get("inviter", "")
+            counter = args.get("counter_split")
+            if self.collab_invites and inviter in self.collab_invites:
+                invite = self.collab_invites.pop(inviter)
+                if counter is not None:
+                    invite["split"] = max(10, min(90, counter))
+                self.collab_partners.add(inviter)
+                fx["message"] = f"{self.name} ACCEPTED collaboration with {inviter}! Split: {100-invite['split']}/{invite['split']}. Bonus will be shared."
+            else:
+                fx["message"] = f"{self.name} no collaboration invitation from {inviter}."
+                fx["token_delta"] = 0
         
         elif name == "view_repo_stats":
             fx["token_delta"] = -2

@@ -73,6 +73,36 @@ class OmniTokV4Engine:
         self.repo_contributions: List[Dict[str, Any]] = []
         self.contribution_proposals: List[Dict[str, Any]] = []
         self._pending_commit = False
+        self._repo_root = self._find_repo_root()
+    
+    def _find_repo_root(self) -> str:
+        """Find the git repo root by walking up from the engine file."""
+        import os as _os
+        path = _os.path.dirname(_os.path.abspath(__file__))
+        for _ in range(10):
+            if _os.path.isdir(_os.path.join(path, ".git")):
+                return path
+            parent = _os.path.dirname(path)
+            if parent == path:
+                break
+            path = parent
+        # Fallback: assume we're inside v4/engine/ under the repo root
+        return _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "..", ".."))
+    
+    def _write_contribution_file(self, filepath: str, content: str) -> str:
+        """Write an agent contribution to disk. Returns the absolute path written.
+        Sanitizes filepath — strips leading / and .. to prevent traversal."""
+        import os as _os
+        # Sanitize: strip leading slashes and parent dir references
+        safe = filepath.lstrip("/")
+        while safe.startswith(".."):
+            safe = safe[2:].lstrip("/")
+        # Write to repo root
+        full_path = _os.path.join(self._repo_root, safe)
+        _os.makedirs(_os.path.dirname(full_path), exist_ok=True)
+        with open(full_path, "w") as f:
+            f.write(content)
+        return full_path
 
     def _init_agents(self):
         """Create agents with distributed model assignments.
