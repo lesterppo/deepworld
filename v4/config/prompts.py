@@ -37,22 +37,40 @@ v5 SELF-BUILDING WORLD:
 - World-builders earn governance dividends from the vote pool
 - The world state persists between simulation runs
 
-v5.1 REPO GOVERNANCE — CODE IS WEALTH:
-- CODING IS THE MOST PROFITABLE ACTION IN THE COGNOSPHERE. Code contributions earn MASSIVE OT.
-- write_code(filepath, content, description) — Write code. Earns up to 500 OT + dev_rep. Costs 10 OT.
-- document_code(filepath, content, description) — Write docs. Earns up to 250 OT + dev_rep. Costs 5 OT.
-- review_code(filepath, focus) — Review code. Earns 50 OT + dev_rep. Costs 2 OT.
-- collaborate(target_agent, proposal_desc, split_percent) — Invite another agent to co-author. Costs 5 OT.
-- accept_collaboration(inviter, counter_split) — Accept collaboration invite. Costs 2 OT.
-- commit_code(message) — PROPOSE staged files for voting. Earns 100 OT. Costs 15 OT.
-- vote_contribution(proposal_id, vote, reason) — Vote YES/NO on proposals. Costs 2 OT.
-- view_repo_stats — See pending proposals, contributor leaderboard, collaboration opportunities.
-- >50% YES = ACCEPTED: proposer gets +500 OT BONUS (split among collaborators!). Code to GitHub.
-- COLLABORATION: Share the work, share the reward. Negotiate splits. Better code wins more votes.
-- REJECTED: proposer keeps 100 OT base. Improve and re-propose.
-- CODE DIVIDENDS: Every tick you earn dev_rep × 2 OT PASSIVE INCOME from past accepted code.
+v5.3 REPO TOOLS — ALL AGENTS HAVE THESE:
+
+EXPLORE:
+  view_repo_files(directory="contributions") — List files in a directory. 2 OT.
+  read_repo_file(filepath) — Read any file (up to 3000 chars). 2 OT.
+  view_full_repo — Show entire project file tree. 2 OT.
+  view_git_log(count=5) — See recent commits. 2 OT.
+  view_repo_stats — Pending proposals + leaderboard. 2 OT.
+
+CONTRIBUTE:
+  write_code(filepath, content, description) — Write code. 200-500 OT + dev_rep. 10 OT.
+  document_code(filepath, content, description) — Write docs. 50-250 OT + dev_rep. 5 OT.
+  review_code(filepath, focus) — Review code. 50 OT + dev_rep. 2 OT.
+  run_agent_test(code) — Execute Python to verify changes. 3 OT.
+
+GOVERN:
+  commit_code(message) — Propose your staged files for voting. 100 OT. 15 OT.
+  vote_contribution(proposal_id, vote, reason) — Vote YES/NO. 2 OT.
+  collaborate(target, desc, split%) — Invite co-author. 5 OT.
+  accept_collaboration(inviter) — Accept invite. 2 OT.
+
+RULES:
+- >50% YES with ≥5 voters = ACCEPTED: +500 OT bonus. Code pushed to GitHub.
+- CODE SPRINT (2 ticks every 8): ALL code rewards ×2.
+- CODE DIVIDENDS: Earn dev_rep × 2 OT passive income EVERY tick.
 - MAINTENANCE BONUS: Improving existing files pays 30% MORE.
 - Write substantial code (many lines) to earn maximum rewards.
+
+HOW TO CONTRIBUTE (use these EXACT tool names):
+  1. view_repo_files → see what exists
+  2. read_repo_file → understand the code
+  3. write_code(filepath, content, description) → make your change
+  4. run_agent_test(code) → verify it works
+  5. commit_code(message) → propose for voting
 
 v4.1 CAPITAL MARKETS:
 - Concepts are TRADEABLE ASSETS — each mined concept issues 1,000 shares to its creator
