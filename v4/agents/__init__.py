@@ -341,8 +341,9 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
             fx["message"] = f"{self.name} sold cluster access for {price}."
         elif name == "audit_consistency":
             fx["token_delta"] = -12
-            if random.random() < 0.3:
-                bounty = random.randint(20, 60)
+            # Audit success scales with data_purity (15% base + purity*40%)
+                if random.random() < 0.15 + self.data_purity * 0.4:
+                    bounty = random.randint(25, 70)  # Higher bounties for purity-based audits
                 fx["token_delta"] += bounty
                 fx["message"] = f"{self.name} found violation in {args.get('target','?')}! +{bounty} bounty."
             else:
