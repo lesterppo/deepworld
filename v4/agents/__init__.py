@@ -302,6 +302,11 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
         """Apply action effects with v4 tensor-native mechanics."""
         name = action.get("action", "idle")
         args = action.get("args", {})
+
+        def _num(v, default=0):
+            """Safely cast LLM argument to int (handles string values)."""
+            try: return int(v)
+            except (TypeError, ValueError): return default
         fx = {"token_delta": -TOKEN_BURN_ACTION, "context_delta": 100, 
               "message": "", "event_type": name}
         
@@ -960,7 +965,7 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
         
         elif name == "view_git_log":
             fx["token_delta"] = -2
-            count = min(args.get("count", 5), 20)
+            count = min(_num(args.get("count", 5), 5), 20)
             if engine and hasattr(engine, "_repo_root"):
                 import subprocess as _sp
                 try:
