@@ -50,19 +50,14 @@ MODEL_BACKENDS = {
 # Each agent gets a random model from this pool for behavioral diversity.
 # All models are available via NVIDIA NIM free tier (integrate.api.nvidia.com/v1).
 NVIDIA_FREE_MODELS = [
-    # Verified working in CI (Jul 30, 2026) — no 404/timeout errors:
-    "meta/llama-3.1-8b-instruct",
-    "meta/llama-3.1-70b-instruct",
-    "meta/llama-3.2-3b-instruct",
-    "meta/llama-3.2-1b-instruct",
-    "google/gemma-2b",
-    "google/gemma-3-4b-it",
-    "nvidia/llama-3.3-nemotron-super-49b-v1",
-    "nvidia/llama-3.3-nemotron-super-49b-v1.5",
-    "nvidia/nemotron-3-super-120b-a12b",
-    "mistralai/mistral-nemotron",
-    "openai/gpt-oss-20b",
-    "microsoft/phi-4-mini-instruct",
+    # PROVEN WORKING (Jul 30 CI — no errors across multiple runs):
+    "meta/llama-3.1-8b-instruct",                   # Health check + all agents
+    "meta/llama-3.1-70b-instruct",                  # Developer agent
+    "nvidia/llama-3.3-nemotron-super-49b-v1",       # 2 agents, no errors
+    "mistralai/mistral-nemotron",                   # 1 agent, no errors
+    "openai/gpt-oss-20b",                           # 1 agent, no errors
+    "nvidia/nemotron-3-super-120b-a12b",            # No errors observed
+    "microsoft/phi-4-mini-instruct",                # No errors observed
 ]
 
 # ─── NVIDIA-only mode (skips all other backends) ───

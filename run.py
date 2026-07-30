@@ -42,9 +42,8 @@ def health_check_nvidia() -> bool:
 
     # Try models in order: most reliable first, with tight timeout
     HEALTH_CHECK_MODELS = [
-        "meta/llama-3.1-8b-instruct",       # Proven working (Jul 30 CI)
-        "meta/llama-3.2-3b-instruct",       # Fast, small fallback
-        "google/gemma-2b",                  # Tiny fallback
+        "meta/llama-3.1-8b-instruct",       # Proven working
+        "meta/llama-3.1-70b-instruct",      # Proven working
     ]
 
     client = OpenAI(api_key=api_key, base_url="https://integrate.api.nvidia.com/v1", timeout=30)
