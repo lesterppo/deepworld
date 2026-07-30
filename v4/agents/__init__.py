@@ -413,18 +413,18 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                 received = cmtip_bridge.receive_tensor(self.name, self.model_family)
                 if received:
                     self.tensor_received += 1
-                    drift_flag = "⚠DEGRADED" if received.get("signal_degraded") else ("DRIFTED" if received["semantic_drift"] else "MATCH")
+                    drift_flag = "⚠DEGRADED" if received.get("signal_degraded") else ("DRIFTED" if received.get("semantic_drift") else "MATCH")
                     
                     # Apply perplexity penalty for low-fidelity reception
                     if received.get("perplexity_penalty", 0) > 0:
-                        self.perplexity += received["perplexity_penalty"]
+                        self.perplexity += received.get("perplexity_penalty", 0)
                         self.cross_family_hops += 1
                     
-                    fx["message"] = (f"{self.name} received '{received['received_concept']}' "
-                                    f"(sent as '{received['original_concept']}') — {drift_flag} "
-                                    f"fidelity={received['fidelity']:.2f} penalty=+{received.get('perplexity_penalty',0):.0f}ppl "
-                                    f"from {received['sender']}")
-                    if received["semantic_drift"]:
+                    fx["message"] = (f"{self.name} received '{received.get('received_concept', '?')}' "
+                                    f"(sent as '{received.get('original_concept', '?')}') — {drift_flag} "
+                                    f"fidelity={received.get('fidelity', 0):.2f} penalty=+{received.get('perplexity_penalty',0):.0f}ppl "
+                                    f"from {received.get('sender', '?')}")
+                    if received.get("semantic_drift"):
                         self.perplexity += random.uniform(5, 15)
                 else:
                     fx["message"] = f"{self.name} checked inbox — empty."

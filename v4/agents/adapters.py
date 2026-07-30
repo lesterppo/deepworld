@@ -107,6 +107,9 @@ class MultiModelAdapter:
                 temperature=temperature, max_tokens=max_tokens,
             )
         elif backend_type == "nvidia_api":
+            # Rate-limit throttle: prevent 429 errors from free tier
+            import random as _random, time as _time
+            _time.sleep(_random.uniform(0.3, 0.8))
             actual_model = model if (model and model != "nemotron") else "meta/llama-3.1-8b-instruct"
             # NVIDIA NIM free models don't support native tool calling — inject tools as text
             tool_text = ""
