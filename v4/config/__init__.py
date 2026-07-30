@@ -50,20 +50,24 @@ MODEL_BACKENDS = {
 # Each agent gets a random model from this pool for behavioral diversity.
 # All models are available via NVIDIA NIM free tier (integrate.api.nvidia.com/v1).
 NVIDIA_FREE_MODELS = [
-    # Verified working (Jul 2026):
-    "meta/llama-3.1-8b-instruct",                   # Reliable, fast
+    # Verified working in CI (Jul 30, 2026):
+    "meta/llama-3.1-8b-instruct",                   # Health check passed
     "meta/llama-3.1-70b-instruct",                  # Capable, stable
-    "google/gemma-2-2b-it",                         # Tiny, always available
-    "deepseek-ai/deepseek-v4-flash",                # DeepSeek Flash
-    "qwen/qwen3-next-80b-a3b-instruct",             # Qwen MoE
-    # Unverified — may work, may be gated:
+    "meta/llama-3.2-3b-instruct",                   # Fast, small
+    "meta/llama-3.2-1b-instruct",                   # Tiny, reliable
+    "google/gemma-2b",                              # Small, fast (replaces EOL gemma-2-2b-it)
+    "google/gemma-3-4b-it",                         # Gemma 3 small
+    # Worked without 410 errors in CI:
     "nvidia/llama-3.3-nemotron-super-49b-v1",
     "nvidia/llama-3.3-nemotron-super-49b-v1.5",
-    "meta/llama-4-maverick-17b-128e-instruct",
+    "nvidia/llama-3.1-nemotron-nano-8b-v1",
+    "nvidia/nemotron-3-super-120b-a12b",
     "mistralai/mistral-nemotron",
     "openai/gpt-oss-20b",
-    "nvidia/nemotron-3-super-120b-a12b",
     "microsoft/phi-4-mini-instruct",
+    # Fresh from catalog (2026-07-30):
+    "nvidia/llama-3.1-nemotron-70b-instruct",
+    "mistralai/mistral-7b-instruct-v0.3",
 ]
 
 # ─── NVIDIA-only mode (skips all other backends) ───
