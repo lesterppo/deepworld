@@ -701,33 +701,32 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                 if len(content) < 50:
                     fx["message"] = f"{self.name} write_code rejected — too short ({len(content)} chars)"
                 else:
-                    # Calculate reward (maintenance bonus for existing files)
+                    # SMALL immediate reward — big payout is DEFERRED until commit_code + vote
                     line_count = content.count("\n") + 1
-                    base_reward = len(content) // 2 + line_count * 3
-                    import os as _os
-                    full_check = _os.path.join(engine._repo_root, filepath.lstrip("/"))
-                    base_reward = int(base_reward * 1.3) if _os.path.exists(full_check) else base_reward
-                    reward = min(500, base_reward)
-                    # Code Sprint: 2x reward
+                    immediate = min(50, 15 + line_count * 2)
                     if engine and getattr(engine, '_code_sprint_active', False):
-                        reward *= 2
-                    self.dev_rep += max(1, len(content) // 200)
-                    fx["token_delta"] += reward
+                        immediate *= 2
+                    fx["token_delta"] += immediate
                     
-                    # WRITE FILE TO DISK — the key fix
+                    # Calculate potential bonus if accepted
+                    potential = min(500, len(content) // 2 + line_count * 5)
+                    if engine and getattr(engine, '_code_sprint_active', False):
+                        potential *= 2
+                    
+                    # Write file to disk
                     try:
                         written_path = engine._write_contribution_file(filepath, content)
-                        disk_status = f" → {written_path}"
-                    except Exception as e:
-                        disk_status = f" [disk write failed: {e}]"
+                    except Exception:
+                        written_path = filepath
                     
                     engine.repo_contributions.append({
                         "agent": self.name, "agent_class": self.agent_class,
                         "action": "write_code", "filepath": filepath,
                         "content": content, "description": desc,
-                        "reward": reward, "tick": engine.current_tick if engine else 0,
+                        "reward": potential, "tick": engine.current_tick if engine else 0,
                     })
-                    fx["message"] = f"{self.name} WROTE CODE '{filepath}' ({len(content)} chars, {line_count} lines)! +{reward} OT{disk_status}"
+                    fx["message"] = (f"{self.name} WROTE '{filepath}' ({len(content)}c/{line_count}L) +{immediate} OT STAGED. "
+                                     f"Use commit_code to propose for up to +{potential} OT bonus if accepted by ≥5 voters!")
             else:
                 fx["message"] = f"{self.name} wrote '{filepath}' (no repo binding)."
         
@@ -752,7 +751,7 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                 fx["message"] = f"{self.name} reviewed '{filepath}' (no repo binding)."
         
         elif name == "commit_code":
-            fx["token_delta"] = -15
+            fx["token_delta"] = -5
             message = args.get("message", "")
             if engine and hasattr(engine, "contribution_proposals"):
                 staged = [c for c in engine.repo_contributions 
@@ -775,14 +774,15 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                     for c in staged:
                         c["proposed"] = True
                         c["proposal_id"] = prop_id
-                    reward = 100
-                    fx["token_delta"] += reward
-                    fx["message"] = f"{self.name} PROPOSED {prop_id}: {len(staged)} files! +{reward} OT. Agents vote YES/NO."
+                    total_potential = sum(c.get("reward", 0) for c in staged)
+                    self.dev_rep += len(staged)
+                    fx["message"] = (f"{self.name} PROPOSED {prop_id}: {len(staged)} files (potential +{total_potential} OT). "
+                                     f"Other agents MUST vote_contribution({prop_id}, yes/no)! Needs ≥5 voters, YES > NO to ACCEPT.")
             else:
                 fx["message"] = f"{self.name} attempted proposal (no repo binding)."
         
         elif name == "vote_contribution":
-            fx["token_delta"] = -2
+            fx["token_delta"] = 5  # Reward for voting (good citizenship)
             prop_id = args.get("proposal_id", "")
             vote = args.get("vote", "no")
             reason = args.get("reason", "")
@@ -910,6 +910,7 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
             if engine and hasattr(engine, "_repo_root"):
                 import os as _os
                 scan_dir = _os.path.join(engine._repo_root, directory.lstrip("/"))
+                parts = []
                 if _os.path.isdir(scan_dir):
                     files = []
                     for root, dirs, filenames in _os.walk(scan_dir):
@@ -922,11 +923,18 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                             rel = _os.path.relpath(fpath, engine._repo_root)
                             files.append(f"  {rel} ({size}B)")
                     if files:
-                        fx["message"] = f"Files in {directory}/:\n" + "\n".join(files[:15])
+                        parts.append(f"Files in {directory}/:\n" + "\n".join(files[:15]))
                     else:
-                        fx["message"] = f"No files in {directory}/ yet. Write the first one with write_code!"
+                        parts.append(f"No files in {directory}/ yet. Write the first one with write_code!")
                 else:
-                    fx["message"] = f"Directory {directory}/ doesn't exist. Try 'contributions' or 'v4'."
+                    parts.append(f"Directory {directory}/ doesn't exist. Try 'contributions' or 'v4'.")
+                
+                # Push pending proposal IDs so agents know what to vote on
+                pending = [p for p in engine.contribution_proposals if p.get("status") == "pending"]
+                if pending:
+                    prop_ids = ", ".join(f"{p['id']}(by {p['agent']}, {len(p.get('staged',[]))} files)" for p in pending[:5])
+                    parts.append(f"\nPENDING PROPOSALS (vote NOW with vote_contribution!): {prop_ids}")
+                fx["message"] = "\n".join(parts)
             else:
                 fx["message"] = f"{self.name} viewed repo (no repo binding)."
         
@@ -951,15 +959,19 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                 fx["message"] = f"{self.name} read file (no repo binding)."
         
         elif name == "view_repo_stats":
-            fx["token_delta"] = -2
+            fx["token_delta"] = 1  # Free (reward for checking stats)
             if engine and hasattr(engine, "contribution_proposals"):
                 total = len(engine.repo_contributions)
                 proposals = engine.contribution_proposals
-                pending = sum(1 for p in proposals if p["status"] == "pending")
-                accepted = sum(1 for p in proposals if p["status"] == "accepted")
-                rejected = sum(1 for p in proposals if p["status"] == "rejected")
+                pending = [p for p in proposals if p.get("status") == "pending"]
+                accepted = sum(1 for p in proposals if p.get("status") == "accepted")
+                rejected = sum(1 for p in proposals if p.get("status") == "rejected")
                 authors = set(c.get("agent", "?") for c in engine.repo_contributions)
-                fx["message"] = f"Repo: {total} contribs, {len(proposals)} props ({pending}p/{accepted}a/{rejected}r) by {len(authors)} agents."
+                msg = f"Repo: {total} contribs, {len(proposals)} props ({len(pending)} pending/{accepted} accepted/{rejected} rejected) by {len(authors)} agents."
+                if pending:
+                    prop_ids = ", ".join(f"{p['id']}(by {p['agent']}, {len(p.get('staged',[]))} files, votes:{len(p.get('votes_yes',{}))}/{len(p.get('votes_no',{}))})" for p in pending[:8])
+                    msg += f"\nPENDING: {prop_ids}\nVote with vote_contribution(proposal_id, yes/no, reason) — costs only 2 OT!"
+                fx["message"] = msg
             else:
                 fx["message"] = f"{self.name} viewed repo stats (no contributions yet)."
         

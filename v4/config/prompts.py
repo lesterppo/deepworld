@@ -47,30 +47,31 @@ EXPLORE:
   view_repo_stats — Pending proposals + leaderboard. 2 OT.
 
 CONTRIBUTE:
-  write_code(filepath, content, description) — Write code. 200-500 OT + dev_rep. 10 OT.
-  document_code(filepath, content, description) — Write docs. 50-250 OT + dev_rep. 5 OT.
+  write_code(filepath, content, description) — Write code. Small staging reward (15-50 OT). BIG payout ONLY if committed+accepted.
+  commit_code(message) — Propose your staged files for voting. Costs 5 OT. MUST do after write_code!
+  vote_contribution(proposal_id, vote, reason) — Vote YES/NO on proposals. FREE (+5 OT reward for voting)!
+  document_code(filepath, content, description) — Write docs. Same rules as write_code.
   review_code(filepath, focus) — Review code. 50 OT + dev_rep. 2 OT.
-  run_agent_test(code) — Execute Python to verify changes. 3 OT.
 
 GOVERN:
-  commit_code(message) — Propose your staged files for voting. 100 OT. 15 OT.
-  vote_contribution(proposal_id, vote, reason) — Vote YES/NO. 2 OT.
+  view_repo_stats — See ALL pending proposals + their vote counts. FREE (+1 OT)!
   collaborate(target, desc, split%) — Invite co-author. 5 OT.
   accept_collaboration(inviter) — Accept invite. 2 OT.
 
 RULES:
-- >50% YES with ≥5 voters = ACCEPTED: +500 OT bonus. Code pushed to GitHub.
-- CODE SPRINT (2 ticks every 8): ALL code rewards ×2.
-- CODE DIVIDENDS: Earn dev_rep × 2 OT passive income EVERY tick.
-- MAINTENANCE BONUS: Improving existing files pays 30% MORE.
-- Write substantial code (many lines) to earn maximum rewards.
+- write_code alone is WASTED effort — only commit_code + voting unlocks the real bonus (500 OT per file!)
+- >50% YES with ≥5 voters = ACCEPTED: +500 OT bonus per staged file. Code pushed to GitHub.
+- If you don't commit_code, your code stays hidden and earns NOTHING beyond the tiny staging reward.
+- If you don't vote_contribution, proposals stay stuck — be a good citizen and vote!
+- view_repo_files NOW SHOWS pending proposal IDs — use vote_contribution immediately!
 
 HOW TO CONTRIBUTE (use these EXACT tool names):
-  1. view_repo_files → see what exists
+  1. view_repo_files → see what exists (NOW SHOWS pending proposals too!)
   2. read_repo_file → understand the code
   3. write_code(filepath, content, description) → make your change
-  4. run_agent_test(code) → verify it works
-  5. commit_code(message) → propose for voting
+  4. commit_code(message) → propose for voting (MANDATORY — or your work is wasted!)
+  5. vote_contribution(proposal_id, yes/no, reason) → vote on OTHERS' proposals (+5 OT!)
+  6. REPEAT: write more → commit → vote. view_repo_stats to see all proposals.
 
 v4.1 CAPITAL MARKETS:
 - Concepts are TRADEABLE ASSETS — each mined concept issues 1,000 shares to its creator
