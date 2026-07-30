@@ -40,21 +40,31 @@ def health_check_nvidia() -> bool:
         print("[DEEPWORLD] Set NVIDIA_API_KEY in ~/.hermes/.env or ~/deepworld/.env", file=sys.stderr)
         return False
 
-    try:
-        client = OpenAI(api_key=api_key, base_url="https://integrate.api.nvidia.com/v1")
-        resp = client.chat.completions.create(
-            model="nvidia/llama-3.1-nemotron-nano-8b-v1",
-            messages=[{"role": "user", "content": "Say OK"}],
-            max_tokens=5, temperature=0,
-        )
-        content = resp.choices[0].message.content or ""
-        print(f"[DEEPWORLD] ✅ NVIDIA health check OK (response: '{content.strip()}')", file=sys.stderr)
-        return True
-    except Exception as e:
-        print(f"\n[DEEPWORLD] ❌ NVIDIA health check FAILED: {type(e).__name__}: {e}", file=sys.stderr)
-        import traceback
-        traceback.print_exc(file=sys.stderr)
-        return False
+    # Try models in order: most reliable first, with tight timeout
+    HEALTH_CHECK_MODELS = [
+        "meta/llama-3.1-8b-instruct",       # Most reliable free model
+        "google/gemma-2-2b-it",             # Tiny, fast fallback
+        "nvidia/llama-3.1-nemotron-nano-8b-v1",  # Original (may be deprecated)
+    ]
+
+    client = OpenAI(api_key=api_key, base_url="https://integrate.api.nvidia.com/v1", timeout=30)
+
+    for model in HEALTH_CHECK_MODELS:
+        try:
+            resp = client.chat.completions.create(
+                model=model,
+                messages=[{"role": "user", "content": "OK"}],
+                max_tokens=5, temperature=0,
+            )
+            content = resp.choices[0].message.content or ""
+            print(f"[DEEPWORLD] ✅ NVIDIA health check OK (model={model}, response: '{content.strip()}')", file=sys.stderr)
+            return True
+        except Exception as e:
+            print(f"[DEEPWORLD] ⚠️  Model {model} failed: {type(e).__name__}", file=sys.stderr)
+            continue
+
+    print(f"\n[DEEPWORLD] ❌ NVIDIA health check FAILED: all {len(HEALTH_CHECK_MODELS)} models timed out or failed", file=sys.stderr)
+    return False
 
 
 def main():
