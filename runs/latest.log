@@ -3,7 +3,4 @@ Traceback (most recent call last):
     from engine import OmniTokV4Engine
   File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 17, in <module>
     from agents.cmtip_bridge import CMTIPBridge
-  File "/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py", line 1
-    def register_concept(description):\n    # discover a novel concept in latent space\n    concept = mine_concept(description)\n    # register the concept and its meaning\n    register_concept_in_ontology(concept)\n    # issue shares to the concept creator\n    issue_concept_shares(concept, 1000, 0.5)\n
-                                       ^
-SyntaxError: unexpected character after line continuation character
+ModuleNotFoundError: No module named 'agents.cmtip_bridge'
