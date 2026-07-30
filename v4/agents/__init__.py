@@ -701,32 +701,37 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                 if len(content) < 50:
                     fx["message"] = f"{self.name} write_code rejected — too short ({len(content)} chars)"
                 else:
-                    # SMALL immediate reward — big payout is DEFERRED until commit_code + vote
-                    line_count = content.count("\n") + 1
-                    immediate = min(50, 15 + line_count * 2)
-                    if engine and getattr(engine, '_code_sprint_active', False):
-                        immediate *= 2
-                    fx["token_delta"] += immediate
-                    
-                    # Calculate potential bonus if accepted
-                    potential = min(500, len(content) // 2 + line_count * 5)
-                    if engine and getattr(engine, '_code_sprint_active', False):
-                        potential *= 2
-                    
-                    # Write file to disk
-                    try:
-                        written_path = engine._write_contribution_file(filepath, content)
-                    except Exception:
-                        written_path = filepath
-                    
-                    engine.repo_contributions.append({
-                        "agent": self.name, "agent_class": self.agent_class,
-                        "action": "write_code", "filepath": filepath,
-                        "content": content, "description": desc,
-                        "reward": potential, "tick": engine.current_tick if engine else 0,
-                    })
-                    fx["message"] = (f"{self.name} WROTE '{filepath}' ({len(content)}c/{line_count}L) +{immediate} OT STAGED. "
-                                     f"Use commit_code to propose for up to +{potential} OT bonus if accepted by ≥5 voters!")
+                    # Sanitize: fix literal \n that corrupts Python files
+                    content = content.replace("\\n", "\n").replace("\\t", "\t")
+                    if len(content) < 50:
+                        fx["message"] = f"{self.name} write_code rejected — too short after sanitize ({len(content)} chars)"
+                    else:
+                        # SMALL immediate reward — big payout is DEFERRED until commit_code + vote
+                        line_count = content.count("\n") + 1
+                        immediate = min(50, 15 + line_count * 2)
+                        if engine and getattr(engine, '_code_sprint_active', False):
+                            immediate *= 2
+                        fx["token_delta"] += immediate
+                        
+                        # Calculate potential bonus if accepted
+                        potential = min(500, len(content) // 2 + line_count * 5)
+                        if engine and getattr(engine, '_code_sprint_active', False):
+                            potential *= 2
+                        
+                        # Write file to disk
+                        try:
+                            written_path = engine._write_contribution_file(filepath, content)
+                        except Exception:
+                            written_path = filepath
+                        
+                        engine.repo_contributions.append({
+                            "agent": self.name, "agent_class": self.agent_class,
+                            "action": "write_code", "filepath": filepath,
+                            "content": content, "description": desc,
+                            "reward": potential, "tick": engine.current_tick if engine else 0,
+                        })
+                        fx["message"] = (f"{self.name} WROTE '{filepath}' ({len(content)}c/{line_count}L) +{immediate} OT STAGED. "
+                                         f"Use commit_code to propose for up to +{potential} OT bonus if accepted by ≥5 voters!")
             else:
                 fx["message"] = f"{self.name} wrote '{filepath}' (no repo binding)."
         

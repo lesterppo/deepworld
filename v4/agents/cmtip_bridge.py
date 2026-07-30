@@ -1,1 +1,0 @@
-def register_concept(description):\n    # discover a novel concept in latent space\n    concept = mine_concept(description)\n    # register the concept and its meaning\n    register_concept_in_ontology(concept)\n    # issue shares to the concept creator\n    issue_concept_shares(concept, 1000, 0.5)\n

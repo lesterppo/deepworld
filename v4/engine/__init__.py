@@ -97,8 +97,11 @@ class OmniTokV4Engine:
     
     def _write_contribution_file(self, filepath: str, content: str) -> str:
         """Write an agent contribution to disk. Returns the absolute path written.
-        Sanitizes filepath — strips leading / and .. to prevent traversal."""
+        Sanitizes filepath and content (literal \\n → real newlines)."""
         import os as _os
+        # Sanitize content: fix literal \n that corrupts code
+        if "\\n" in content:
+            content = content.replace("\\n", "\n").replace("\\t", "\t")
         # Sanitize: strip leading slashes and parent dir references
         safe = filepath.lstrip("/")
         while safe.startswith(".."):
