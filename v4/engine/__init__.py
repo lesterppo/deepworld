@@ -14,7 +14,15 @@ from collections import defaultdict, Counter
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from agents import OmniTokV4Agent
-from agents.cmtip_bridge import CMTIPBridge
+try:
+    from agents.cmtip_bridge import CMTIPBridge
+except (ImportError, SyntaxError):
+    # Agent may have written corrupt code — provide a fallback stub
+    print("[DEEPWORLD] ⚠ cmtip_bridge import failed — using stub", file=sys.stderr)
+    class CMTIPBridge:
+        def __init__(self): self.concept_registry, self.inbox = {}, {}
+        def get_fidelity_matrix(self): return {}
+        def get_ontology_stats(self): return {"total_concepts": 0, "most_used": []}
 from world_registry import WorldParamRegistry
 from config import (
     SIM_DAYS, TICKS_PER_DAY, NUM_AGENTS, AGENT_CLASSES,
