@@ -50,14 +50,23 @@ MODEL_BACKENDS = {
 # Each agent gets a random model from this pool for behavioral diversity.
 # All models are available via NVIDIA NIM free tier (integrate.api.nvidia.com/v1).
 NVIDIA_FREE_MODELS = [
-    # PROVEN WORKING (Jul 30 CI — no errors across multiple runs):
-    "meta/llama-3.1-8b-instruct",                   # Health check + all agents
-    "meta/llama-3.1-70b-instruct",                  # Developer agent
-    "nvidia/llama-3.3-nemotron-super-49b-v1",       # 2 agents, no errors
-    "mistralai/mistral-nemotron",                   # 1 agent, no errors
-    "openai/gpt-oss-20b",                           # 1 agent, no errors
-    "nvidia/nemotron-3-super-120b-a12b",            # No errors observed
-    "microsoft/phi-4-mini-instruct",                # No errors observed
+    # Tier 1 — proven working (Jul 30 CI, zero errors):
+    "meta/llama-3.1-8b-instruct",
+    "meta/llama-3.1-70b-instruct",
+    "nvidia/llama-3.3-nemotron-super-49b-v1",
+    "mistralai/mistral-nemotron",
+    "openai/gpt-oss-20b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "microsoft/phi-4-mini-instruct",
+    # Tier 2 — nemotron family, untested but in catalog:
+    "nvidia/llama-3.1-nemotron-51b-instruct",
+    "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+    "nvidia/nemotron-3-nano-30b-a3b",
+    "nvidia/nemotron-mini-4b-instruct",
+    "nvidia/nvidia-nemotron-nano-9b-v2",
+    # Tier 3 — other families, untested:
+    "google/gemma-2b",
+    "mistralai/mistral-7b-instruct-v0.3",
 ]
 
 # ─── NVIDIA-only mode (skips all other backends) ───
