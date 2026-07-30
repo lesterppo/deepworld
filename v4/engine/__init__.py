@@ -275,8 +275,17 @@ class OmniTokV4Engine:
                 "repo_your_dev_rep": agent.dev_rep,
             }
             
-            action = agent.act(world, self.cmtip)
-            effects = agent.apply_effects(action, self, self.cmtip)
+            try:
+                action = agent.act(world, self.cmtip)
+                effects = agent.apply_effects(action, self, self.cmtip)
+            except Exception as e:
+                import traceback
+                short_model = agent.model.split("/")[-1] if "/" in agent.model else agent.model
+                print(f"  ⚠ {agent.name} ({agent.agent_class}/{short_model}) act failed: {type(e).__name__}", file=sys.stderr)
+                traceback.print_exc(file=sys.stderr)
+                # Graceful degradation: skip this agent this tick
+                action = {"action": "idle", "args": {}}
+                effects = {"cost": 0, "agent": agent.name}
 
             # Track tensor messages
             if action.get("action") == "send_tensor":

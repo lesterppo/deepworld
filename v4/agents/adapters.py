@@ -80,7 +80,7 @@ class MultiModelAdapter:
                                 api_key = line.split("=", 1)[1]
             base_url = "https://api.deepseek.com/v1"
         
-        return OpenAI(api_key=api_key, base_url=base_url, timeout=120.0)
+        return OpenAI(api_key=api_key, base_url=base_url, timeout=30.0)
 
     def _create_gemini_web_client(self, info: dict) -> Any:
         """Gemini Web CLI adapter (returns an OpenAI-compatible facade)."""
@@ -107,7 +107,7 @@ class MultiModelAdapter:
                 temperature=temperature, max_tokens=max_tokens,
             )
         elif backend_type == "nvidia_api":
-            actual_model = model if (model and model != "nemotron") else "nvidia/llama-3.1-nemotron-nano-8b-v1"
+            actual_model = model if (model and model != "nemotron") else "meta/llama-3.1-8b-instruct"
             # NVIDIA NIM free models don't support native tool calling — inject tools as text
             tool_text = ""
             has_repo_tools = False
