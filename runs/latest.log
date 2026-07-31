@@ -1,13 +1,113 @@
 [DEEPWORLD] ⚠ cmtip_bridge import failed — using stub
 [DEEPWORLD] ✅ NVIDIA health check OK (model=meta/llama-3.1-8b-instruct, response: 'It seems like you're')
-[DEEPWORLD] NVIDIA API error for meta/llama-3.1-70b-instruct: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
-  ⚠ DE-06 (Developer/mistral-nemotron) act failed: AttributeError
+[DEEPWORLD] NVIDIA API error for meta/llama-3.1-70b-instruct: APITimeoutError: Request timed out.
+  ⚠ EM-05 (Embedding-Broker/mistral-nemotron) act failed: AttributeError
 Traceback (most recent call last):
   File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
     effects = agent.apply_effects(action, self, self.cmtip)
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 394, in apply_effects
-    result = cmtip_bridge.send_tensor(
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 515, in apply_effects
+    result = cmtip_bridge.send_tensor(concept, 0.8, self.model_family, target, "FP16", self.name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
+  ⚠ EM-05 (Embedding-Broker/mistral-nemotron) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 627, in apply_effects
+    pf = cmtip_bridge.get_agent_portfolio(self.name)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'get_agent_portfolio'
+  ⚠ EM-05 (Embedding-Broker/mistral-nemotron) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 515, in apply_effects
+    result = cmtip_bridge.send_tensor(concept, 0.8, self.model_family, target, "FP16", self.name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
+  ⚠ EM-05 (Embedding-Broker/mistral-nemotron) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 515, in apply_effects
+    result = cmtip_bridge.send_tensor(concept, 0.8, self.model_family, target, "FP16", self.name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
+  ⚠ EM-05 (Embedding-Broker/mistral-nemotron) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 515, in apply_effects
+    result = cmtip_bridge.send_tensor(concept, 0.8, self.model_family, target, "FP16", self.name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: RateLimitError: Error code: 429 - {'status': 429, 'title': 'Too Many Requests'}
+  ⚠ CO-03 (Concept-Miner/nemotron-3-super-120b-a12b) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 494, in apply_effects
+    result = cmtip_bridge.mine_concept(desc, self.name, self.model_family,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'mine_concept'
+  ⚠ EM-05 (Embedding-Broker/mistral-nemotron) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 515, in apply_effects
+    result = cmtip_bridge.send_tensor(concept, 0.8, self.model_family, target, "FP16", self.name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
+  ⚠ CO-03 (Concept-Miner/nemotron-3-super-120b-a12b) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 494, in apply_effects
+    result = cmtip_bridge.mine_concept(desc, self.name, self.model_family,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'mine_concept'
+  ⚠ EM-05 (Embedding-Broker/mistral-nemotron) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 515, in apply_effects
+    result = cmtip_bridge.send_tensor(concept, 0.8, self.model_family, target, "FP16", self.name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
+  ⚠ EM-05 (Embedding-Broker/mistral-nemotron) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 515, in apply_effects
+    result = cmtip_bridge.send_tensor(concept, 0.8, self.model_family, target, "FP16", self.name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
+  ⚠ CO-03 (Concept-Miner/nemotron-3-super-120b-a12b) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 438, in apply_effects
+    result = cmtip_bridge.blend_tensors(ca, cb, ratio, self.model_family)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CMTIPBridge' object has no attribute 'blend_tensors'
+  ⚠ EM-05 (Embedding-Broker/mistral-nemotron) act failed: AttributeError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 515, in apply_effects
+    result = cmtip_bridge.send_tensor(concept, 0.8, self.model_family, target, "FP16", self.name)
              ^^^^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
 
@@ -22,16 +122,16 @@ AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
 ======================================================================
 
   Model distribution:
-    2× mistral-nemotron
-    2× llama-3.3-nemotron-super-49b-v1
-    2× llama-3.1-70b-instruct
-  ⚡ CO-03 (Concept-Miner/llama-3.1-70b-instruct) STARVED: 1500 OT, perplexity=214
-  ⚡ LO-04 (Loss-Miner/llama-3.3-nemotron-super-49b-v1) STARVED: 1500 OT, perplexity=253
-  ⚡ QU-01 (Quant-Scribe/mistral-nemotron) STARVED: 1500 OT, perplexity=255
-  💰 EM-05 (Embedding-Broker/llama-3.1-70b-instruct) WEALTHY: 12500 OT, low perplexity=47
-  💰 DE-06 (Developer/mistral-nemotron) WEALTHY: 12500 OT, low perplexity=42
+    3× mistral-nemotron
+    2× nemotron-3-super-120b-a12b
+    1× llama-3.1-70b-instruct
+  ⚡ PR-02 (Projection-Weaver/nemotron-3-super-120b-a12b) STARVED: 1500 OT, perplexity=205
+  ⚡ CO-03 (Concept-Miner/nemotron-3-super-120b-a12b) STARVED: 1500 OT, perplexity=249
+  ⚡ LO-04 (Loss-Miner/mistral-nemotron) STARVED: 1500 OT, perplexity=272
+  💰 DE-06 (Developer/mistral-nemotron) WEALTHY: 12500 OT, low perplexity=47
+  💰 EM-05 (Embedding-Broker/mistral-nemotron) WEALTHY: 12500 OT, low perplexity=36
   ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/mistral-nemotron), PR-02(Projection-Weaver/llama-3.3-nemotron-super-49b-v1), CO-03(Concept-Miner/llama-3.1-70b-instruct), LO-04(Loss-Miner/llama-3.3-nemotron-super-49b-v1), EM-05(Embedding-Broker/llama-3.1-70b-instruct), DE-06(Developer/mistral-nemotron)
+  Agents: QU-01(Quant-Scribe/llama-3.1-70b-instruct), PR-02(Projection-Weaver/nemotron-3-super-120b-a12b), CO-03(Concept-Miner/nemotron-3-super-120b-a12b), LO-04(Loss-Miner/mistral-nemotron), EM-05(Embedding-Broker/mistral-nemotron), DE-06(Developer/mistral-nemotron)
   Baseline fidelity (needs Weavers): {}
 
 ─────────────────────────────────────────────────────────────────
@@ -39,10 +139,10 @@ AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
 ─────────────────────────────────────────────────────────────────
   💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for 2 ticks!
   T 1 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 2 | A:6 | 📊{'compress_context': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
+  T 2 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
   T 3 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
   T 4 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 5 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 5 | A:6 | 📊{'translate_fragment': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
   T 6 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
   T 7 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
   T 8 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
@@ -51,27 +151,27 @@ AttributeError: 'CMTIPBridge' object has no attribute 'send_tensor'
   Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/0r
 ─────────────────────────────────────────────────────────────────
   T 1 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 2 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 3 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 4 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 5 | A:6 | 📊{'view_repo_files': 6} | 🔮{}
-  T 6 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 7 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 2 | A:6 | 📊{'error': 1, 'idle': 1, 'review_code': 1, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{} | 💻:LO-04=1
+  T 3 | A:6 | 📊{'document_code': 1, 'scan_network': 1, 'view_git_log': 1, 'view_repo_files': 2, 'write_code': 1} | 🔮{} | 💻:LO-04=1
+  T 4 | A:6 | 📊{'document_code': 1, 'harvest_tokens': 1, 'idle': 1, 'review_code': 1, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{} | 💻:LO-04=2
+  T 5 | A:6 | 📊{'document_code': 1, 'idle': 1, 'review_code': 1, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{} | 💻:LO-04=3
+  T 6 | A:6 | 📊{'document_code': 1, 'harvest_tokens': 1, 'review_code': 1, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{} | 💻:LO-04=4
+  T 7 | A:6 | 📊{'document_code': 1, 'harvest_tokens': 1, 'idle': 1, 'review_code': 1, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{} | 💻:LO-04=5
 
   ⚡ GREAT COMPRESSION — 50% context purge!
-  T 8 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 8 | A:6 | 📊{'compress_context': 1, 'idle': 2, 'scan_network': 1, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{} | 💻:LO-04=5
 
 ─────────────────────────────────────────────────────────────────
   Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/0r
 ─────────────────────────────────────────────────────────────────
-  T 1 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 2 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 3 | A:6 | 📊{'error': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
-  T 4 | A:6 | 📊{'idle': 1, 'view_repo_files': 5} | 🔮{}
-  T 5 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 6 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 7 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 8 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 1 | A:6 | 📊{'review_code': 1, 'scan_network': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{} | 💻:LO-04=6
+  T 2 | A:6 | 📊{'review_code': 1, 'scan_network': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{} | 💻:LO-04=7
+  T 3 | A:6 | 📊{'error': 1, 'review_code': 1, 'scan_network': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{} | 💻:LO-04=8
+  T 4 | A:6 | 📊{'review_code': 1, 'scan_network': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{} | 💻:LO-04=9
+  T 5 | A:6 | 📊{'idle': 2, 'review_code': 1, 'scan_network': 1, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{} | 💻:LO-04=10
+  T 6 | A:6 | 📊{'idle': 2, 'review_code': 1, 'scan_network': 1, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{} | 💻:LO-04=11
+  T 7 | A:6 | 📊{'compress_context': 1, 'idle': 1, 'review_code': 1, 'scan_network': 1, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{} | 💻:LO-04=12
+  T 8 | A:6 | 📊{'harvest_tokens': 1, 'idle': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{} | 💻:LO-04=12
 
 ======================================================================
   SIMULATION COMPLETE
