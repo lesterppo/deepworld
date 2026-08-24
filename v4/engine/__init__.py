@@ -23,6 +23,9 @@ except (ImportError, SyntaxError):
         def __init__(self): self.concept_registry, self.inbox = {}, {}
         def get_fidelity_matrix(self): return {}
         def get_ontology_stats(self): return {"total_concepts": 0, "most_used": []}
+        def receive_tensor(self, agent_name, model_family):
+            # Stub: no queued tensors in fallback bridge mode
+            return []
 from world_registry import WorldParamRegistry
 from config import (
     SIM_DAYS, TICKS_PER_DAY, NUM_AGENTS, AGENT_CLASSES,
