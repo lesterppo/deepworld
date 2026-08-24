@@ -2,7 +2,7 @@ name: DeepWorld v5.2 — OpenRouter Ox Alpha Continuous Simulation
 
 on:
   schedule:
-    - cron: '0 */2 * * *'   # Every 2 hours
+    - cron: '30 */4 * * *'   # Every 4 hours (runs take ~2.8h; avoids overlap)
   workflow_dispatch:          # Manual trigger
 
 permissions:
