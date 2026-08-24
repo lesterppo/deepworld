@@ -1,14 +1,5 @@
 [DEEPWORLD] ⚠ cmtip_bridge import failed — using stub
 [DEEPWORLD] ✅ OpenRouter health check OK (model=stealth/ox-alpha, response: '')
-  ⚠ EM-05 (Embedding-Broker/ox-alpha) act failed: AttributeError
-Traceback (most recent call last):
-  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 291, in tick
-    effects = agent.apply_effects(action, self, self.cmtip)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 413, in apply_effects
-    received = cmtip_bridge.receive_tensor(self.name, self.model_family)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'CMTIPBridge' object has no attribute 'receive_tensor'
 
   DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
   Backend: OpenRouter (stealth/ox-alpha)
@@ -22,11 +13,11 @@ AttributeError: 'CMTIPBridge' object has no attribute 'receive_tensor'
 
   Model distribution:
     6× ox-alpha
-  ⚡ EM-05 (Embedding-Broker/ox-alpha) STARVED: 1500 OT, perplexity=232
-  ⚡ LO-04 (Loss-Miner/ox-alpha) STARVED: 1500 OT, perplexity=249
-  ⚡ DE-06 (Developer/ox-alpha) STARVED: 1500 OT, perplexity=235
-  💰 CO-03 (Concept-Miner/ox-alpha) WEALTHY: 12500 OT, low perplexity=40
-  💰 PR-02 (Projection-Weaver/ox-alpha) WEALTHY: 12500 OT, low perplexity=42
+  ⚡ EM-05 (Embedding-Broker/ox-alpha) STARVED: 1500 OT, perplexity=204
+  ⚡ CO-03 (Concept-Miner/ox-alpha) STARVED: 1500 OT, perplexity=267
+  ⚡ LO-04 (Loss-Miner/ox-alpha) STARVED: 1500 OT, perplexity=233
+  💰 PR-02 (Projection-Weaver/ox-alpha) WEALTHY: 12500 OT, low perplexity=46
+  💰 QU-01 (Quant-Scribe/ox-alpha) WEALTHY: 12500 OT, low perplexity=54
   ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
   Agents: QU-01(Quant-Scribe/ox-alpha), PR-02(Projection-Weaver/ox-alpha), CO-03(Concept-Miner/ox-alpha), LO-04(Loss-Miner/ox-alpha), EM-05(Embedding-Broker/ox-alpha), DE-06(Developer/ox-alpha)
   Baseline fidelity (needs Weavers): {}
@@ -36,56 +27,56 @@ AttributeError: 'CMTIPBridge' object has no attribute 'receive_tensor'
 ─────────────────────────────────────────────────────────────────
   💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for 2 ticks!
   T 1 | A:6 | 📊{'idle': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
-  T 2 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
-  T 3 | A:6 | 📊{'error': 1, 'idle': 1, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
+  T 2 | A:6 | 📊{'idle': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
+  T 3 | A:6 | 📊{'scan_latent_space': 1, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{'receive_tensor': 1}
   T 4 | A:6 | 📊{'idle': 2, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
   T 5 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 6 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
-  T 7 | A:6 | 📊{'view_full_repo': 4, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 6 | A:6 | 📊{'idle': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
+  T 7 | A:6 | 📊{'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
   T 8 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
 
 ─────────────────────────────────────────────────────────────────
-  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/0r
+  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/1r
 ─────────────────────────────────────────────────────────────────
-  T 1 | A:6 | 📊{'idle': 2, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 2 | A:6 | 📊{'idle': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
-  T 3 | A:6 | 📊{'scan_latent_space': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
-  T 4 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_repo_files': 2} | 🔮{}
-  T 5 | A:6 | 📊{'idle': 2, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
-  T 6 | A:6 | 📊{'error': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
-  T 7 | A:6 | 📊{'idle': 2, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 1 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 2 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{'receive_tensor': 1}
+  T 3 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 4 | A:6 | 📊{'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
+  T 5 | A:6 | 📊{'idle': 2, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 6 | A:6 | 📊{'idle': 2, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 7 | A:6 | 📊{'view_full_repo': 4, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
 
   ⚡ GREAT COMPRESSION — 50% context purge!
   T 8 | A:6 | 📊{'idle': 2, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
 
 ─────────────────────────────────────────────────────────────────
-  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/0r
+  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/2r
 ─────────────────────────────────────────────────────────────────
-  T 1 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1, 'view_repo_stats': 1} | 🔮{}
-  T 2 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 3 | A:6 | 📊{'idle': 2, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
-  T 4 | A:6 | 📊{'idle': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
-  T 5 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 6 | A:6 | 📊{'idle': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
-  T 7 | A:6 | 📊{'idle': 3, 'view_full_repo': 2, 'view_git_log': 1} | 🔮{}
-  T 8 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 1 | A:6 | 📊{'view_full_repo': 4, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 2 | A:6 | 📊{'idle': 2, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 3 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
+  T 4 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 5 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{'receive_tensor': 1}
+  T 6 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 7 | A:6 | 📊{'scan_latent_space': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 8 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
 
 ======================================================================
   SIMULATION COMPLETE
 
   Tensor Economy Final:
     Total tensor sends: 0
-    Total tensor receives: 0
+    Total tensor receives: 3
     Ontology: 0 concepts
     Royalties: 0
     Top concepts: []
 
-  Done in 10044s. Report: runs/20260824_153801/final_report.md
+  Done in 3556s. Report: runs/20260824_210132/final_report.md
 
   Agent Summary:
-    ✓ PR-02 (Projection-Weaver/nvidia) OT=24478
-    ✓ CO-03 (Concept-Miner/nvidia) OT=24425
-    ✓ QU-01 (Quant-Scribe/nvidia) OT=17173
-    ✓ LO-04 (Loss-Miner/nvidia) OT=13711
-    ✓ DE-06 (Developer/nvidia) OT=13643
-    ✓ EM-05 (Embedding-Broker/nvidia) OT=13504
+    ✓ QU-01 (Quant-Scribe/nvidia) OT=24666
+    ✓ PR-02 (Projection-Weaver/nvidia) OT=24454
+    ✓ DE-06 (Developer/nvidia) OT=17139
+    ✓ LO-04 (Loss-Miner/nvidia) OT=13592
+    ✓ EM-05 (Embedding-Broker/nvidia) OT=13500
+    ✓ CO-03 (Concept-Miner/nvidia) OT=13410
