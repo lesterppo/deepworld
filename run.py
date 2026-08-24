@@ -20,35 +20,34 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "v4"
 from engine import OmniTokV4Engine
 
 
-def health_check_nvidia() -> bool:
-    """Verify NVIDIA API is reachable before starting simulation."""
+def health_check_openrouter() -> bool:
+    """Verify OpenRouter / Ox Alpha is reachable before starting simulation."""
     from openai import OpenAI
     import os
 
-    api_key = os.environ.get("NVIDIA_API_KEY", "")
+    api_key = os.environ.get("OPENROUTER_API_KEY", "")
     if not api_key:
-        env_path = os.path.expanduser("~/deepworld/.env")
-        if os.path.exists(env_path):
-            with open(env_path) as f:
-                for line in f:
-                    if "=" in line and line.startswith("NVIDIA_API_KEY"):
-                        api_key = line.strip().split("=", 1)[1]
-                        break
+        env_path = os.path.expanduser("~/.env")
+        for cand in (env_path, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")):
+            if os.path.exists(cand):
+                with open(cand) as f:
+                    for line in f:
+                        if line.startswith("OPENROUTER_API_KEY") and "=" in line:
+                            api_key = line.strip().split("=", 1)[1]
+                            break
+            if api_key:
+                break
 
     if not api_key:
-        print("\n[DEEPWORLD] ❌ NVIDIA_API_KEY not found!", file=sys.stderr)
-        print("[DEEPWORLD] Set NVIDIA_API_KEY in ~/.hermes/.env or ~/deepworld/.env", file=sys.stderr)
+        print("\n[DEEPWORLD] ❌ OPENROUTER_API_KEY not found!", file=sys.stderr)
+        print("[DEEPWORLD] Set OPENROUTER_API_KEY env var or GitHub Secret.", file=sys.stderr)
         return False
 
-    # Try models in order: most reliable first, with tight timeout
-    HEALTH_CHECK_MODELS = [
-        "meta/llama-3.1-8b-instruct",       # Proven working
-        "meta/llama-3.1-70b-instruct",      # Proven working
-    ]
+    model = os.environ.get("DEEPWORLD_HEALTH_MODEL", "stealth/ox-alpha")
+    client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1", timeout=60)
 
-    client = OpenAI(api_key=api_key, base_url="https://integrate.api.nvidia.com/v1", timeout=30)
-
-    for model in HEALTH_CHECK_MODELS:
+    # Ox Alpha's upstream shared pool occasionally 429s transiently — retry.
+    for attempt in range(5):
         try:
             resp = client.chat.completions.create(
                 model=model,
@@ -56,13 +55,16 @@ def health_check_nvidia() -> bool:
                 max_tokens=5, temperature=0,
             )
             content = resp.choices[0].message.content or ""
-            print(f"[DEEPWORLD] ✅ NVIDIA health check OK (model={model}, response: '{content.strip()}')", file=sys.stderr)
+            print(f"[DEEPWORLD] ✅ OpenRouter health check OK (model={model}, "
+                  f"response: '{content.strip()[:20]}')", file=sys.stderr)
             return True
         except Exception as e:
-            print(f"[DEEPWORLD] ⚠️  Model {model} failed: {type(e).__name__}", file=sys.stderr)
-            continue
+            wait = 10 * (attempt + 1)
+            print(f"[DEEPWORLD] ⚠️  Health check attempt {attempt + 1} failed: {type(e).__name__}: {str(e)[:120]}", file=sys.stderr)
+            if attempt < 4:
+                time.sleep(wait)
 
-    print(f"\n[DEEPWORLD] ❌ NVIDIA health check FAILED: all {len(HEALTH_CHECK_MODELS)} models timed out or failed", file=sys.stderr)
+    print(f"\n[DEEPWORLD] ❌ OpenRouter health check FAILED after 5 attempts", file=sys.stderr)
     return False
 
 
@@ -84,14 +86,14 @@ def main():
     # NVIDIA-only by default
     if not a.multi_model:
         os.environ["DEEPWORLD_NVIDIA_ONLY"] = "1"
-        backend_label = "NVIDIA NIM (free, random models per agent)"
+        backend_label = f"OpenRouter ({os.environ.get('DEEPWORLD_MODELS', 'stealth/ox-alpha')})"
     else:
         os.environ["DEEPWORLD_NVIDIA_ONLY"] = "0"
         backend_label = "Multi-model (DeepSeek + Gemini + Claude + Nvidia)"
 
     # Health check
     if not a.no_health_check:
-        if not health_check_nvidia():
+        if not health_check_openrouter():
             sys.exit(1)
 
     print(f"\n  DeepWorld v5 | {a.days}d × {a.ticks}t | "

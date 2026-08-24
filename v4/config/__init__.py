@@ -46,18 +46,17 @@ MODEL_BACKENDS = {
     },
 }
 
-# ─── NVIDIA Free Model Pool (random assignment per agent) ───
-# Each agent gets a random model from this pool for behavioral diversity.
-# All models are available via NVIDIA NIM free tier (integrate.api.nvidia.com/v1).
-NVIDIA_FREE_MODELS = [
-    # All 6 verified working locally (Jul 30, 2026) with adequate context windows:
-    "meta/llama-3.1-8b-instruct",                # 131K ctx, fast, reliable
-    "meta/llama-3.1-70b-instruct",               # 131K ctx, capable
-    "nvidia/llama-3.3-nemotron-super-49b-v1",    # 128K ctx
-    "mistralai/mistral-nemotron",                # 128K ctx
-    "nvidia/nemotron-3-super-120b-a12b",         # 128K ctx, MoE
-    "nvidia/nemotron-3-nano-30b-a3b",            # 128K ctx, MoE
+# ─── Model Pool (random assignment per agent) ───
+# v5.2: backend switched to OpenRouter — free stealth/ox-alpha model.
+# Override via env: DEEPWORLD_MODELS="id1,id2" (comma-separated OpenRouter ids).
+# All calls route through https://openrouter.ai/api/v1 (OPENROUTER_API_KEY).
+DEFAULT_MODEL_POOL = [
+    "stealth/ox-alpha",  # free via OpenRouter, 1M ctx, native tool calls
 ]
+NVIDIA_FREE_MODELS = [
+    m.strip() for m in os.environ.get("DEEPWORLD_MODELS", "").split(",")
+    if m.strip()
+] or DEFAULT_MODEL_POOL
 
 # ─── NVIDIA-only mode (skips all other backends) ───
 NVIDIA_ONLY = os.environ.get("DEEPWORLD_NVIDIA_ONLY", "1") == "1"

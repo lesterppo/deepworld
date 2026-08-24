@@ -1,4 +1,4 @@
-name: DeepWorld v5 — NVIDIA Continuous Simulation
+name: DeepWorld v5.2 — OpenRouter Ox Alpha Continuous Simulation
 
 on:
   schedule:
@@ -26,9 +26,9 @@ jobs:
         run: |
           pip install openai pyyaml sentence-transformers numpy
 
-      - name: Run DeepWorld v5 (NVIDIA)
+      - name: Run DeepWorld v5.2 (OpenRouter / Ox Alpha)
         env:
-          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           mkdir -p runs
           python3 run.py --days 3 --ticks 8 --delay 0.1 --output runs 2>&1 | tee runs/latest.log
@@ -41,5 +41,5 @@ jobs:
           mkdir -p contributions
           git add runs/ contributions/ v4/ --all
           # Include any agent-written files (v5.1 repo maintenance)
-          git diff --staged --quiet || git commit -m "sim: $(date +%Y-%m-%d_%H:%M) run [NVIDIA v5]"
+          git diff --staged --quiet || git commit -m "sim: $(date +%Y-%m-%d_%H:%M) run [OpenRouter ox-alpha v5.2]"
           git pull --rebase origin main && git push || echo "Push failed (concurrent run?)"

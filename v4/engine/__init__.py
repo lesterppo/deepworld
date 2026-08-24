@@ -375,7 +375,7 @@ class OmniTokV4Engine:
         return events
 
     def run(self):
-        from config import NVIDIA_ONLY
+        from config import NVIDIA_ONLY, NVIDIA_FREE_MODELS
         
         nvidia_only_str = " | NVIDIA ONLY" if NVIDIA_ONLY else ""
         print("=" * 70)
@@ -385,7 +385,7 @@ class OmniTokV4Engine:
         print(f"  {NUM_AGENTS} agents on {model_count} models ({family_count} families)")
         print(f"  {self.days}d × {self.ticks_per_day}t | CMTIP: {'ON' if self.cmtip else 'OFF'} | Governance: ON")
         if NVIDIA_ONLY:
-            print(f"  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1)")
+            print(f"  Backend: OpenRouter (openrouter.ai/api/v1) — {', '.join(NVIDIA_FREE_MODELS)}")
         print(f"  World is mutable — agents can propose, vote, and change simulation rules")
         print("=" * 70)
 
@@ -470,9 +470,9 @@ class OmniTokV4Engine:
             print(f"\n  Tensor Economy Final:")
             print(f"    Total tensor sends: {self.tensor_messages_sent}")
             print(f"    Total tensor receives: {self.tensor_messages_received}")
-            print(f"    Ontology: {onto['total_concepts']} concepts")
-            print(f"    Royalties: {onto['total_royalties']}")
-            print(f"    Top concepts: {onto['most_used'][:5]}")
+            print(f"    Ontology: {onto.get('total_concepts', 0)} concepts")
+            print(f"    Royalties: {onto.get('total_royalties', 0)}")
+            print(f"    Top concepts: {onto.get('most_used', [])[:5]}")
         
         return summary
     
