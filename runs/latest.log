@@ -13,11 +13,11 @@
 
   Model distribution:
     6× ox-alpha
-  ⚡ EM-05 (Embedding-Broker/ox-alpha) STARVED: 1500 OT, perplexity=204
-  ⚡ CO-03 (Concept-Miner/ox-alpha) STARVED: 1500 OT, perplexity=267
-  ⚡ LO-04 (Loss-Miner/ox-alpha) STARVED: 1500 OT, perplexity=233
-  💰 PR-02 (Projection-Weaver/ox-alpha) WEALTHY: 12500 OT, low perplexity=46
-  💰 QU-01 (Quant-Scribe/ox-alpha) WEALTHY: 12500 OT, low perplexity=54
+  ⚡ LO-04 (Loss-Miner/ox-alpha) STARVED: 1500 OT, perplexity=214
+  ⚡ EM-05 (Embedding-Broker/ox-alpha) STARVED: 1500 OT, perplexity=247
+  ⚡ PR-02 (Projection-Weaver/ox-alpha) STARVED: 1500 OT, perplexity=186
+  💰 CO-03 (Concept-Miner/ox-alpha) WEALTHY: 12500 OT, low perplexity=32
+  💰 QU-01 (Quant-Scribe/ox-alpha) WEALTHY: 12500 OT, low perplexity=60
   ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
   Agents: QU-01(Quant-Scribe/ox-alpha), PR-02(Projection-Weaver/ox-alpha), CO-03(Concept-Miner/ox-alpha), LO-04(Loss-Miner/ox-alpha), EM-05(Embedding-Broker/ox-alpha), DE-06(Developer/ox-alpha)
   Baseline fidelity (needs Weavers): {}
@@ -26,39 +26,39 @@
   Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
 ─────────────────────────────────────────────────────────────────
   💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for 2 ticks!
-  T 1 | A:6 | 📊{'idle': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
-  T 2 | A:6 | 📊{'idle': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
-  T 3 | A:6 | 📊{'scan_latent_space': 1, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{'receive_tensor': 1}
-  T 4 | A:6 | 📊{'idle': 2, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
-  T 5 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 6 | A:6 | 📊{'idle': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
-  T 7 | A:6 | 📊{'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
-  T 8 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 1 | A:6 | 📊{'idle': 1, 'scan_latent_space': 1, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
+  T 2 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
+  T 3 | A:6 | 📊{'view_full_repo': 4, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 4 | A:6 | 📊{'idle': 2, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 5 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 6 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 7 | A:6 | 📊{'idle': 2, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 8 | A:6 | 📊{'idle': 2, 'scan_latent_space': 1, 'view_full_repo': 2, 'view_git_log': 1} | 🔮{}
 
 ─────────────────────────────────────────────────────────────────
-  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/1r
+  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/0r
 ─────────────────────────────────────────────────────────────────
-  T 1 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 2 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{'receive_tensor': 1}
-  T 3 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 4 | A:6 | 📊{'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
-  T 5 | A:6 | 📊{'idle': 2, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 6 | A:6 | 📊{'idle': 2, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 1 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 2 | A:6 | 📊{'idle': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
+  T 3 | A:6 | 📊{'idle': 2, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
+  T 4 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 5 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 6 | A:6 | 📊{'idle': 2, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
   T 7 | A:6 | 📊{'view_full_repo': 4, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
 
   ⚡ GREAT COMPRESSION — 50% context purge!
-  T 8 | A:6 | 📊{'idle': 2, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
+  T 8 | A:6 | 📊{'error': 1, 'idle': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
 
 ─────────────────────────────────────────────────────────────────
-  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/2r
+  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/0r
 ─────────────────────────────────────────────────────────────────
-  T 1 | A:6 | 📊{'view_full_repo': 4, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 2 | A:6 | 📊{'idle': 2, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
-  T 3 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
-  T 4 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 5 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{'receive_tensor': 1}
-  T 6 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 7 | A:6 | 📊{'scan_latent_space': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 1 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
+  T 2 | A:6 | 📊{'view_full_repo': 6} | 🔮{}
+  T 3 | A:6 | 📊{'view_full_repo': 4, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 4 | A:6 | 📊{'receive_tensor</tool_call><c4cf82b7><tool_call><0c7dc7cb>view_repo_files': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
+  T 5 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
+  T 6 | A:6 | 📊{'idle': 3, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 7 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1, 'view_repo_stats': 1} | 🔮{}
   T 8 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
 
 ======================================================================
@@ -66,17 +66,17 @@
 
   Tensor Economy Final:
     Total tensor sends: 0
-    Total tensor receives: 3
+    Total tensor receives: 0
     Ontology: 0 concepts
     Royalties: 0
     Top concepts: []
 
-  Done in 3556s. Report: runs/20260824_210132/final_report.md
+  Done in 4372s. Report: runs/20260825_020448/final_report.md
 
   Agent Summary:
-    ✓ QU-01 (Quant-Scribe/nvidia) OT=24666
-    ✓ PR-02 (Projection-Weaver/nvidia) OT=24454
-    ✓ DE-06 (Developer/nvidia) OT=17139
-    ✓ LO-04 (Loss-Miner/nvidia) OT=13592
-    ✓ EM-05 (Embedding-Broker/nvidia) OT=13500
-    ✓ CO-03 (Concept-Miner/nvidia) OT=13410
+    ✓ QU-01 (Quant-Scribe/nvidia) OT=24651
+    ✓ CO-03 (Concept-Miner/nvidia) OT=24427
+    ✓ DE-06 (Developer/nvidia) OT=17146
+    ✓ EM-05 (Embedding-Broker/nvidia) OT=13636
+    ✓ LO-04 (Loss-Miner/nvidia) OT=13595
+    ✓ PR-02 (Projection-Weaver/nvidia) OT=13461
