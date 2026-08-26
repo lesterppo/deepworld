@@ -1,0 +1,131 @@
+{
+  "sim": "DeepWorld v4 \u2014 Tensor-Native Cognosphere",
+  "completed": "2026-08-26T10:58:42.663489",
+  "final": {
+    "alive": 6,
+    "dead": 0,
+    "lazarus_agents": 0,
+    "total_lazarus_echoes": 0,
+    "avg_perplexity": 155.8,
+    "context_distribution": {
+      "Full-Context": 6
+    },
+    "model_distribution": {
+      "nvidia": 6
+    },
+    "great_compressions": 1,
+    "tensor_sent": 0,
+    "tensor_received": 0,
+    "concepts_owned": 0,
+    "projections_trained": 0,
+    "tensor_ratio": 0.0
+  },
+  "agents": [
+    {
+      "name": "DE-06",
+      "class": "Developer",
+      "model": "nvidia",
+      "context": "Full-Context",
+      "tokens": 24638,
+      "perplexity": 51.5,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "tensor_sent": 0,
+      "tensor_received": 0,
+      "concepts_owned": 0,
+      "projections": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "PR-02",
+      "class": "Projection-Weaver",
+      "model": "nvidia",
+      "context": "Full-Context",
+      "tokens": 24467,
+      "perplexity": 57.0,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "tensor_sent": 0,
+      "tensor_received": 0,
+      "concepts_owned": 0,
+      "projections": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "QU-01",
+      "class": "Quant-Scribe",
+      "model": "nvidia",
+      "context": "Full-Context",
+      "tokens": 17271,
+      "perplexity": 100.0,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "tensor_sent": 0,
+      "tensor_received": 0,
+      "concepts_owned": 0,
+      "projections": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "EM-05",
+      "class": "Embedding-Broker",
+      "model": "nvidia",
+      "context": "Full-Context",
+      "tokens": 13744,
+      "perplexity": 256.8,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "tensor_sent": 0,
+      "tensor_received": 0,
+      "concepts_owned": 0,
+      "projections": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "LO-04",
+      "class": "Loss-Miner",
+      "model": "nvidia",
+      "context": "Full-Context",
+      "tokens": 13582,
+      "perplexity": 214.9,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "tensor_sent": 0,
+      "tensor_received": 0,
+      "concepts_owned": 0,
+      "projections": 0,
+      "alive": true,
+      "cause": ""
+    },
+    {
+      "name": "CO-03",
+      "class": "Concept-Miner",
+      "model": "nvidia",
+      "context": "Full-Context",
+      "tokens": 13548,
+      "perplexity": 254.5,
+      "lazarus_echoes": 0,
+      "fragments_claimed": 0,
+      "tensor_sent": 0,
+      "tensor_received": 0,
+      "concepts_owned": 0,
+      "projections": 0,
+      "alive": true,
+      "cause": ""
+    }
+  ],
+  "actions": {
+    "view_full_repo": 64,
+    "idle": 29,
+    "view_git_log": 24,
+    "view_repo_files": 19,
+    "error": 4,
+    "receive_tensor": 2,
+    "view_repo_stats": 1,
+    "harvest_tokens": 1
+  }
+}
