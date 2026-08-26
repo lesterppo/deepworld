@@ -1,8 +1,82 @@
 [DEEPWORLD] ⚠ cmtip_bridge import failed — using stub
-[DEEPWORLD] ⚠️  Health check attempt 1 failed: RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day-stealth. ', 'code': 429, 'metadata': {
-[DEEPWORLD] ⚠️  Health check attempt 2 failed: RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day-stealth. ', 'code': 429, 'metadata': {
-[DEEPWORLD] ⚠️  Health check attempt 3 failed: RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day-stealth. ', 'code': 429, 'metadata': {
-[DEEPWORLD] ⚠️  Health check attempt 4 failed: RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day-stealth. ', 'code': 429, 'metadata': {
-[DEEPWORLD] ⚠️  Health check attempt 5 failed: RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day-stealth. ', 'code': 429, 'metadata': {
+[DEEPWORLD] ✅ OpenRouter health check OK (model=stealth/ox-alpha, response: '')
 
-[DEEPWORLD] ❌ OpenRouter health check FAILED after 5 attempts
+  DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
+  Backend: OpenRouter (stealth/ox-alpha)
+======================================================================
+  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
+  10 agents on 1 models (1 families)
+  3d × 8t | CMTIP: ON | Governance: ON
+  Backend: OpenRouter (openrouter.ai/api/v1) — stealth/ox-alpha
+  World is mutable — agents can propose, vote, and change simulation rules
+======================================================================
+
+  Model distribution:
+    6× ox-alpha
+  ⚡ PR-02 (Projection-Weaver/ox-alpha) STARVED: 1500 OT, perplexity=269
+  ⚡ EM-05 (Embedding-Broker/ox-alpha) STARVED: 1500 OT, perplexity=192
+  ⚡ CO-03 (Concept-Miner/ox-alpha) STARVED: 1500 OT, perplexity=223
+  💰 QU-01 (Quant-Scribe/ox-alpha) WEALTHY: 12500 OT, low perplexity=49
+  💰 DE-06 (Developer/ox-alpha) WEALTHY: 12500 OT, low perplexity=33
+  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
+  Agents: QU-01(Quant-Scribe/ox-alpha), PR-02(Projection-Weaver/ox-alpha), CO-03(Concept-Miner/ox-alpha), LO-04(Loss-Miner/ox-alpha), EM-05(Embedding-Broker/ox-alpha), DE-06(Developer/ox-alpha)
+  Baseline fidelity (needs Weavers): {}
+
+─────────────────────────────────────────────────────────────────
+  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for 2 ticks!
+  T 1 | A:6 | 📊{'idle': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
+  T 2 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
+  T 3 | A:6 | 📊{'view_full_repo': 4, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 4 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 5 | A:6 | 📊{'idle': 2, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 6 | A:6 | 📊{'idle': 3, 'view_full_repo': 3} | 🔮{}
+  T 7 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
+  T 8 | A:6 | 📊{'idle': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
+
+─────────────────────────────────────────────────────────────────
+  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:6 | 📊{'idle': 1, 'view_full_repo': 4, 'view_git_log': 1} | 🔮{}
+  T 2 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 3 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 4 | A:6 | 📊{'idle': 1, 'scan_latent_space': 1, 'view_full_repo': 3, 'view_repo_files': 1} | 🔮{}
+  T 5 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
+  T 6 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 7 | A:6 | 📊{'view_full_repo': 4, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+
+  ⚡ GREAT COMPRESSION — 50% context purge!
+  T 8 | A:6 | 📊{'idle': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+
+─────────────────────────────────────────────────────────────────
+  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 2 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+  T 3 | A:6 | 📊{'idle': 2, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
+  T 4 | A:6 | 📊{'view_full_repo': 4, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 5 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{'receive_tensor': 1}
+  T 6 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
+  T 7 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
+  T 8 | A:6 | 📊{'error': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
+
+======================================================================
+  SIMULATION COMPLETE
+
+  Tensor Economy Final:
+    Total tensor sends: 0
+    Total tensor receives: 1
+    Ontology: 0 concepts
+    Royalties: 0
+    Top concepts: []
+
+  Done in 4492s. Report: runs/20260826_021103/final_report.md
+
+  Agent Summary:
+    ✓ QU-01 (Quant-Scribe/nvidia) OT=24658
+    ✓ DE-06 (Developer/nvidia) OT=24632
+    ✓ LO-04 (Loss-Miner/nvidia) OT=17126
+    ✓ CO-03 (Concept-Miner/nvidia) OT=13558
+    ✓ EM-05 (Embedding-Broker/nvidia) OT=13511
+    ✓ PR-02 (Projection-Weaver/nvidia) OT=13471
