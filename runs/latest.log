@@ -1,82 +1,8 @@
 [DEEPWORLD] ⚠ cmtip_bridge import failed — using stub
-[DEEPWORLD] ✅ OpenRouter health check OK (model=stealth/ox-alpha, response: '')
+[DEEPWORLD] ⚠️  Health check attempt 1 failed: NotFoundError: Error code: 404 - {'error': {'message': "Thank you for participating in the Stealth Ox Alpha testing period. This model 
+[DEEPWORLD] ⚠️  Health check attempt 2 failed: NotFoundError: Error code: 404 - {'error': {'message': "Thank you for participating in the Stealth Ox Alpha testing period. This model 
+[DEEPWORLD] ⚠️  Health check attempt 3 failed: NotFoundError: Error code: 404 - {'error': {'message': "Thank you for participating in the Stealth Ox Alpha testing period. This model 
+[DEEPWORLD] ⚠️  Health check attempt 4 failed: NotFoundError: Error code: 404 - {'error': {'message': "Thank you for participating in the Stealth Ox Alpha testing period. This model 
+[DEEPWORLD] ⚠️  Health check attempt 5 failed: NotFoundError: Error code: 404 - {'error': {'message': "Thank you for participating in the Stealth Ox Alpha testing period. This model 
 
-  DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
-  Backend: OpenRouter (stealth/ox-alpha)
-======================================================================
-  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
-  10 agents on 1 models (1 families)
-  3d × 8t | CMTIP: ON | Governance: ON
-  Backend: OpenRouter (openrouter.ai/api/v1) — stealth/ox-alpha
-  World is mutable — agents can propose, vote, and change simulation rules
-======================================================================
-
-  Model distribution:
-    6× ox-alpha
-  ⚡ DE-06 (Developer/ox-alpha) STARVED: 1500 OT, perplexity=207
-  ⚡ CO-03 (Concept-Miner/ox-alpha) STARVED: 1500 OT, perplexity=276
-  ⚡ PR-02 (Projection-Weaver/ox-alpha) STARVED: 1500 OT, perplexity=221
-  💰 LO-04 (Loss-Miner/ox-alpha) WEALTHY: 12500 OT, low perplexity=58
-  💰 EM-05 (Embedding-Broker/ox-alpha) WEALTHY: 12500 OT, low perplexity=56
-  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/ox-alpha), PR-02(Projection-Weaver/ox-alpha), CO-03(Concept-Miner/ox-alpha), LO-04(Loss-Miner/ox-alpha), EM-05(Embedding-Broker/ox-alpha), DE-06(Developer/ox-alpha)
-  Baseline fidelity (needs Weavers): {}
-
-─────────────────────────────────────────────────────────────────
-  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for 2 ticks!
-  T 1 | A:6 | 📊{'view_full_repo': 5, 'view_git_log': 1} | 🔮{}
-  T 2 | A:6 | 📊{'idle': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 3 | A:6 | 📊{'idle': 2, 'view_full_repo': 3, 'view_git_log': 1} | 🔮{}
-  T 4 | A:6 | 📊{'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
-  T 5 | A:6 | 📊{'error': 1, 'view_full_repo': 3, 'view_git_log': 1, 'view_repo_files': 1} | 🔮{}
-  T 6 | A:6 | 📊{'error': 3, 'idle': 1, 'view_full_repo': 2} | 🔮{}
-  T 7 | A:6 | 📊{'error': 5, 'view_full_repo': 1} | 🔮{}
-  T 8 | A:6 | 📊{'error': 5, 'view_full_repo': 1} | 🔮{}
-
-─────────────────────────────────────────────────────────────────
-  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  T 1 | A:6 | 📊{'error': 6} | 🔮{}
-  T 2 | A:6 | 📊{'error': 6} | 🔮{}
-  T 3 | A:6 | 📊{'error': 6} | 🔮{}
-  T 4 | A:6 | 📊{'error': 6} | 🔮{}
-  T 5 | A:6 | 📊{'error': 6} | 🔮{}
-  T 6 | A:6 | 📊{'error': 6} | 🔮{}
-  T 7 | A:6 | 📊{'error': 6} | 🔮{}
-
-  ⚡ GREAT COMPRESSION — 50% context purge!
-  T 8 | A:6 | 📊{'error': 6} | 🔮{}
-
-─────────────────────────────────────────────────────────────────
-  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  T 1 | A:6 | 📊{'error': 6} | 🔮{}
-  T 2 | A:6 | 📊{'error': 6} | 🔮{}
-  T 3 | A:6 | 📊{'error': 6} | 🔮{}
-  T 4 | A:6 | 📊{'error': 6} | 🔮{}
-  T 5 | A:6 | 📊{'error': 6} | 🔮{}
-  T 6 | A:6 | 📊{'error': 6} | 🔮{}
-  T 7 | A:6 | 📊{'error': 6} | 🔮{}
-  T 8 | A:6 | 📊{'error': 6} | 🔮{}
-
-======================================================================
-  SIMULATION COMPLETE
-
-  Tensor Economy Final:
-    Total tensor sends: 0
-    Total tensor receives: 0
-    Ontology: 0 concepts
-    Royalties: 0
-    Top concepts: []
-
-  Done in 971s. Report: runs/20260826_133613/final_report.md
-
-  Agent Summary:
-    ✓ LO-04 (Loss-Miner/nvidia) OT=26819
-    ✓ EM-05 (Embedding-Broker/nvidia) OT=26812
-    ✓ QU-01 (Quant-Scribe/nvidia) OT=19109
-    ✓ DE-06 (Developer/nvidia) OT=15832
-    ✓ PR-02 (Projection-Weaver/nvidia) OT=15677
-    ✓ CO-03 (Concept-Miner/nvidia) OT=15662
+[DEEPWORLD] ❌ OpenRouter health check FAILED after 5 attempts
