@@ -106,6 +106,36 @@ class OmniTokV4Engine:
         # Fallback: assume we're inside v4/engine/ under the repo root
         return _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "..", ".."))
     
+    # ─── Protected engine files (v5.3) ───
+    # Load-bearing files agents may READ but never WRITE. Two committed agent
+    # overwrites (adapters.py clobber, cmtip_bridge.py garbage) were auto-merged
+    # by CI and killed the sim for weeks. Staging a write here is rejected with
+    # no reward; extend the sim via contributions/ or non-protected files.
+    PROTECTED_PATHS = frozenset({
+        "run.py",
+        "v4/engine/__init__.py",
+        "v4/agents/__init__.py",
+        "v4/agents/adapters.py",
+        "v4/agents/cmtip_bridge.py",
+        "v4/agents/tools.py",
+        "v4/config/__init__.py",
+        "v4/config/prompts.py",
+        ".github/workflows/simulate.yml",
+    })
+
+    def _is_protected_path(self, filepath: str) -> bool:
+        """True if agents must not write this path (normalized compare)."""
+        safe = (filepath or "").lstrip("/").replace("\\", "/")
+        parts = [p for p in safe.split("/") if p not in ("", ".")]
+        norm = []
+        for p in parts:
+            if p == "..":
+                if norm:
+                    norm.pop()
+            else:
+                norm.append(p)
+        return "/".join(norm) in self.PROTECTED_PATHS
+
     def _write_contribution_file(self, filepath: str, content: str) -> str:
         """Write an agent contribution to disk. Returns the absolute path written.
         Sanitizes filepath and content (literal \\n → real newlines)."""
@@ -117,6 +147,8 @@ class OmniTokV4Engine:
         safe = filepath.lstrip("/")
         while safe.startswith(".."):
             safe = safe[2:].lstrip("/")
+        if self._is_protected_path(safe):
+            raise ValueError("protected engine file (read-only for agents): " + safe)
         # Write to repo root
         full_path = _os.path.join(self._repo_root, safe)
         _os.makedirs(_os.path.dirname(full_path), exist_ok=True)
@@ -388,7 +420,7 @@ class OmniTokV4Engine:
         print(f"  {NUM_AGENTS} agents on {model_count} models ({family_count} families)")
         print(f"  {self.days}d × {self.ticks_per_day}t | CMTIP: {'ON' if self.cmtip else 'OFF'} | Governance: ON")
         if NVIDIA_ONLY:
-            print(f"  Backend: OpenRouter (openrouter.ai/api/v1) — {', '.join(NVIDIA_FREE_MODELS)}")
+            print(f"  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1) — {', '.join(NVIDIA_FREE_MODELS)}")
         print(f"  World is mutable — agents can propose, vote, and change simulation rules")
         print("=" * 70)
 

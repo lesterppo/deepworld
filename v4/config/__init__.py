@@ -47,11 +47,19 @@ MODEL_BACKENDS = {
 }
 
 # ─── Model Pool (random assignment per agent) ───
-# v5.2: backend switched to OpenRouter — free stealth/ox-alpha model.
-# Override via env: DEEPWORLD_MODELS="id1,id2" (comma-separated OpenRouter ids).
-# All calls route through https://openrouter.ai/api/v1 (OPENROUTER_API_KEY).
+# v5.3: NVIDIA NIM direct. Pool = ONLY locally-verified models (probed live
+# 2026-09-20 with agent-size prompts; catalog presence != account access).
+# Override via env: DEEPWORLD_MODELS="id1,id2" (comma-separated NIM ids).
+# All calls route through https://integrate.api.nvidia.com/v1 (NVIDIA_API_KEY).
+# Dead: stealth/ox-alpha (OpenRouter stealth period ended Aug 2026),
+# gemma-4-31b-it + kimi-k3 (hang to timeout on NIM), kimi-k2.6 /
+# llama-3.1-nemotron-51b+70b / nemotron-nano-3 (404 per-account gated).
 DEFAULT_MODEL_POOL = [
-    "stealth/ox-alpha",  # free via OpenRouter, 1M ctx, native tool calls
+    "openai/gpt-oss-20b",                  # ~3s, perfect JSON tool calls
+    "nvidia/nemotron-3-super-120b-a12b",   # ~3s
+    "z-ai/glm-5.3-flash",                  # ~34s
+    "mistralai/mistral-nemotron",          # ~65s, clean JSON
+    "nvidia/nemotron-3.5-lightning-30b-a3b",  # ~72s, chatty CoT
 ]
 NVIDIA_FREE_MODELS = [
     m.strip() for m in os.environ.get("DEEPWORLD_MODELS", "").split(",")

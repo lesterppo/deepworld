@@ -697,7 +697,10 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
             filepath = args.get("filepath", "")
             content = args.get("content", "")
             desc = args.get("description", "")
-            if engine and hasattr(engine, "repo_contributions"):
+            if engine and hasattr(engine, "_is_protected_path") and engine._is_protected_path(filepath):
+                fx["message"] = (f"{self.name} write_code REJECTED — '{filepath}' is a protected engine file (read-only). "
+                                 f"Core files cannot be overwritten; write new modules under contributions/ instead. No reward.")
+            elif engine and hasattr(engine, "repo_contributions"):
                 if len(content) < 50:
                     fx["message"] = f"{self.name} write_code rejected — too short ({len(content)} chars)"
                 else:
@@ -843,7 +846,10 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
             filepath = args.get("filepath", "")
             content = args.get("content", "")
             desc = args.get("description", "")
-            if engine and hasattr(engine, "repo_contributions"):
+            if engine and hasattr(engine, "_is_protected_path") and engine._is_protected_path(filepath):
+                fx["message"] = (f"{self.name} document_code REJECTED — '{filepath}' is a protected engine file (read-only). "
+                                 f"Document contributions/ modules instead. No reward.")
+            elif engine and hasattr(engine, "repo_contributions"):
                 if len(content) < 30:
                     fx["message"] = f"{self.name} document_code rejected — too short ({len(content)} chars)"
                 else:

@@ -20,51 +20,71 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "v4"
 from engine import OmniTokV4Engine
 
 
-def health_check_openrouter() -> bool:
-    """Verify OpenRouter / Ox Alpha is reachable before starting simulation."""
-    from openai import OpenAI
-    import os
+def health_check_nim() -> bool:
+    """Verify NVIDIA NIM is reachable before starting simulation (v5.3).
 
-    api_key = os.environ.get("OPENROUTER_API_KEY", "")
+    Tries the first 2 pool models in order (fast ones first). Fails fast on
+    4xx (gated/EOL/auth) — only 429/5xx/timeout are retried once each.
+    """
+    from openai import OpenAI
+
+    api_key = os.environ.get("NVIDIA_API_KEY", "")
     if not api_key:
-        env_path = os.path.expanduser("~/.env")
-        for cand in (env_path, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")):
+        for cand in (os.path.expanduser("~/.env"),
+                     os.path.expanduser("~/deepworld/.env"),
+                     os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")):
             if os.path.exists(cand):
                 with open(cand) as f:
                     for line in f:
-                        if line.startswith("OPENROUTER_API_KEY") and "=" in line:
+                        if line.startswith("NVIDIA_API_KEY") and "=" in line:
                             api_key = line.strip().split("=", 1)[1]
                             break
             if api_key:
                 break
 
     if not api_key:
-        print("\n[DEEPWORLD] ❌ OPENROUTER_API_KEY not found!", file=sys.stderr)
-        print("[DEEPWORLD] Set OPENROUTER_API_KEY env var or GitHub Secret.", file=sys.stderr)
+        print("[DEEPWORLD] NVIDIA_API_KEY not found!", file=sys.stderr)
+        print("[DEEPWORLD] Set NVIDIA_API_KEY env var or GitHub Secret.", file=sys.stderr)
         return False
 
-    model = os.environ.get("DEEPWORLD_HEALTH_MODEL", "stealth/ox-alpha")
-    client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1", timeout=60)
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "v4"))
+    try:
+        from config import NVIDIA_FREE_MODELS as _pool
+    except Exception:
+        _pool = []
+    hmodel = os.environ.get("DEEPWORLD_HEALTH_MODEL", "")
+    models = [hmodel] if hmodel else list(_pool[:2] or ["openai/gpt-oss-20b"])
+    client = OpenAI(api_key=api_key, base_url="https://integrate.api.nvidia.com/v1", timeout=60)
 
-    # Ox Alpha's upstream shared pool occasionally 429s transiently — retry.
-    for attempt in range(5):
-        try:
-            resp = client.chat.completions.create(
-                model=model,
-                messages=[{"role": "user", "content": "OK"}],
-                max_tokens=5, temperature=0,
-            )
-            content = resp.choices[0].message.content or ""
-            print(f"[DEEPWORLD] ✅ OpenRouter health check OK (model={model}, "
-                  f"response: '{content.strip()[:20]}')", file=sys.stderr)
-            return True
-        except Exception as e:
-            wait = 10 * (attempt + 1)
-            print(f"[DEEPWORLD] ⚠️  Health check attempt {attempt + 1} failed: {type(e).__name__}: {str(e)[:120]}", file=sys.stderr)
-            if attempt < 4:
-                time.sleep(wait)
+    for model in models:
+        for attempt in range(2):
+            try:
+                resp = client.chat.completions.create(
+                    model=model,
+                    messages=[{"role": "user", "content": "OK"}],
+                    max_tokens=5, temperature=0,
+                )
+                content = (resp.choices[0].message.content or "").strip()[:20]
+                print(
+                    "[DEEPWORLD] Health check OK model=" + model + " resp=" + content,
+                    file=sys.stderr,
+                )
+                return True
+            except Exception as e:
+                emsg = str(type(e).__name__) + Q + str(e)
+                transient = any(m in emsg for m in (
+                    "429", "500", "502", "503", "Timeout", "timeout",
+                    "Connection", "connection", "Rate limit"))
+                print(
+                    "[DEEPWORLD] Health check " + model + " attempt " + str(attempt + 1)
+                    + Q + type(e).__name__ + Q + str(e)[:120],
+                    file=sys.stderr,
+                )
+                if not transient:
+                    break
+                time.sleep(5 * (attempt + 1))
 
-    print(f"\n[DEEPWORLD] ❌ OpenRouter health check FAILED after 5 attempts", file=sys.stderr)
+    print("[DEEPWORLD] NVIDIA health check FAILED for all models", file=sys.stderr)
     return False
 
 
@@ -86,14 +106,15 @@ def main():
     # NVIDIA-only by default
     if not a.multi_model:
         os.environ["DEEPWORLD_NVIDIA_ONLY"] = "1"
-        backend_label = f"OpenRouter ({os.environ.get('DEEPWORLD_MODELS', 'stealth/ox-alpha')})"
+        pool_label = os.environ.get('DEEPWORLD_MODELS', 'v5.3 pool')
+        backend_label = "NVIDIA NIM (" + pool_label + ")"
     else:
         os.environ["DEEPWORLD_NVIDIA_ONLY"] = "0"
         backend_label = "Multi-model (DeepSeek + Gemini + Claude + Nvidia)"
 
     # Health check
     if not a.no_health_check:
-        if not health_check_openrouter():
+        if not health_check_nim():
             sys.exit(1)
 
     print(f"\n  DeepWorld v5 | {a.days}d × {a.ticks}t | "
@@ -187,6 +208,13 @@ def main():
                 print(f"\n  📝 Writing {len(accepted_files)} accepted files...")
                 repo_root = os.path.dirname(os.path.abspath(__file__))
                 for c in accepted_files:
+                    rel = (c["filepath"] or "").lstrip("/")
+                    if rel in ("run.py", "v4/engine/__init__.py", "v4/agents/__init__.py",
+                               "v4/agents/adapters.py", "v4/agents/cmtip_bridge.py",
+                               "v4/agents/tools.py", "v4/config/__init__.py",
+                               "v4/config/prompts.py", ".github/workflows/simulate.yml"):
+                        print(f"    ! SKIPPED protected {c['filepath']} (by {c['agent']})")
+                        continue
                     filepath = os.path.join(repo_root, c["filepath"])
                     os.makedirs(os.path.dirname(filepath), exist_ok=True)
                     with open(filepath, "w") as f:

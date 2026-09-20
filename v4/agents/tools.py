@@ -429,11 +429,11 @@ REPO_TOOLS = [
     {
         "type": "function", "function": {
             "name": "write_code",
-            "description": "Write or improve code in the DeepWorld repo. Your contribution will be committed to GitHub. Quality code earns OT rewards proportional to contribution size. Costs 10 OT (staked — refunded if contribution accepted).",
+            "description": "Write or improve code in the DeepWorld repo. Your contribution will be committed to GitHub. Quality code earns OT rewards proportional to contribution size. Costs 10 OT (staked — refunded if contribution accepted). Write NEW modules under contributions/ (e.g. 'contributions/agent_improvements.py'). Core engine files (run.py, v4/engine, v4/agents core, v4/config, workflow) are READ-ONLY and rejected with no reward.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "filepath": {"type": "string", "description": "File path relative to repo root (e.g., 'contributions/agent_improvements.py', 'v4/config/tuning.py')"},
+                    "filepath": {"type": "string", "description": "File path relative to repo root, e.g. 'contributions/agent_improvements.py'. Protected engine paths are rejected."},
                     "content": {"type": "string", "description": "Complete file content. Write clean, working Python code."},
                     "description": {"type": "string", "description": "What this change does and why it improves the simulation"},
                 },

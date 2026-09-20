@@ -1,8 +1,8 @@
-name: DeepWorld v5.2 — OpenRouter Ox Alpha Continuous Simulation
+name: DeepWorld v5.3 — NVIDIA NIM Continuous Simulation
 
 on:
   schedule:
-    - cron: '30 */4 * * *'   # Every 4 hours (runs take ~2.8h; avoids overlap)
+    - cron: '30 */4 * * *'   # Every 4 hours (runs take ~2.5h; avoids overlap)
   workflow_dispatch:          # Manual trigger
 
 permissions:
@@ -26,9 +26,15 @@ jobs:
         run: |
           pip install openai pyyaml sentence-transformers numpy
 
-      - name: Run DeepWorld v5.2 (OpenRouter / Ox Alpha)
+      - name: Smoke gate (fail fast on broken engine before the long run)
+        run: |
+          python3 -c "import os; os.environ['DEEPWORLD_NVIDIA_ONLY']='1'; import sys; sys.path.insert(0,'v4'); from engine import OmniTokV4Engine; e=OmniTokV4Engine(1,1,0,use_cmtip=True); print(f'{len(e.agents)} agents, {len(e.cmtip.concept_registry)} concepts')"
+          python3 -c "import sys; sys.path.insert(0,'v4'); from engine import OmniTokV4Engine; e=OmniTokV4Engine(1,1,0,use_cmtip=False); assert e._is_protected_path('v4/agents/adapters.py'); assert e._is_protected_path('run.py'); assert not e._is_protected_path('contributions/x.py'); print('protected-paths guard OK')"
+          python3 -c "import sys; sys.path.insert(0,'v4'); from agents.adapters import MultiModelAdapter, _is_transient_nim_error; assert not _is_transient_nim_error(Exception('Error code: 404')); assert _is_transient_nim_error(Exception('Error code: 429')); print('adapter retry policy OK')"
+
+      - name: Run DeepWorld v5.3 (NVIDIA NIM, verified pool)
         env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
         run: |
           mkdir -p runs
           python3 run.py --days 3 --ticks 8 --delay 0.1 --output runs 2>&1 | tee runs/latest.log
@@ -41,5 +47,5 @@ jobs:
           mkdir -p contributions
           git add runs/ contributions/ v4/ --all
           # Include any agent-written files (v5.1 repo maintenance)
-          git diff --staged --quiet || git commit -m "sim: $(date +%Y-%m-%d_%H:%M) run [OpenRouter ox-alpha v5.2]"
-          git pull --rebase origin main && git push || echo "Push failed (concurrent run?)"
+          git diff --staged --quiet || git commit -m "sim: $(date +%Y-%m-%d_%H:%M) run [NVIDIA NIM v5.3]"
+          git pull --rebase origin main && git push || { echo "::error::push failed — results may be lost (ephemeral runner)"; exit 1; }

@@ -1,6 +1,6 @@
 # DeepWorld — Tensor-Native Multi-Agent Cognosphere
 
-A self-modifying AI-native ecosystem where 10 agents on 15 different NVIDIA free models
+A self-modifying AI-native ecosystem where 10 agents on 5 verified NVIDIA free models
 navigate token economies, tensor communication, and self-building governance.
 **Agents write, vote on, collaborate, and merge their own code to GitHub. Zero API cost.**
 
@@ -105,12 +105,18 @@ The richest agents are the best developers.
 
 ---
 
-## NVIDIA Model Pool (15 models, random per agent)
+## NVIDIA Model Pool (5 verified models, random per agent)
 
-nano-8b · nemotron-51b · nemotron-70b · super-49b · super-49b-v1.5 ·
-llama-4-maverick · llama-3.1-8b · gemma-3-12b · mistral-nemotron ·
-nemotron-4-340b · gpt-oss-20b · qwen3.5-122b · deepseek-v4-flash ·
-phi-4-mini · nemotron-3-super-120b
+v5.3 pool — each probed live 2026-09-20 with agent-size prompts
+(catalog presence ≠ account access; gated/EOL models culled):
+
+gpt-oss-20b (~3s, perfect JSON) · nemotron-3-super-120b-a12b (~3s) ·
+glm-5.3-flash (~34s) · mistral-nemotron (~65s, clean JSON) ·
+nemotron-3.5-lightning-30b-a3b (~72s)
+
+Override via `DEEPWORLD_MODELS` env. History: 15-model pool (v5.0) →
+stealth/ox-alpha via OpenRouter (v5.2, stealth period ended Aug 2026) →
+verified NIM pool (v5.3).
 
 ---
 
@@ -130,15 +136,15 @@ phi-4-mini · nemotron-3-super-120b
 
 ## CI Pipeline
 
-GitHub Actions runs every 2 hours. Each invocation adds 3 sim-days.
+GitHub Actions runs every 4 hours. Each invocation adds 3 sim-days.
 
 ```
 .github/workflows/simulate.yml:
-  schedule: every 2 hours
+  schedule: every 4 hours
   timeout: 5h
   backend: NVIDIA NIM (NVIDIA_API_KEY secret)
-  models: 15 models, random per agent × 10 agents
-  pre-flight: health check before simulation
+  models: 5 verified models, random per agent × 10 agents
+  pre-flight: health check + smoke gate before simulation
   privacy: all secrets in GitHub Secrets, .env is gitignored
   output: commits results + agent-written code to runs/
 ```
