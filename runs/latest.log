@@ -1,8 +1,93 @@
-[DEEPWORLD] ⚠ cmtip_bridge import failed — using stub
-[DEEPWORLD] ⚠️  Health check attempt 1 failed: NotFoundError: Error code: 404 - {'error': {'message': "Thank you for participating in the Stealth Ox Alpha testing period. This model 
-[DEEPWORLD] ⚠️  Health check attempt 2 failed: NotFoundError: Error code: 404 - {'error': {'message': "Thank you for participating in the Stealth Ox Alpha testing period. This model 
-[DEEPWORLD] ⚠️  Health check attempt 3 failed: NotFoundError: Error code: 404 - {'error': {'message': "Thank you for participating in the Stealth Ox Alpha testing period. This model 
-[DEEPWORLD] ⚠️  Health check attempt 4 failed: NotFoundError: Error code: 404 - {'error': {'message': "Thank you for participating in the Stealth Ox Alpha testing period. This model 
-[DEEPWORLD] ⚠️  Health check attempt 5 failed: NotFoundError: Error code: 404 - {'error': {'message': "Thank you for participating in the Stealth Ox Alpha testing period. This model 
+[DEEPWORLD] Health check OK model=openai/gpt-oss-20b resp=
+  ⚠ QU-01 (Quant-Scribe/gpt-oss-20b) act failed: KeyError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 326, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 472, in apply_effects
+    f"(+{result['improvement']:.2f})")
+         ~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'improvement'
 
-[DEEPWORLD] ❌ OpenRouter health check FAILED after 5 attempts
+  DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
+  Backend: NVIDIA NIM (v5.3 pool)
+======================================================================
+  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
+  10 agents on 4 models (1 families)
+  3d × 8t | CMTIP: ON | Governance: ON
+  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1) — openai/gpt-oss-20b, nvidia/nemotron-3-super-120b-a12b, z-ai/glm-5.3-flash, mistralai/mistral-nemotron, nvidia/nemotron-3.5-lightning-30b-a3b
+  World is mutable — agents can propose, vote, and change simulation rules
+======================================================================
+
+  Model distribution:
+    2× glm-5.3-flash
+    2× nemotron-3.5-lightning-30b-a3b
+    1× gpt-oss-20b
+    1× nemotron-3-super-120b-a12b
+  ⚡ LO-04 (Loss-Miner/glm-5.3-flash) STARVED: 1500 OT, perplexity=256
+  ⚡ DE-06 (Developer/nemotron-3.5-lightning-30b-a3b) STARVED: 1500 OT, perplexity=210
+  ⚡ CO-03 (Concept-Miner/glm-5.3-flash) STARVED: 1500 OT, perplexity=280
+  💰 EM-05 (Embedding-Broker/nemotron-3.5-lightning-30b-a3b) WEALTHY: 12500 OT, low perplexity=56
+  💰 PR-02 (Projection-Weaver/nemotron-3-super-120b-a12b) WEALTHY: 12500 OT, low perplexity=59
+  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
+  Agents: QU-01(Quant-Scribe/gpt-oss-20b), PR-02(Projection-Weaver/nemotron-3-super-120b-a12b), CO-03(Concept-Miner/glm-5.3-flash), LO-04(Loss-Miner/glm-5.3-flash), EM-05(Embedding-Broker/nemotron-3.5-lightning-30b-a3b), DE-06(Developer/nemotron-3.5-lightning-30b-a3b)
+  Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
+
+─────────────────────────────────────────────────────────────────
+  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for 2 ticks!
+  T 1 | A:6 | 📊{'idle': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
+  T 2 | A:6 | 📊{'compress_context': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
+  T 3 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 4 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 5 | A:6 | 📊{'view_repo_files': 6} | 🔮{}
+  T 6 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 7 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 8 | A:6 | 📊{'idle': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
+
+─────────────────────────────────────────────────────────────────
+  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 2 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 3 | A:6 | 📊{'idle': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
+  T 4 | A:6 | 📊{'transmit_message': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
+  T 5 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 6 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 7 | A:6 | 📊{'compress_context': 1, 'idle': 2, 'view_repo_files': 3} | 🔮{}
+
+  ⚡ GREAT COMPRESSION — 50% context purge!
+  T 8 | A:6 | 📊{'idle': 2, 'view_repo_files': 4} | 🔮{}
+
+─────────────────────────────────────────────────────────────────
+  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:6 | 📊{'idle': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
+  T 2 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 3 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 4 | A:6 | 📊{'compress_context': 1, 'idle': 1, 'view_full_repo': 1, 'view_repo_files': 3} | 🔮{}
+  T 5 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 6 | A:6 | 📊{'idle': 1, 'transmit_message': 1, 'view_repo_files': 4} | 🔮{}
+  T 7 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
+  T 8 | A:6 | 📊{'idle': 1, 'view_repo_files': 5} | 🔮{}
+
+======================================================================
+  SIMULATION COMPLETE
+
+  Tensor Economy Final:
+    Total tensor sends: 0
+    Total tensor receives: 0
+    Ontology: 20 concepts
+    Royalties: {}
+    Top concepts: [('resource_scarcity', 0), ('abundance', 0), ('trust', 0), ('betrayal', 0), ('cooperation', 0)]
+
+  Done in 8980s. Report: runs/20260920_173715/final_report.md
+
+  Agent Summary:
+    ✓ PR-02 (Projection-Weaver/nvidia) OT=25087
+    ✓ EM-05 (Embedding-Broker/nvidia) OT=25071
+    ✓ QU-01 (Quant-Scribe/nvidia) OT=18036
+    ✓ LO-04 (Loss-Miner/nvidia) OT=14468
+    ✓ CO-03 (Concept-Miner/nvidia) OT=14388
+    ✓ DE-06 (Developer/nvidia) OT=14232
