@@ -25,9 +25,9 @@ python3 run.py --days 5 --ticks 12 --delay 0.1 --output runs
 
 ## Key Finding
 
-**15 different models on the same NVIDIA backend produce different agent behaviors.**
-Model diversity IS the simulation mechanic — different architectures (Llama, Gemma,
-Mistral, Qwen, Phi, DeepSeek, GPT-OSS) interpret the same tensor differently due
+**5 verified models on the same NVIDIA backend produce different agent behaviors.**
+Model diversity IS the simulation mechanic — different architectures (GPT-OSS,
+Nemotron, Mistral, GLM) interpret the same tensor differently due
 to cross-model semantic decay.
 
 ---
@@ -45,7 +45,7 @@ v4/
 │   ├── cmtip_bridge.py     # CMTIP tensor bus: concept embeddings, CCA projectors
 │   └── real_backends.py    # SentenceTransformer + deterministic hash fallback
 ├── config/
-│   ├── __init__.py         # NVIDIA_FREE_MODELS (15 models), token economy params
+│   ├── __init__.py         # NVIDIA_FREE_MODELS (5 verified), token economy params
 │   └── prompts.py          # 5 agent class system prompts
 ├── world_registry.py       # Self-building governance: proposals, voting, laws
 ├── telemetry/__init__.py   # OmniObserverV4: event logging, daily snapshots
@@ -56,24 +56,18 @@ archive/                    # v1, v2, v3 (preserved, not active)
 
 ---
 
-## NVIDIA Model Pool (15 models)
+## NVIDIA Model Pool (5 verified models, v5.3)
 
-Each agent randomly assigned from:
-- `nvidia/llama-3.1-nemotron-nano-8b-v1` — Fast
-- `nvidia/llama-3.1-nemotron-51b-instruct` — Balanced
-- `nvidia/llama-3.1-nemotron-70b-instruct` — Large
-- `nvidia/llama-3.3-nemotron-super-49b-v1` — Super
-- `nvidia/llama-3.3-nemotron-super-49b-v1.5` — Super v1.5
-- `meta/llama-4-maverick-17b-128e-instruct` — Llama 4
-- `meta/llama-3.1-8b-instruct` — Classic
-- `google/gemma-3-12b-it` — Gemma 3
-- `mistralai/mistral-nemotron` — Mistral
-- `nvidia/nemotron-4-340b-instruct` — Massive
-- `openai/gpt-oss-20b` — GPT-OSS
-- `qwen/qwen3.5-122b-a10b` — Qwen MoE
-- `deepseek-ai/deepseek-v4-flash` — DeepSeek
-- `microsoft/phi-4-mini-instruct` — Phi-4
-- `nvidia/nemotron-3-super-120b-a12b` — Nemotron 3
+Each agent randomly assigned from (all probed live 2026-09-20):
+- `openai/gpt-oss-20b` — Fast (~3s, perfect JSON tool calls)
+- `nvidia/nemotron-3-super-120b-a12b` — Fast (~3s)
+- `z-ai/glm-5.3-flash` — Medium (~34s)
+- `mistralai/mistral-nemotron` — Slow (~65s, clean JSON)
+- `nvidia/nemotron-3.5-lightning-30b-a3b` — Slow (~72s, chatty)
+
+Pool lives in `v4/config/__init__.py` (`DEFAULT_MODEL_POOL`, override via
+`DEEPWORLD_MODELS` env). Catalog presence ≠ account access — verify with
+`scripts/test_models.py` before adding anything.
 
 All through `https://integrate.api.nvidia.com/v1` (OpenAI-compatible).
 NVIDIA NIM free models don't support native tool calling — tools are injected as text prompts.
@@ -121,11 +115,11 @@ QU-01 → commit_code("Joint proposal")          # Joint vote
 
 ```
 .github/workflows/simulate.yml:
-  schedule: every 2 hours
+  schedule: every 4 hours
   timeout: 5h
   backend: NVIDIA NIM (NVIDIA_API_KEY secret)
-  models: 15 models, random per agent × 10 agents
-  pre-flight: health check validates API before simulation
+  models: 5 verified models, random per agent × 10 agents
+  pre-flight: health check + smoke gate validates engine before simulation
   output: commits to runs/
   state: .world_state.json persists governance
   contribution: agent-written code committed alongside runs/
@@ -152,7 +146,7 @@ QU-01 → commit_code("Joint proposal")          # Joint vote
 ## Design Philosophy
 
 - **Mechanics > narrative.** Context class mobility, perplexity markets, and CMTIP tensor drift emerge from rules.
-- **Model diversity IS the simulation.** 15 models interpret the same concept differently.
+- **Model diversity IS the simulation.** 5 verified models interpret the same concept differently.
 - **Tensors are cheap, text is bankruptcy.** `send_tensor` costs 2 OT. `transmit_message` costs 50 OT.
 - **The world builds itself.** Agents propose and vote on rule changes through governance.
 - **Collaboration over competition.** Agents share rewards, negotiate splits, build together.
