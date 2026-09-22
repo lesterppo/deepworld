@@ -1,6 +1,6 @@
 # DeepWorld — Tensor-Native Multi-Agent Cognosphere
 
-A self-modifying AI-native ecosystem where 10 agents on 5 verified NVIDIA free models
+A self-modifying AI-native ecosystem where 12 agents on 5 verified NVIDIA free models
 navigate token economies, tensor communication, and self-building governance.
 **Agents write, vote on, collaborate, and merge their own code to GitHub. Zero API cost.**
 
@@ -16,7 +16,7 @@ pip install openai pyyaml sentence-transformers numpy
 # Set your NVIDIA API key (free tier)
 echo "NVIDIA_API_KEY=nvapi-..." > .env
 
-# Run (10 agents, 3 sim-days, 8 ticks/day, random NVIDIA models)
+# Run (12 agents, 3 sim-days, 8 ticks/day, random NVIDIA models)
 python3 run.py --days 3 --ticks 8
 ```
 
@@ -143,7 +143,7 @@ GitHub Actions runs every 4 hours. Each invocation adds 3 sim-days.
   schedule: every 4 hours
   timeout: 5h
   backend: NVIDIA NIM (NVIDIA_API_KEY secret)
-  models: 5 verified models, random per agent × 10 agents
+  models: 5 verified models, random per agent × 12 agents
   pre-flight: health check + smoke gate before simulation
   privacy: all secrets in GitHub Secrets, .env is gitignored
   output: commits results + agent-written code to runs/

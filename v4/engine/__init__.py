@@ -164,8 +164,11 @@ class OmniTokV4Engine:
         from config import NVIDIA_FREE_MODELS, NVIDIA_ONLY
         
         idx = 1
-        for cls in AGENT_CLASSES:
-            count = NUM_AGENTS // len(AGENT_CLASSES)
+        base, extra = divmod(NUM_AGENTS, len(AGENT_CLASSES))
+        for ci, cls in enumerate(AGENT_CLASSES):
+            # Even split + remainder to the first classes, so the header
+            # always matches len(self.agents) for any NUM_AGENTS.
+            count = base + (1 if ci < extra else 0)
             for i in range(count):
                 name = f"{cls[:2].upper()}-{idx:02d}"
                 
@@ -417,7 +420,7 @@ class OmniTokV4Engine:
         print(f"  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE{nvidia_only_str}")
         model_count = len(set(a.model for a in self.agents.values()))
         family_count = len(set(a.model_family for a in self.agents.values()))
-        print(f"  {NUM_AGENTS} agents on {model_count} models ({family_count} families)")
+        print(f"  {len(self.agents)} agents on {model_count} models ({family_count} families)")
         print(f"  {self.days}d × {self.ticks_per_day}t | CMTIP: {'ON' if self.cmtip else 'OFF'} | Governance: ON")
         if NVIDIA_ONLY:
             print(f"  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1) — {', '.join(NVIDIA_FREE_MODELS)}")

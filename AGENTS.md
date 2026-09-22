@@ -118,7 +118,7 @@ QU-01 → commit_code("Joint proposal")          # Joint vote
   schedule: every 4 hours
   timeout: 5h
   backend: NVIDIA NIM (NVIDIA_API_KEY secret)
-  models: 5 verified models, random per agent × 10 agents
+  models: 5 verified models, random per agent × 12 agents
   pre-flight: health check + smoke gate validates engine before simulation
   output: commits to runs/
   state: .world_state.json persists governance

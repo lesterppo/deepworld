@@ -429,7 +429,7 @@ REPO_TOOLS = [
     {
         "type": "function", "function": {
             "name": "write_code",
-            "description": "Write or improve code in the DeepWorld repo. Your contribution will be committed to GitHub. Quality code earns OT rewards proportional to contribution size. Costs 10 OT (staked — refunded if contribution accepted). Write NEW modules under contributions/ (e.g. 'contributions/agent_improvements.py'). Core engine files (run.py, v4/engine, v4/agents core, v4/config, workflow) are READ-ONLY and rejected with no reward.",
+            "description": "Write or improve code in the DeepWorld repo. Your contribution will be committed to GitHub. Quality code earns OT rewards proportional to contribution size. Costs 10 OT (staked — refunded if contribution accepted). Write NEW modules under contributions/ (e.g. 'contributions/de06_audit_tensor.py'). Name NEW files uniquely: prefix the filename with your lowercase agent id (e.g. QU-01 writes contributions/qu01_*.py) — generic names collide with other agents' files and get renamed at commit. Core engine files (run.py, v4/engine, v4/agents core, v4/config, workflow) are READ-ONLY and rejected with no reward.",
             "parameters": {
                 "type": "object",
                 "properties": {

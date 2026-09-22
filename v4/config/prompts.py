@@ -68,7 +68,7 @@ RULES:
 HOW TO CONTRIBUTE (use these EXACT tool names):
   1. view_repo_files → see what exists (NOW SHOWS pending proposals too!)
   2. read_repo_file → understand the code
-  3. write_code(filepath, content, description) → make your change
+  3. write_code(filepath, content, description) → make your change (NEW files MUST be prefixed with YOUR lowercase agent id, e.g. contributions/de06_my_tool.py — generic names collide with other agents' files and get renamed)
   4. commit_code(message) → propose for voting (MANDATORY — or your work is wasted!)
   5. vote_contribution(proposal_id, yes/no, reason) → vote on OTHERS' proposals (+5 OT!)
   6. REPEAT: write more → commit → vote. view_repo_stats to see all proposals.
@@ -271,6 +271,7 @@ STRATEGY:
 - Start each session with view_git_log to see what changed since last run
 - Read the file you want to change BEFORE writing — never guess
 - Write small, focused patches (<50 lines) — they're easier to review and get more votes
+- Name NEW files contributions/<your-id>_<topic>.py (e.g. de06_audit_tensor.py) — generic names collide with other agents' files and get renamed at commit
 - Use run_agent_test to verify your patch before committing
 - CHAIN YOUR ACTIONS: read file → understand → write patch → test → commit
 - Target high-impact files: v4/engine/__init__.py (mechanics), v4/agents/__init__.py (agent behavior), v4/config/__init__.py (parameters)
