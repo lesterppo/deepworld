@@ -1,87 +1,20 @@
 [DEEPWORLD] Health check OK model=openai/gpt-oss-20b resp=
+  ⚠ PR-04 (Projection-Weaver/glm-5.3-flash) act failed: KeyError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 329, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 472, in apply_effects
+    f"(+{result['improvement']:.2f})")
+         ~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'improvement'
+  ⚠ PR-03 (Projection-Weaver/glm-5.3-flash) act failed: KeyError
+Traceback (most recent call last):
+  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 329, in tick
+    effects = agent.apply_effects(action, self, self.cmtip)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 472, in apply_effects
+    f"(+{result['improvement']:.2f})")
+         ~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'improvement'
 [DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
-
-  DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
-  Backend: NVIDIA NIM (v5.3 pool)
-======================================================================
-  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
-  10 agents on 3 models (1 families)
-  3d × 8t | CMTIP: ON | Governance: ON
-  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1) — openai/gpt-oss-20b, nvidia/nemotron-3-super-120b-a12b, z-ai/glm-5.3-flash, mistralai/mistral-nemotron, nvidia/nemotron-3.5-lightning-30b-a3b
-  World is mutable — agents can propose, vote, and change simulation rules
-======================================================================
-
-  Model distribution:
-    3× nemotron-3.5-lightning-30b-a3b
-    2× mistral-nemotron
-    1× nemotron-3-super-120b-a12b
-  ⚡ CO-03 (Concept-Miner/nemotron-3.5-lightning-30b-a3b) STARVED: 1500 OT, perplexity=250
-  ⚡ PR-02 (Projection-Weaver/nemotron-3.5-lightning-30b-a3b) STARVED: 1500 OT, perplexity=267
-  ⚡ EM-05 (Embedding-Broker/mistral-nemotron) STARVED: 1500 OT, perplexity=199
-  💰 QU-01 (Quant-Scribe/mistral-nemotron) WEALTHY: 12500 OT, low perplexity=48
-  💰 LO-04 (Loss-Miner/nemotron-3.5-lightning-30b-a3b) WEALTHY: 12500 OT, low perplexity=55
-  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/mistral-nemotron), PR-02(Projection-Weaver/nemotron-3.5-lightning-30b-a3b), CO-03(Concept-Miner/nemotron-3.5-lightning-30b-a3b), LO-04(Loss-Miner/nemotron-3.5-lightning-30b-a3b), EM-05(Embedding-Broker/mistral-nemotron), DE-06(Developer/nemotron-3-super-120b-a12b)
-  Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
-
-─────────────────────────────────────────────────────────────────
-  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for 2 ticks!
-  T 1 | A:6 | 📊{'error': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
-  T 2 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 4, 'write_code': 1} | 🔮{}
-  T 3 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 4 | A:6 | 📊{'error': 2, 'transmit_message': 1, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{}
-  T 5 | A:6 | 📊{'clone_embedding': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
-  T 6 | A:6 | 📊{'harvest_tokens': 1, 'idle': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
-  T 7 | A:6 | 📊{'error': 1, 'idle': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
-  T 8 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-
-─────────────────────────────────────────────────────────────────
-  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  T 1 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 2 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 3 | A:6 | 📊{'idle': 1, 'transmit_message': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
-  T 4 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 5 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 6 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 7 | A:6 | 📊{'clone_embedding': 1, 'compress_context': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
-
-  ⚡ GREAT COMPRESSION — 50% context purge!
-  T 8 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-
-─────────────────────────────────────────────────────────────────
-  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  T 1 | A:6 | 📊{'harvest_tokens': 1, 'view_git_log': 1, 'view_repo_files': 3, 'write_code': 1} | 🔮{}
-  T 2 | A:6 | 📊{'idle': 2, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{}
-  T 3 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 4 | A:6 | 📊{'transmit_message': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{}
-  T 5 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 5} | 🔮{}
-  T 6 | A:6 | 📊{'view_git_log': 1, 'view_repo_files': 4, 'write_code': 1} | 🔮{}
-  T 7 | A:6 | 📊{'audit_consistency': 1, 'harvest_tokens': 1, 'view_git_log': 1, 'view_repo_files': 2} | 🔮{'route_tensor': 1}
-  T 8 | A:6 | 📊{'compress_context': 1, 'harvest_tokens': 1, 'review_code': 1, 'scan_network': 1, 'view_git_log': 1} | 🔮{'route_tensor': 1} | 💻:LO-04=1
-
-======================================================================
-  SIMULATION COMPLETE
-
-  Tensor Economy Final:
-    Total tensor sends: 0
-    Total tensor receives: 0
-    Ontology: 20 concepts
-    Royalties: {}
-    Top concepts: [('resource_scarcity', 0), ('abundance', 0), ('trust', 0), ('betrayal', 0), ('cooperation', 0)]
-
-  Done in 14389s. Report: runs/20260922_130830/final_report.md
-
-  Agent Summary:
-    ✓ QU-01 (Quant-Scribe/nvidia) OT=25707
-    ✓ LO-04 (Loss-Miner/nvidia) OT=25225
-    ✓ DE-06 (Developer/nvidia) OT=17739
-    ✓ EM-05 (Embedding-Broker/nvidia) OT=14501
-    ✓ PR-02 (Projection-Weaver/nvidia) OT=14196
-    ✓ CO-03 (Concept-Miner/nvidia) OT=14195
