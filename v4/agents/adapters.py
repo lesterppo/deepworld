@@ -35,6 +35,64 @@ def _is_transient_nim_error(e: Exception) -> bool:
     return False
 
 
+# ─── Offline Mock Adapter ───
+
+class OfflineMockAdapter:
+    """Deterministic offline backend (DEEPWORLD_OFFLINE=1 / run.py --offline).
+
+    Cycles through the agent's available tool list, skipping repo-mutating
+    tools, and synthesizes schema-valid arguments (enums honored, required
+    params filled by type). Exercises the full engine loop — ticks, Great
+    Compression, governance, telemetry — with zero API cost and no key.
+    """
+
+    # Repo-mutating tools stay off offline: no garbage files in the repo.
+    OFFLINE_SKIP = frozenset({
+        "write_code", "document_code", "commit_code",
+        "collaborate", "accept_collaboration",
+    })
+
+    def __init__(self):
+        self._calls = 0
+
+    @staticmethod
+    def _dummy_arg(name: str, spec: dict):
+        if isinstance(spec.get("enum"), list) and spec["enum"]:
+            return spec["enum"][0]
+        t = spec.get("type", "string")
+        if t == "integer":
+            return 1
+        if t == "number":
+            return 1.0
+        if t == "boolean":
+            return True
+        if t == "array":
+            return []
+        if t == "object":
+            return {}
+        return f"offline_{name}"
+
+    def create_completion(self, model: str, messages: list = None, tools: list = None,
+                          temperature: float = 0.7, max_tokens: int = 512) -> Any:
+        usable = [t for t in (tools or [])
+                  if t.get("function", {}).get("name") not in self.OFFLINE_SKIP]
+        if not usable:
+            return MockResponseNvidia(None, "offline: no tools available", 0)
+        self._calls += 1
+        chosen = usable[self._calls % len(usable)]
+        fn = chosen["function"]
+        params = fn.get("parameters", {}) or {}
+        props = params.get("properties", {}) or {}
+        required = set(params.get("required", []) or [])
+        args = {n: self._dummy_arg(n, s) for n, s in props.items() if n in required}
+        tool_call = {"name": fn["name"], "arguments": json.dumps(args)}
+        text = json.dumps({"tool": fn["name"], "args": args})
+        return MockResponseNvidia(tool_call, text, 0)
+
+
+_OFFLINE_ADAPTER = OfflineMockAdapter()
+
+
 class MultiModelAdapter:
     """Dispatches LLM calls to the correct model backend per agent."""
 
@@ -119,6 +177,9 @@ class MultiModelAdapter:
     def create_completion(self, model: str, messages: list, tools: list = None,
                           temperature: float = 0.7, max_tokens: int = 512) -> Any:
         """Route completion to the correct backend."""
+        if os.environ.get("DEEPWORLD_OFFLINE") == "1":
+            return _OFFLINE_ADAPTER.create_completion(
+                model, messages, tools, temperature, max_tokens)
         client = self.get_client(model)
         backend_type = self._get_backend_info(model)["type"]
 

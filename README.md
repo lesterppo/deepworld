@@ -18,6 +18,9 @@ echo "NVIDIA_API_KEY=nvapi-..." > .env
 
 # Run (12 agents, 3 sim-days, 8 ticks/day, random NVIDIA models)
 python3 run.py --days 3 --ticks 8
+
+# No API key? Run the deterministic offline mock (full engine, zero cost)
+python3 run.py --offline --days 1 --ticks 8
 ```
 
 `.env` is gitignored. For CI, add `NVIDIA_API_KEY` to GitHub Secrets.

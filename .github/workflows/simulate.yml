@@ -32,12 +32,28 @@ jobs:
           python3 -c "import sys; sys.path.insert(0,'v4'); from engine import OmniTokV4Engine; e=OmniTokV4Engine(1,1,0,use_cmtip=False); assert e._is_protected_path('v4/agents/adapters.py'); assert e._is_protected_path('run.py'); assert not e._is_protected_path('contributions/x.py'); print('protected-paths guard OK')"
           python3 -c "import sys; sys.path.insert(0,'v4'); from agents.adapters import MultiModelAdapter, _is_transient_nim_error; assert not _is_transient_nim_error(Exception('Error code: 404')); assert _is_transient_nim_error(Exception('Error code: 429')); print('adapter retry policy OK')"
 
-      - name: Run DeepWorld v5.3 (NVIDIA NIM, verified pool)
+      - name: Probe NVIDIA health (offline fallback)
+        id: probe
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+        run: |
+          if python3 -c "import run, sys; sys.exit(0 if run.health_check_nim() else 1)"; then
+            echo "mode=online" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=offline" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run DeepWorld v5.3 (NVIDIA NIM, offline fallback)
         env:
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
         run: |
           mkdir -p runs
-          python3 run.py --days 3 --ticks 8 --delay 0.1 --output runs 2>&1 | tee runs/latest.log
+          if [ "${{ steps.probe.outputs.mode }}" = "offline" ]; then
+            echo "NVIDIA NIM unhealthy — falling back to offline mock backend"
+            python3 run.py --offline --days 3 --ticks 8 --delay 0.1 --output runs 2>&1 | tee runs/latest.log
+          else
+            python3 run.py --days 3 --ticks 8 --delay 0.1 --output runs 2>&1 | tee runs/latest.log
+          fi
 
       - name: Commit results
         if: always()  # Commit even on errors for debugging

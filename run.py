@@ -11,6 +11,7 @@ Usage:
   python3 run.py --days 3 --ticks 8                    # NVIDIA-only (default)
   python3 run.py --multi-model                          # All backends (needs keys)
   python3 run.py --days 5 --ticks 12 --output runs/     # CI mode
+  python3 run.py --offline --days 1 --ticks 8           # Mock backend (no key)
 """
 
 import argparse, os, sys, time, json
@@ -28,6 +29,7 @@ def health_check_nim() -> bool:
     """
     from openai import OpenAI
 
+    Q = " | "  # separator for compact error summaries
     api_key = os.environ.get("NVIDIA_API_KEY", "")
     if not api_key:
         for cand in (os.path.expanduser("~/.env"),
@@ -100,11 +102,18 @@ def main():
                    help="Use single model family (only with --multi-model)")
     p.add_argument("--no-cmtip", action="store_true", help="Disable tensor communication")
     p.add_argument("--no-health-check", action="store_true", help="Skip pre-flight health check")
+    p.add_argument("--offline", action="store_true",
+                   help="Run with the deterministic mock backend (no API key, no network)")
 
     a = p.parse_args()
 
-    # NVIDIA-only by default
-    if not a.multi_model:
+    # Backend selection
+    if a.offline:
+        # Offline: deterministic mock backend — full engine loop, zero API cost
+        os.environ["DEEPWORLD_OFFLINE"] = "1"
+        os.environ["DEEPWORLD_NVIDIA_ONLY"] = "1"
+        backend_label = "Offline mock (no API key, deterministic)"
+    elif not a.multi_model:
         os.environ["DEEPWORLD_NVIDIA_ONLY"] = "1"
         pool_label = os.environ.get('DEEPWORLD_MODELS', 'v5.3 pool')
         backend_label = "NVIDIA NIM (" + pool_label + ")"
@@ -112,8 +121,8 @@ def main():
         os.environ["DEEPWORLD_NVIDIA_ONLY"] = "0"
         backend_label = "Multi-model (DeepSeek + Gemini + Claude + Nvidia)"
 
-    # Health check
-    if not a.no_health_check:
+    # Health check (nothing to check in offline mode)
+    if not a.no_health_check and not a.offline:
         if not health_check_nim():
             sys.exit(1)
 

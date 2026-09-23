@@ -17,6 +17,9 @@ pip install openai pyyaml sentence-transformers numpy
 # NVIDIA-only (default, free tier)
 python3 run.py --days 3 --ticks 8
 
+# Offline: deterministic mock backend, no API key needed (tests engine mechanics)
+python3 run.py --offline --days 1 --ticks 8
+
 # CI continuous mode
 python3 run.py --days 5 --ticks 12 --delay 0.1 --output runs
 ```
@@ -117,7 +120,9 @@ QU-01 → commit_code("Joint proposal")          # Joint vote
 .github/workflows/simulate.yml:
   schedule: every 4 hours
   timeout: 5h
-  backend: NVIDIA NIM (NVIDIA_API_KEY secret)
+  backend: NVIDIA NIM (NVIDIA_API_KEY secret); if the pre-flight health
+           check fails the run falls back to --offline mock automatically,
+           so the schedule never no-ops
   models: 5 verified models, random per agent × 12 agents
   pre-flight: health check + smoke gate validates engine before simulation
   output: commits to runs/

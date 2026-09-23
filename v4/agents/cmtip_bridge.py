@@ -74,6 +74,13 @@ class CMTIPBridge:
             return {"error": f"Unknown concept: {concept}", "fidelity": 0}
         reg = self.concept_registry[concept]
         reg["use_count"] += 1
+        # Royalties: concept authors earn per use (funds collect_dividends)
+        author = reg.get("author", "system")
+        rate = reg.get("royalty_rate", 0.0)
+        if author not in ("system", sender) and rate > 0:
+            royalty = round(100.0 * rate, 2)  # 2% -> 2.0 OT per use
+            self.dividend_income[author] += royalty
+            self.concept_royalties[concept] = self.concept_royalties.get(concept, 0.0) + royalty
         vec = reg["embeddings"].get(source_family)
         if vec is None:
             vec = np.random.randn(384).astype(np.float32)
@@ -82,6 +89,27 @@ class CMTIPBridge:
                 "source_family": source_family, "source_agent": sender,
                 "target_cluster": target_cluster, "fidelity": 1.0,
                 "vector": (vec * intensity).tolist()}
+
+    def recall_tensor(self, agent, query, family) -> List[dict]:
+        """Fuzzy recall over the concept registry + the agent's semantic memory."""
+        q = (query or "").lower().strip()
+        scored, seen = [], set()
+        candidates = list(self.concept_registry.keys())
+        candidates += [m.get("concept", "") for m in self.semantic_memory.get(agent, [])]
+        for name in candidates:
+            if not name or name in seen:
+                continue
+            seen.add(name)
+            if q and q in name.lower():
+                sim = 0.9
+            elif q and any(tok in name.lower() for tok in q.split()):
+                sim = 0.6
+            elif not q:
+                sim = 0.5
+            else:
+                continue
+            scored.append({"concept": name, "similarity": sim})
+        return sorted(scored, key=lambda d: -d["similarity"])[:5]
 
     def receive_tensor(self, agent_name, source_family) -> Optional[dict]:
         if not self.inbox.get(agent_name):
@@ -110,21 +138,112 @@ class CMTIPBridge:
             self.inbox[agent].append(msg)
 
     def upgrade_projector(self, src, tgt, investment, owner=""):
-        return {"source": src, "target": tgt, "fidelity_before": 0.7, "fidelity_after": min(0.9, 0.7 + investment*0.002)}
+        before = 0.7
+        after = min(0.9, before + investment * 0.002)
+        return {"source": src, "target": tgt,
+                "fidelity_before": before, "fidelity_after": after,
+                "improvement": after - before}
 
     def mine_concept(self, description, author, family, tick):
-        name = "_".join(description.lower().split()[:3])[:30].replace(",","").replace(".","")
+        name = "_".join(description.lower().split()[:3])[:30].replace(",", "").replace(".", "")
+        if not name:
+            name = f"concept_{tick}_{author}"
         self.concept_registry[name] = {"description": description, "author": author,
             "royalty_rate": 0.02, "registration_tick": tick,
             "embeddings": {family: np.random.randn(384).astype(np.float32)}, "use_count": 0}
         self.concept_authors[name] = author
+        # Founder allocation: miner starts with 100 tradeable shares
+        self._ensure_shares(name)
+        pf = self.share_portfolios[author]
+        pf[name] = pf.get(name, 0) + 100
         return {"concept": name, "author": author, "registration_cost": 50}
 
+    # ─── Concept share markets ───
+
+    def _ensure_shares(self, concept):
+        if concept not in self.concept_shares and concept in self.concept_registry:
+            self.concept_shares[concept] = {"total": 1000, "issued": 0, "price": 1.0}
+
+    def place_order(self, concept, agent, shares, price, side):
+        """Rest a limit order. side: 'bid' or 'ask'."""
+        self._ensure_shares(concept)
+        book = self.order_book[concept]
+        key = "bids" if side == "bid" else "asks"
+        try:
+            shares_i, price_f = int(shares), float(price)
+        except (TypeError, ValueError):
+            return {"error": f"bad order: shares={shares} price={price}"}
+        book[key].append({"agent": agent, "shares": shares_i, "price": price_f})
+        book[key].sort(key=lambda o: o["price"], reverse=(key == "bids"))
+        return {"concept": concept, "side": side, "shares": shares_i, "price": price_f}
+
+    def match_orders(self, concept):
+        """Match top bid >= top ask. Moves shares; returns executed trades."""
+        book = self.order_book[concept]
+        trades = []
+        with self._shares_lock:
+            while book["bids"] and book["asks"] and book["bids"][0]["price"] >= book["asks"][0]["price"]:
+                bid, ask = book["bids"][0], book["asks"][0]
+                qty = min(bid["shares"], ask["shares"])
+                px = (bid["price"] + ask["price"]) / 2
+                seller_pf = self.share_portfolios[ask["agent"]]
+                if seller_pf.get(concept, 0) < qty:
+                    book["asks"].pop(0)  # seller can't deliver — drop the ask
+                    continue
+                seller_pf[concept] -= qty
+                buyer_pf = self.share_portfolios[bid["agent"]]
+                buyer_pf[concept] = buyer_pf.get(concept, 0) + qty
+                trades.append({"buyer": bid["agent"], "seller": ask["agent"],
+                               "shares": qty, "price_per_share": round(px, 3),
+                               "total_cost": round(qty * px, 2), "concept": concept})
+                bid["shares"] -= qty
+                ask["shares"] -= qty
+                if bid["shares"] <= 0:
+                    book["bids"].pop(0)
+                if ask["shares"] <= 0:
+                    book["asks"].pop(0)
+        return trades
+
+    def trade_concept_shares(self, concept, seller, buyer, shares, price):
+        """Direct peer-to-peer share transfer (money moves in the caller)."""
+        if concept not in self.concept_registry:
+            return {"error": f"Unknown concept: {concept}"}
+        self._ensure_shares(concept)
+        try:
+            shares_i, price_f = int(shares), float(price)
+        except (TypeError, ValueError):
+            return {"error": f"bad trade: shares={shares} price={price}"}
+        with self._shares_lock:
+            held = self.share_portfolios[seller].get(concept, 0)
+            if held < shares_i:
+                return {"error": f"{seller} holds {held} shares of '{concept}' (needs {shares_i})"}
+            self.share_portfolios[seller][concept] = held - shares_i
+            pf = self.share_portfolios[buyer]
+            pf[concept] = pf.get(concept, 0) + shares_i
+        return {"concept": concept, "seller": seller, "buyer": buyer,
+                "shares": shares_i, "price_per_share": price_f,
+                "total_cost": round(shares_i * price_f, 2)}
+
     def collect_dividends(self, agent):
-        return 0.0
+        amt = round(self.dividend_income.get(agent, 0.0), 2)
+        self.dividend_income[agent] = 0.0
+        return amt
 
     def get_market_summary(self):
-        return {"total_concepts_traded": 0, "total_market_cap": 0, "top_by_market_cap": []}
+        traded = [c for c, b in self.order_book.items() if b["bids"] or b["asks"]]
+        caps = []
+        for c, info in self.concept_shares.items():
+            caps.append({"concept": c, "market_cap": round(info["price"] * info["total"], 2)})
+        caps.sort(key=lambda d: -d["market_cap"])
+        return {"total_concepts_traded": len(traded),
+                "total_market_cap": round(sum(d["market_cap"] for d in caps), 2),
+                "top_by_market_cap": caps[:10]}
 
     def get_agent_portfolio(self, agent):
-        return {"agent": agent, "holdings": [], "total_value": 0, "uncollected_dividends": 0}
+        pf = self.share_portfolios.get(agent, {})
+        holdings = [{"concept": c, "shares": s,
+                     "price": self.concept_shares.get(c, {}).get("price", 1.0)}
+                    for c, s in pf.items() if s > 0]
+        total = round(sum(h["shares"] * h["price"] for h in holdings), 2)
+        return {"agent": agent, "holdings": holdings, "total_value": total,
+                "uncollected_dividends": round(self.dividend_income.get(agent, 0.0), 2)}
