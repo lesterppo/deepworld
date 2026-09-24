@@ -1,11 +1,6 @@
 [DEEPWORLD] Health check OK model=openai/gpt-oss-20b resp=
 [DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APITimeoutError: Request timed out.
-  ⚠ PR-03 (Projection-Weaver/glm-5.3-flash) act failed: KeyError
-Traceback (most recent call last):
-  File "/home/runner/work/deepworld/deepworld/v4/engine/__init__.py", line 329, in tick
-    effects = agent.apply_effects(action, self, self.cmtip)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/deepworld/deepworld/v4/agents/__init__.py", line 472, in apply_effects
-    f"(+{result['improvement']:.2f})")
-         ~~~~~~^^^^^^^^^^^^^^^
-KeyError: 'improvement'
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
