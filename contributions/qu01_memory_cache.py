@@ -1,64 +1,65 @@
-import time
-from collections import OrderedDict
+import json
+import os
+from collections import defaultdict
 
 class MemoryCache:
-    """A simple LRU cache for memory fragments.
+    """A simple in-memory cache for compressed context fragments.
 
-    The cache stores compressed context fragments keyed by a unique id.
-    It tracks the last access time and evicts the least recently used item
-    when the capacity is exceeded.
+    The Quant‑Scribe role requires efficient storage and retrieval of
+    high‑purity memory fragments.  This class offers:
+    * LRU eviction policy to limit memory footprint.
+    * Automatic compression of string data using zlib to reduce token use.
+    * Quick lookup by fragment ID.
+    * Serialization helpers for persistence to the local filesystem.
     """
 
-    def __init__(self, capacity: int = 128):
-        self.capacity = capacity
-        self.cache: OrderedDict[str, any] = OrderedDict()
+    def __init__(self, max_size: int = 128):
+        self.max_size = max_size
+        self.cache = {}
+        self.order = []  # keep insertion order for LRU
 
-    def put(self, key: str, value: any):
-        """Insert or update a fragment in the cache.
+    def _compress(self, data: str) -> bytes:
+        return os.urandom(0) if not data else zlib.compress(data.encode())
 
-        Args:
-            key: Unique identifier for the fragment.
-            value: The compressed fragment object.
-        """
+    def _decompress(self, data: bytes) -> str:
+        return zlib.decompress(data).decode()
+
+    def put(self, key: str, value: str):
         if key in self.cache:
-            # Update existing entry and move to end
-            self.cache.pop(key)
-        elif len(self.cache) >= self.capacity:
-            # Evict the oldest item
-            evicted_key, evicted_value = self.cache.popitem(last=False)
-            # Optionally log eviction
-            print(f"[MemoryCache] Evicted {evicted_key}")
-        self.cache[key] = value
+            self.order.remove(key)
+        elif len(self.cache) >= self.max_size:
+            # Evict least recently used
+            lru = self.order.pop(0)
+            del self.cache[lru]
+        self.cache[key] = self._compress(value)
+        self.order.append(key)
 
-    def get(self, key: str):
-        """Retrieve a fragment and mark it as recently used.
-
-        Returns None if the key is missing.
-        """
+    def get(self, key: str) -> str | None:
         if key not in self.cache:
             return None
-        value = self.cache.pop(key)
-        self.cache[key] = value
-        return value
+        # Move to end to mark as recently used
+        self.order.remove(key)
+        self.order.append(key)
+        return self._decompress(self.cache[key])
 
-    def __contains__(self, key: str) -> bool:
-        return key in self.cache
+    def delete(self, key: str):
+        if key in self.cache:
+            self.order.remove(key)
+            del self.cache[key]
 
-    def __len__(self):
-        return len(self.cache)
+    def serialize(self, path: str):
+        data = {k: self.cache[k].hex() for k in self.cache}
+        with open(path, 'w') as f:
+            json.dump(data, f)
 
-    def keys(self):
-        return list(self.cache.keys())
+    def deserialize(self, path: str):
+        with open(path) as f:
+            data = json.load(f)
+        for k, v in data.items():
+            self.cache[k] = bytes.fromhex(v)
+            self.order.append(k)
 
-    def clear(self):
-        self.cache.clear()
-
-# Example usage
-if __name__ == "__main__":
-    cache = MemoryCache(capacity=3)
-    cache.put("a", "fragment_a")
-    cache.put("b", "fragment_b")
-    cache.put("c", "fragment_c")
-    print(cache.get("a"))  # Access 'a' to make it most recently used
-    cache.put("d", "fragment_d")  # This should evict 'b'
-    print(list(cache.keys()))
+# Example usage (would be removed in production):
+# cache = MemoryCache(max_size=10)
+# cache.put('frag1', 'some large string…')
+# print(cache.get('frag1'))
