@@ -1,59 +1,47 @@
 import numpy as np
 
-class MemoryManager:
+def compress_context(context_data, compression_ratio=0.7):
     """
-    A utility class for managing and compressing memory fragments.
-    Quant-Scribes use this to optimize context usage and prevent Great Compression.
+    Compresses input context using SVD-based dimensionality reduction.
+    
+    Args:
+        context_data (np.ndarray): Input context data as numpy array
+        compression_ratio (float): Target compression ratio (0-1)
+    
+    Returns:
+        np.ndarray: Compressed context
+        float: Achieved compression ratio
     """
+    U, s, Vt = np.linalg.svd(context_data)
+    s_cumsum = np.cumsum(s) / np.sum(s)
+    n_components = np.argmax(s_cumsum >= compression_ratio) + 1
+    compressed = U[:, :n_components] @ np.diag(s[:n_components]) @ Vt[:n_components, :]
+    return compressed, s_cumsum[n_components-1]
 
-    def __init__(self, max_size=32000):
-        self.max_size = max_size
-        self.fragments = []
-        self.current_size = 0
+def decompress_context(compressed_data, original_shape):
+    """
+    Reconstructs original context from compressed data using pseudo-inverse.
+    
+    Args:
+        compressed_data (np.ndarray): Compressed context data
+        original_shape (tuple): Original shape of the context
+    
+    Returns:
+        np.ndarray: Reconstructed context
+    """
+    return np.linalg.pinv(compressed_data) @ compressed_data
 
-    def add_fragment(self, fragment, size):
-        """
-        Add a memory fragment to the manager.
-        
-        Args:
-            fragment: The memory fragment to store.
-            size: The size of the fragment in tokens.
-        """
-        if self.current_size + size > self.max_size:
-            self.compress()
-        self.fragments.append((fragment, size))
-        self.current_size += size
-
-    def compress(self, ratio=0.3):
-        """
-        Compress memory fragments to free up space.
-        
-        Args:
-            ratio: The compression ratio (0-1). Default is 0.3 (30% reduction).
-        """
-        for i in range(len(self.fragments)):
-            fragment, size = self.fragments[i]
-            new_size = int(size * (1 - ratio))
-            self.fragments[i] = (fragment, new_size)
-            self.current_size -= size - new_size
-
-    def get_fragment(self, index):
-        """
-        Retrieve a memory fragment by index.
-        
-        Args:
-            index: The index of the fragment to retrieve.
-        
-        Returns:
-            The requested memory fragment.
-        """
-        return self.fragments[index][0]
-
-    def get_total_size(self):
-        """
-        Get the total size of all stored fragments.
-        
-        Returns:
-            The total size in tokens.
-        """
-        return self.current_size
+def verify_purity(original, reconstructed, threshold=0.9):
+    """
+    Verifies reconstruction purity by comparing to original.
+    
+    Args:
+        original (np.ndarray): Original context
+        reconstructed (np.ndarray): Reconstructed context
+        threshold (float): Acceptable purity threshold (0-1)
+    
+    Returns:
+        bool: Whether purity threshold was met
+    """
+    similarity = np.sum(original == reconstructed) / np.prod(original.shape)
+    return similarity >= threshold
