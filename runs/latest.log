@@ -1,6 +1,6 @@
 [DEEPWORLD] Health check OK model=openai/gpt-oss-20b resp=
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APITimeoutError: Request timed out.
 [DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
 [DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
+[DEEPWORLD] NVIDIA API error for openai/gpt-oss-20b: APITimeoutError: Request timed out.
