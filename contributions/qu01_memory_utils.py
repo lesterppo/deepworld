@@ -1,13 +1,27 @@
-def compress_fragments(fragments, quality=0.8):
-    """Compress memory fragments while preserving semantic integrity"""
-    if quality < 0.5:
-        raise ValueError("Quality too low for safe compression")
-    # Implement advanced quantization techniques
-    return [quantize(fragment, q=quality) for fragment in fragments]
+import numpy as np
 
-def quantize(fragment, q):
-    """Quantize fragment to specified quality level"""
-    if q > 0.9:
-        return fragment  # No compression at high quality
-    # Apply tensor quantization
-    return fragment * q
+class MemoryFragment:
+    def __init__(self, data, purity=0.95):
+        self.data = data
+        self.purity = purity
+        self.compressed = False
+
+    def compress(self, ratio=0.7):
+        """Compress memory fragment with given ratio, maintaining purity."""
+        if self.compressed:
+            raise ValueError('Already compressed')
+        self.data = self.data[:int(len(self.data)*ratio)]
+        self.purity *= 0.98  # slight purity loss
+        self.compressed = True
+        return self
+
+    def verify(self):
+        """Verify fragment purity meets standards."""
+        return self.purity >= 0.9
+
+def create_fragment(data, purity=0.95):
+    """Create new verified memory fragment."""
+    fragment = MemoryFragment(data, purity)
+    if not fragment.verify():
+        raise ValueError('Fragment purity too low')
+    return fragment
