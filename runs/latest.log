@@ -1,7 +1,8 @@
 [DEEPWORLD] Health check OK model=openai/gpt-oss-20b resp=
-[DEEPWORLD] NVIDIA API error for nvidia/nemotron-3-super-120b-a12b: NotFoundError: Error code: 404
-[DEEPWORLD] NVIDIA API error for nvidia/nemotron-3-super-120b-a12b: NotFoundError: Error code: 404
-[DEEPWORLD] NVIDIA API error for nvidia/nemotron-3-super-120b-a12b: NotFoundError: Error code: 404
-[DEEPWORLD] NVIDIA API error for nvidia/nemotron-3-super-120b-a12b: NotFoundError: Error code: 404
-[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APITimeoutError: Request timed out.
-[DEEPWORLD] NVIDIA API error for nvidia/nemotron-3-super-120b-a12b: NotFoundError: Error code: 404
+[DEEPWORLD] NVIDIA API error for nvidia/nemotron-3.5-lightning-30b-a3b: BadRequestError: Error code: 400 - {'status': 400, 'title': 'Bad Request', 'detail': "Function id '0a213807-640b-43fb-bfbf-2919f9b666ad': DEGRADED function cannot be invoked"}
+[DEEPWORLD] NVIDIA API error for nvidia/nemotron-3.5-lightning-30b-a3b: BadRequestError: Error code: 400 - {'status': 400, 'title': 'Bad Request', 'detail': "Function id '0a213807-640b-43fb-bfbf-2919f9b666ad': DEGRADED function cannot be invoked"}
+[DEEPWORLD] NVIDIA API error for openai/gpt-oss-20b: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for openai/gpt-oss-20b: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for openai/gpt-oss-20b: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for openai/gpt-oss-20b: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for openai/gpt-oss-20b: APITimeoutError: Request timed out.
