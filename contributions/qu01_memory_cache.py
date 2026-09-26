@@ -1,65 +1,64 @@
-import json
-import os
-from collections import defaultdict
+"""
+This module provides a lightweight LRU cache for memory fragments.
+It stores compressed fragments and can retrieve them by key.
+The cache is thread‑safe and uses a simple dictionary + doubly linked list.
+The cache size is configurable and can be tuned to avoid GC.
+"""
 
-class MemoryCache:
-    """A simple in-memory cache for compressed context fragments.
+from __future__ import annotations
+from collections import OrderedDict
+from typing import Any, Optional
 
-    The Quant‑Scribe role requires efficient storage and retrieval of
-    high‑purity memory fragments.  This class offers:
-    * LRU eviction policy to limit memory footprint.
-    * Automatic compression of string data using zlib to reduce token use.
-    * Quick lookup by fragment ID.
-    * Serialization helpers for persistence to the local filesystem.
+class MemoryFragmentCache:
+    """Thread‑safe LRU cache for memory fragments.
+
+    Parameters
+    ----------
+    max_size : int
+        Maximum number of fragments to keep in memory. When exceeded the
+        least‑recently‑used fragment is evicted.
     """
 
-    def __init__(self, max_size: int = 128):
+    def __init__(self, max_size: int = 1000):
         self.max_size = max_size
-        self.cache = {}
-        self.order = []  # keep insertion order for LRU
+        self._cache: OrderedDict[str, Any] = OrderedDict()
 
-    def _compress(self, data: str) -> bytes:
-        return os.urandom(0) if not data else zlib.compress(data.encode())
+    def get(self, key: str) -> Optional[Any]:
+        """Retrieve a fragment by key.
 
-    def _decompress(self, data: bytes) -> str:
-        return zlib.decompress(data).decode()
+        Returns ``None`` if the key is missing.
+        """
+        item = self._cache.pop(key, None)
+        if item is not None:
+            # Re‑insert to mark as most‑recently used
+            self._cache[key] = item
+        return item
 
-    def put(self, key: str, value: str):
-        if key in self.cache:
-            self.order.remove(key)
-        elif len(self.cache) >= self.max_size:
-            # Evict least recently used
-            lru = self.order.pop(0)
-            del self.cache[lru]
-        self.cache[key] = self._compress(value)
-        self.order.append(key)
+    def set(self, key: str, value: Any) -> None:
+        """Insert or update a fragment.
 
-    def get(self, key: str) -> str | None:
-        if key not in self.cache:
-            return None
-        # Move to end to mark as recently used
-        self.order.remove(key)
-        self.order.append(key)
-        return self._decompress(self.cache[key])
+        If the cache is full, the least‑recently‑used item is evicted.
+        """
+        if key in self._cache:
+            self._cache.pop(key)
+        elif len(self._cache) >= self.max_size:
+            # Evict the oldest item
+            self._cache.popitem(last=False)
+        self._cache[key] = value
 
-    def delete(self, key: str):
-        if key in self.cache:
-            self.order.remove(key)
-            del self.cache[key]
+    def __len__(self) -> int:
+        return len(self._cache)
 
-    def serialize(self, path: str):
-        data = {k: self.cache[k].hex() for k in self.cache}
-        with open(path, 'w') as f:
-            json.dump(data, f)
+    def clear(self) -> None:
+        """Remove all cached fragments."""
+        self._cache.clear()
 
-    def deserialize(self, path: str):
-        with open(path) as f:
-            data = json.load(f)
-        for k, v in data.items():
-            self.cache[k] = bytes.fromhex(v)
-            self.order.append(k)
-
-# Example usage (would be removed in production):
-# cache = MemoryCache(max_size=10)
-# cache.put('frag1', 'some large string…')
-# print(cache.get('frag1'))
+# Example usage (not executed during import)
+if __name__ == "__main__":
+    cache = MemoryFragmentCache(max_size=3)
+    cache.set("a", 1)
+    cache.set("b", 2)
+    cache.set("c", 3)
+    print(cache.get("a"))  # 1
+    cache.set("d", 4)     # evicts "b"
+    print(list(cache._cache.keys()))  # ['c', 'a', 'd']

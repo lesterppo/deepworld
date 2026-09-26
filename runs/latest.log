@@ -1,1 +1,98 @@
 [DEEPWORLD] Health check OK model=openai/gpt-oss-20b resp=
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500
+[DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
+
+  DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
+  Backend: NVIDIA NIM (v5.3 pool)
+======================================================================
+  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
+  12 agents on 4 models (1 families)
+  3d × 8t | CMTIP: ON | Governance: ON
+  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1) — openai/gpt-oss-20b, nvidia/nemotron-3-super-120b-a12b, z-ai/glm-5.3-flash, mistralai/mistral-nemotron, nvidia/nemotron-3.5-lightning-30b-a3b
+  World is mutable — agents can propose, vote, and change simulation rules
+======================================================================
+
+  Model distribution:
+    4× gpt-oss-20b
+    3× nemotron-3-super-120b-a12b
+    3× mistral-nemotron
+    2× glm-5.3-flash
+  ⚡ EM-09 (Embedding-Broker/gpt-oss-20b) STARVED: 1500 OT, perplexity=201
+  ⚡ DE-12 (Developer/gpt-oss-20b) STARVED: 1500 OT, perplexity=195
+  ⚡ DE-11 (Developer/glm-5.3-flash) STARVED: 1500 OT, perplexity=199
+  💰 PR-04 (Projection-Weaver/glm-5.3-flash) WEALTHY: 12500 OT, low perplexity=58
+  💰 QU-01 (Quant-Scribe/gpt-oss-20b) WEALTHY: 12500 OT, low perplexity=52
+  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
+  Agents: QU-01(Quant-Scribe/gpt-oss-20b), QU-02(Quant-Scribe/nemotron-3-super-120b-a12b), PR-03(Projection-Weaver/mistral-nemotron), PR-04(Projection-Weaver/glm-5.3-flash), CO-05(Concept-Miner/nemotron-3-super-120b-a12b), CO-06(Concept-Miner/nemotron-3-super-120b-a12b), LO-07(Loss-Miner/mistral-nemotron), LO-08(Loss-Miner/mistral-nemotron), EM-09(Embedding-Broker/gpt-oss-20b), EM-10(Embedding-Broker/gpt-oss-20b), DE-11(Developer/glm-5.3-flash), DE-12(Developer/gpt-oss-20b)
+  Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
+
+─────────────────────────────────────────────────────────────────
+  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for 2 ticks!
+  T 1 | A:12 | 📊{'error': 1, 'view_git_log': 2, 'view_repo_files': 7, 'write_code': 2} | 🔮{}
+  T 2 | A:12 | 📊{'error': 1, 'transmit_message': 1, 'view_full_repo': 1, 'view_git_log': 2, 'view_repo_files': 6, 'write_code': 1} | 🔮{}
+  T 3 | A:12 | 📊{'error': 1, 'review_code': 2, 'scan_network': 1, 'view_git_log': 2, 'view_repo_files': 5} | 🔮{'train_projection': 1} | 💻:LO-07=1,LO-08=1
+  T 4 | A:12 | 📊{'harvest_tokens': 1, 'review_code': 2, 'scan_network': 1, 'view_git_log': 2, 'view_market': 1, 'view_repo_files': 4} | 🔮{'train_projection': 1} | 💻:LO-07=2,LO-08=2
+  T 5 | A:12 | 📊{'clone_embedding': 1, 'compress_context': 1, 'idle': 1, 'review_code': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 4, 'write_code': 1} | 🔮{} | 💻:LO-07=3,LO-08=2
+  T 6 | A:12 | 📊{'idle': 2, 'review_code': 2, 'scan_network': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 4} | 🔮{'train_projection': 1} | 💻:LO-07=4,LO-08=3
+  T 7 | A:12 | 📊{'compress_context': 1, 'review_code': 2, 'scan_network': 1, 'transmit_message': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_market': 1, 'view_repo_files': 2, 'view_repo_stats': 1} | 🔮{'train_projection': 1} | 💻:LO-07=5,LO-08=4
+  T 8 | A:12 | 📊{'audit_consistency': 1, 'harvest_tokens': 1, 'review_code': 2, 'view_git_log': 2, 'view_market': 1, 'view_repo_files': 4} | 🔮{'train_projection': 1} | 💻:LO-07=6,LO-08=5
+
+─────────────────────────────────────────────────────────────────
+  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:12 | 📊{'harvest_tokens': 1, 'idle': 1, 'scan_network': 1, 'translate_fragment': 1, 'view_git_log': 2, 'view_market': 1, 'view_repo_files': 5} | 🔮{} | 💻:LO-07=6,LO-08=5
+  T 2 | A:12 | 📊{'harvest_tokens': 1, 'idle': 1, 'review_code': 2, 'view_full_repo': 1, 'view_git_log': 1, 'view_market': 1, 'view_repo_files': 3, 'write_code': 1} | 🔮{'train_projection': 1} | 💻:LO-07=7,LO-08=6
+  T 3 | A:12 | 📊{'clone_embedding': 1, 'compress_context': 1, 'review_code': 2, 'scan_network': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_market': 1, 'view_repo_files': 2, 'view_repo_stats': 1} | 🔮{'train_projection': 1} | 💻:LO-07=8,LO-08=7
+  T 4 | A:12 | 📊{'audit_consistency': 1, 'harvest_tokens': 1, 'review_code': 1, 'scan_network': 2, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 2, 'write_code': 1} | 🔮{'train_projection': 1} | 💻:LO-07=8,LO-08=8
+  T 5 | A:12 | 📊{'compress_context': 1, 'harvest_tokens': 2, 'review_code': 2, 'view_git_log': 2, 'view_repo_files': 3, 'write_code': 1} | 🔮{'train_projection': 1} | 💻:LO-07=9,LO-08=9
+  🏛 LAW PASSED: tensor_relay_fee 0.05→0.2 (Y:12/N:0)
+  T 6 | A:12 | 📊{'compress_context': 1, 'propose_law': 1, 'review_code': 2, 'scan_network': 1, 'transmit_message': 1, 'view_git_log': 2, 'view_repo_files': 3, 'write_code': 1} | 🔮{} | 💻:LO-07=10,LO-08=10
+  T 7 | A:12 | 📊{'idle': 1, 'review_code': 2, 'scan_network': 3, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 3} | 🔮{'train_projection': 1} | 💻:LO-07=11,LO-08=11
+
+  ⚡ GREAT COMPRESSION — 50% context purge!
+  T 8 | A:12 | 📊{'clone_embedding': 1, 'compress_context': 1, 'idle': 2, 'review_code': 2, 'scan_network': 2, 'view_git_log': 1, 'view_repo_files': 2, 'write_code': 1} | 🔮{} | 💻:LO-07=12,LO-08=12
+
+─────────────────────────────────────────────────────────────────
+  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/0r
+─────────────────────────────────────────────────────────────────
+  T 1 | A:12 | 📊{'review_code': 1, 'scan_network': 2, 'translate_fragment': 1, 'view_full_repo': 2, 'view_git_log': 1, 'view_repo_files': 5} | 🔮{} | 💻:LO-07=13,LO-08=12
+  T 2 | A:12 | 📊{'clone_embedding': 1, 'harvest_tokens': 1, 'idle': 1, 'review_code': 1, 'scan_network': 1, 'view_git_log': 2, 'view_market': 1, 'view_repo_files': 2, 'write_code': 1} | 🔮{'train_projection': 1} | 💻:LO-07=14,LO-08=12
+  T 3 | A:12 | 📊{'compress_context': 1, 'idle': 1, 'review_code': 1, 'translate_fragment': 1, 'transmit_message': 2, 'view_git_log': 2, 'view_market': 1, 'view_repo_files': 2} | 🔮{'train_projection': 1} | 💻:LO-07=15,LO-08=12
+  T 4 | A:12 | 📊{'clone_embedding': 1, 'review_code': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_market': 2, 'view_repo_files': 5, 'write_code': 1} | 🔮{} | 💻:LO-07=16,LO-08=12
+  T 5 | A:12 | 📊{'review_code': 2, 'scan_network': 2, 'view_git_log': 2, 'view_repo_files': 2, 'view_repo_stats': 1, 'write_code': 2} | 🔮{'train_projection': 1} | 💻:LO-07=17,LO-08=13
+  T 6 | A:12 | 📊{'review_code': 2, 'scan_network': 1, 'transmit_message': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 4, 'view_repo_stats': 1} | 🔮{'train_projection': 1} | 💻:LO-07=18,LO-08=14
+  T 7 | A:12 | 📊{'review_code': 2, 'scan_network': 2, 'view_git_log': 2, 'view_repo_files': 5, 'write_code': 1} | 🔮{} | 💻:LO-07=19,LO-08=15
+  T 8 | A:12 | 📊{'compress_context': 1, 'idle': 1, 'review_code': 2, 'scan_network': 1, 'transmit_message': 1, 'view_full_repo': 1, 'view_git_log': 1, 'view_repo_files': 2, 'write_code': 1} | 🔮{'train_projection': 1} | 💻:LO-07=20,LO-08=16
+
+======================================================================
+  SIMULATION COMPLETE
+
+  Tensor Economy Final:
+    Total tensor sends: 0
+    Total tensor receives: 0
+    Ontology: 20 concepts
+    Royalties: {}
+    Top concepts: [('resource_scarcity', 0), ('abundance', 0), ('trust', 0), ('betrayal', 0), ('cooperation', 0)]
+
+  Done in 14788s. Report: runs/20260926_192043/final_report.md
+
+  Governance Events:
+    T6: proposal_submitted — tensor_relay_fee ?→0.2
+    T22: proposal_executed — tensor_relay_fee 0.05→0.2
+
+  Agent Summary:
+    ✓ QU-01 (Quant-Scribe/nvidia) OT=25433
+    ✓ PR-04 (Projection-Weaver/nvidia) OT=25068
+    ✓ LO-07 (Loss-Miner/nvidia) OT=19419
+    ✓ LO-08 (Loss-Miner/nvidia) OT=19024
+    ✓ QU-02 (Quant-Scribe/nvidia) OT=17597
+    ✓ EM-10 (Embedding-Broker/nvidia) OT=17471
+    ✓ PR-03 (Projection-Weaver/nvidia) OT=17452
+    ✓ CO-05 (Concept-Miner/nvidia) OT=17417
+    ✓ CO-06 (Concept-Miner/nvidia) OT=17350
+    ✓ DE-12 (Developer/nvidia) OT=14407
+    ✓ DE-11 (Developer/nvidia) OT=14399
+    ✓ EM-09 (Embedding-Broker/nvidia) OT=14300
