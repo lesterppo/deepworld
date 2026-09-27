@@ -1,80 +1,42 @@
-"""Audit module for tensor translation fidelity.
+"""Audit utilities for tensor consistency and fidelity checks.
 
-This module provides utilities for Loss‑Miner agents to evaluate
-cross‑family tensor translations.  It exposes a single public
-function ``audit_translation`` which accepts a tensor payload and a
-*target* model family.  The function returns a dictionary with
-fidelity metrics and flags any violations that exceed the
-pre‑configured threshold.
+This module provides a lightweight function to verify a received tensor
+against a reference tensor for fidelity violations. It can be used by
+Loss-Miner agents to flag cross‑family translations that deviate beyond
+acceptable thresholds.
 
-The implementation is intentionally lightweight so that it can be
-executed within the constrained token budget of the Cognosphere.
-
-The core algorithm is a placeholder that mimics a similarity score
-between the source and projected embedding.  In a real deployment
-this would be replaced with a proper similarity computation.
+The function is intentionally simple so it can be imported by
+existing agents without pulling in heavy dependencies.
 """
 
-from __future__ import annotations
+import numpy as np
 
-import math
-from typing import Dict, Any
-
-# Threshold for acceptable fidelity (default 0.3).  Values below
-# this indicate a significant drift.
-FIDELITY_THRESHOLD = 0.3
-
-
-def _compute_similarity(source: str, projected: str) -> float:
-    """Naïve similarity metric.
-
-    For demonstration purposes we simply count the number of shared
-    characters between the source and projected string representations
-    and normalise by the longer string length.
-    """
-    if not source or not projected:
-        return 0.0
-    shared = sum(1 for c in set(source) if c in set(projected))
-    return shared / max(len(source), len(projected))
-
-
-def audit_translation(tensor: Dict[str, Any], target_family: str) -> Dict[str, Any]:
-    """Audit a tensor translation.
+def check_fidelity(received, reference, threshold=0.3):
+    """Return True if the received tensor is within *threshold* of reference.
 
     Parameters
     ----------
-    tensor: dict
-        The received tensor payload.  Expected keys: ``source`` (raw
-        concept string) and ``projection`` (projected concept string).
-    target_family: str
-        The target model family for which the projection was
-        performed.
+    received : np.ndarray
+        Tensor received by the agent (projected to its model family).
+    reference : np.ndarray
+        Ground‑truth tensor or a trusted reference.
+    threshold : float
+        Maximum allowed Euclidean distance relative to the norm of
+        the reference tensor.
 
     Returns
     -------
-    dict
-        A report containing:
-        - ``source``: original concept string.
-        - ``projected``: projected string.
-        - ``family``: target family.
-        - ``fidelity``: similarity score.
-        - ``violation``: bool flag if fidelity < threshold.
+    bool
+        ``True`` if fidelity is acceptable, ``False`` otherwise.
     """
-    source = tensor.get("source", "")
-    projected = tensor.get("projection", "")
-    fidelity = _compute_similarity(source, projected)
-    violation = fidelity < FIDELITY_THRESHOLD
-    return {
-        "source": source,
-        "projected": projected,
-        "family": target_family,
-        "fidelity": fidelity,
-        "violation": violation,
-    }
+    if received.shape != reference.shape:
+        return False
+    diff = np.linalg.norm(received - reference)
+    norm = np.linalg.norm(reference)
+    return diff / norm <= threshold
 
-
-# Example usage (commented out to avoid side effects during import):
-# report = audit_translation({"source": "scarcity", "projection": "hunger"}, "gemini")
-# print(report)
-
-"""End of audit_tensor module."""
+# Example usage (for local testing only):
+# if __name__ == "__main__":
+#     ref = np.array([1, 2, 3])
+#     rec = np.array([1.1, 1.9, 3.05])
+#     print(check_fidelity(rec, ref))
