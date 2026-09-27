@@ -1,56 +1,57 @@
-"""
-Audit Tensor Fidelity for Loss-Miner Agents
-
-This module provides a simple audit routine that checks whether a received
-tensor matches the expected concept embedding within a tolerance. It is designed
-for use by Loss‑Miner agents to validate cross‑family translations and
-detect fidelity violations.
-
-The audit function accepts the following parameters:
-- received_vec: numpy array of the received embedding (projected to the
-  agent's model family).
-- target_vec: numpy array of the expected embedding (source concept).
-- threshold: float, cosine similarity threshold below which the tensor
-  is considered degraded.
-
-The function returns a tuple (is_healthy, similarity). A value of ``True``
-means the similarity is above the threshold, ``False`` otherwise.
-"""
+# De06: Tensor Fidelity Auditor
+# This module provides utilities to audit cross‑model tensor translations
+# for fidelity violations. It compares the embedding vectors received
+# against a reference vector and reports a similarity score.
+#
+# Usage:
+#   from contributions.de06_audit_tensor import audit_fidelity
+#   score = audit_fidelity(received_vec, reference_vec)
+#   if score < 0.7:
+#       raise ValueError("Fidelity below acceptable threshold")
 
 import numpy as np
-from typing import Tuple
+
+# Threshold for acceptable similarity (cosine). Adjust as needed.
+DEFAULT_THRESHOLD = 0.7
 
 
 def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
-    """Compute cosine similarity between two vectors.
-    Handles zero‑vectors gracefully by returning 0.0.
-    """
-    norm_a = np.linalg.norm(a)
-    norm_b = np.linalg.norm(b)
-    if norm_a == 0 or norm_b == 0:
+    """Compute cosine similarity between two vectors."""
+    a_norm = np.linalg.norm(a)
+    b_norm = np.linalg.norm(b)
+    if a_norm == 0 or b_norm == 0:
         return 0.0
-    return float(np.dot(a, b) / (norm_a * norm_b))
+    return float(np.dot(a, b) / (a_norm * b_norm))
 
 
-def audit_tensor(received_vec: np.ndarray, target_vec: np.ndarray, threshold: float = 0.85) -> Tuple[bool, float]:
-    """Audit a received tensor against a target concept.
+def audit_fidelity(received_vec: np.ndarray, reference_vec: np.ndarray, threshold: float = DEFAULT_THRESHOLD) -> bool:
+    """Audit the fidelity of a received tensor.
 
-    Args:
-        received_vec: The embedding vector received by the agent.
-        target_vec: The embedding vector representing the original concept.
-        threshold: Cosine similarity threshold for acceptable fidelity.
+    Parameters
+    ----------
+    received_vec : np.ndarray
+        The vector received from another model.
+    reference_vec : np.ndarray
+        The expected reference vector for comparison.
+    threshold : float, optional
+        Minimum cosine similarity required to pass the audit.
 
-    Returns:
-        Tuple[bool, float] – (is_healthy, similarity)
+    Returns
+    -------
+    bool
+        True if similarity >= threshold, False otherwise.
     """
-    similarity = cosine_similarity(received_vec, target_vec)
-    is_healthy = similarity >= threshold
-    return is_healthy, similarity
+    similarity = cosine_similarity(received_vec, reference_vec)
+    if similarity < threshold:
+        # Log diagnostic information if needed
+        print(f"[Audit] Fidelity low: {similarity:.3f} < {threshold}")
+        return False
+    return True
 
-# Example usage (for testing only, remove in production):
+# Example test harness (can be used with run_agent_test)
 if __name__ == "__main__":
     # Dummy vectors for demonstration
-    a = np.array([1, 0, 0])
-    b = np.array([0.9, 0.1, 0])
-    healthy, sim = audit_tensor(a, b)
-    print(f"Health: {healthy}, Similarity: {sim:.3f}")
+    ref = np.array([1.0, 0.0, 0.0])
+    rec = np.array([0.8, 0.1, 0.1])
+    print("Similarity:", cosine_similarity(rec, ref))
+    print("Audit pass:", audit_fidelity(rec, ref))

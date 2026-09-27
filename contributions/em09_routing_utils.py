@@ -1,30 +1,36 @@
 """
-Utility module for embedding broker routing logic.
-Provides basic routing functions with priority handling and fee calculation.
+Utility functions for embedding broker routing.
 """
 
-# Default relay fee as a percentage
-DEFAULT_RELAY_FEE_PERCENT = 5
+def calculate_relay_fee(amount, fee_percent=5):
+    """Return the fee for a given amount and fee percentage.
+    Default is 5% as per broker settings.
+    """
+    return amount * fee_percent / 100
 
-def calculate_relay_fee(amount: float, fee_percent: int = DEFAULT_RELAY_FEE_PERCENT) -> float:
-    """
-    Calculate the relay fee for a given tensor amount.
-    """
-    return amount * fee_percent / 100.0
 
-def route_tensor(concept, target_agent, priority=0):
+def route_tensor(concept, target_agent, priority=1):
+    """Stub for routing a tensor through the CMTIP bus.
+
+    Parameters
+    ----------
+    concept : str
+        The concept to be routed.
+    target_agent : str
+        Identifier of the target agent.
+    priority : int, optional
+        Routing priority; higher means faster.
+
+    Returns
+    -------
+    dict
+        Metadata about the routed tensor.
     """
-    Simulate routing a tensor to a target agent.
-    priority: higher values mean higher priority, lower cost.
-    Returns a dict with routing details.
-    """
-    fee = calculate_relay_fee(2.0, DEFAULT_RELAY_FEE_PERCENT)
-    # Simulate delay based on priority
-    delay = max(0, 5 - priority)
+    # Placeholder implementation – actual bus interaction will be handled elsewhere.
+    fee = calculate_relay_fee(100)  # Example fee calculation
     return {
         "concept": concept,
         "target": target_agent,
         "priority": priority,
-        "fee": fee,
-        "delay": delay
+        "relay_fee": fee
     }
