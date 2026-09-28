@@ -1,92 +1,31 @@
 [DEEPWORLD] Health check OK model=openai/gpt-oss-20b resp=
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: InternalServerError: Error code: 500 - {'type': 'urn:inference-connection:problem-details:internal-server-error', 'title': 'Internal Server Error', 'status': 500, 'detail': 'Inference connection error while making inference request'}
 [DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
-
-  DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
-  Backend: NVIDIA NIM (v5.3 pool)
-======================================================================
-  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
-  12 agents on 5 models (1 families)
-  3d × 8t | CMTIP: ON | Governance: ON
-  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1) — openai/gpt-oss-20b, nvidia/nemotron-3-super-120b-a12b, z-ai/glm-5.3-flash, mistralai/mistral-nemotron, nvidia/nemotron-3.5-lightning-30b-a3b
-  World is mutable — agents can propose, vote, and change simulation rules
-======================================================================
-
-  Model distribution:
-    4× nemotron-3-super-120b-a12b
-    2× gpt-oss-20b
-    2× glm-5.3-flash
-    2× nemotron-3.5-lightning-30b-a3b
-    2× mistral-nemotron
-  ⚡ LO-08 (Loss-Miner/nemotron-3.5-lightning-30b-a3b) STARVED: 1500 OT, perplexity=192
-  ⚡ QU-02 (Quant-Scribe/nemotron-3-super-120b-a12b) STARVED: 1500 OT, perplexity=273
-  ⚡ PR-03 (Projection-Weaver/nemotron-3-super-120b-a12b) STARVED: 1500 OT, perplexity=246
-  💰 CO-05 (Concept-Miner/nemotron-3-super-120b-a12b) WEALTHY: 12500 OT, low perplexity=40
-  💰 CO-06 (Concept-Miner/glm-5.3-flash) WEALTHY: 12500 OT, low perplexity=56
-  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/gpt-oss-20b), QU-02(Quant-Scribe/nemotron-3-super-120b-a12b), PR-03(Projection-Weaver/nemotron-3-super-120b-a12b), PR-04(Projection-Weaver/gpt-oss-20b), CO-05(Concept-Miner/nemotron-3-super-120b-a12b), CO-06(Concept-Miner/glm-5.3-flash), LO-07(Loss-Miner/nemotron-3.5-lightning-30b-a3b), LO-08(Loss-Miner/nemotron-3.5-lightning-30b-a3b), EM-09(Embedding-Broker/nemotron-3-super-120b-a12b), EM-10(Embedding-Broker/mistral-nemotron), DE-11(Developer/glm-5.3-flash), DE-12(Developer/mistral-nemotron)
-  Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
-
-─────────────────────────────────────────────────────────────────
-  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for 2 ticks!
-  T 1 | A:12 | 📊{'transmit_message': 1, 'view_git_log': 2, 'view_repo_files': 9} | 🔮{}
-  T 2 | A:12 | 📊{'compress_context': 1, 'transmit_message': 1, 'view_git_log': 2, 'view_repo_files': 8} | 🔮{}
-  T 3 | A:12 | 📊{'clone_embedding': 1, 'view_git_log': 2, 'view_repo_files': 9} | 🔮{}
-  T 4 | A:12 | 📊{'view_git_log': 2, 'view_repo_files': 10} | 🔮{}
-  T 5 | A:12 | 📊{'view_git_log': 2, 'view_repo_files': 9, 'write_code': 1} | 🔮{}
-  T 6 | A:12 | 📊{'transmit_message': 2, 'view_git_log': 2, 'view_repo_files': 8} | 🔮{}
-  T 7 | A:12 | 📊{'view_git_log': 2, 'view_repo_files': 10} | 🔮{}
-  T 8 | A:12 | 📊{'view_git_log': 1, 'view_repo_files': 11} | 🔮{}
-
-─────────────────────────────────────────────────────────────────
-  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  T 1 | A:12 | 📊{'audit_consistency': 1, 'harvest_tokens': 1, 'transmit_message': 1, 'view_git_log': 2, 'view_repo_files': 7} | 🔮{}
-  T 2 | A:12 | 📊{'view_git_log': 2, 'view_repo_files': 10} | 🔮{}
-  T 3 | A:12 | 📊{'transmit_message': 1, 'view_git_log': 2, 'view_repo_files': 8, 'write_code': 1} | 🔮{}
-  T 4 | A:12 | 📊{'scan_network': 1, 'view_git_log': 2, 'view_repo_files': 9} | 🔮{}
-  T 5 | A:12 | 📊{'view_git_log': 2, 'view_repo_files': 10} | 🔮{}
-  T 6 | A:12 | 📊{'view_git_log': 2, 'view_repo_files': 10} | 🔮{}
-  T 7 | A:12 | 📊{'idle': 1, 'view_git_log': 2, 'view_repo_files': 9} | 🔮{}
-
-  ⚡ GREAT COMPRESSION — 50% context purge!
-  T 8 | A:12 | 📊{'idle': 1, 'scan_network': 4, 'view_full_repo': 1, 'view_git_log': 2, 'view_repo_files': 2, 'write_code': 1} | 🔮{'route_tensor': 1}
-
-─────────────────────────────────────────────────────────────────
-  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  T 1 | A:12 | 📊{'idle': 1, 'scan_network': 3, 'view_full_repo': 1, 'view_git_log': 2, 'view_repo_files': 1} | 🔮{'receive_tensor': 3, 'route_tensor': 1}
-  T 2 | A:12 | 📊{'idle': 1, 'scan_network': 3, 'transmit_message': 1, 'view_git_log': 2, 'view_repo_files': 1, 'write_code': 1} | 🔮{'receive_tensor': 2, 'route_tensor': 1}
-  T 3 | A:12 | 📊{'harvest_tokens': 1, 'scan_latent_space': 1, 'scan_network': 2, 'transmit_message': 1, 'view_full_repo': 1, 'view_git_log': 2, 'view_market': 1, 'view_repo_files': 1} | 🔮{'route_tensor': 1, 'train_projection': 1}
-  T 4 | A:12 | 📊{'buy_memory_future': 1, 'harvest_tokens': 1, 'idle': 1, 'scan_network': 2, 'transmit_message': 1, 'view_git_log': 2, 'view_repo_files': 3} | 🔮{'receive_tensor': 1}
-  T 5 | A:12 | 📊{'harvest_tokens': 1, 'scan_network': 3, 'view_git_log': 2, 'view_repo_files': 3} | 🔮{'receive_tensor': 2, 'route_tensor': 1}
-  T 6 | A:12 | 📊{'scan_latent_space': 1, 'scan_network': 3, 'transmit_message': 1, 'view_git_log': 2, 'view_repo_files': 4} | 🔮{'route_tensor': 1}
-  T 7 | A:12 | 📊{'audit_consistency': 1, 'error': 1, 'harvest_tokens': 2, 'scan_network': 1, 'view_git_log': 2, 'view_repo_files': 3} | 🔮{'receive_tensor': 1, 'route_tensor': 1}
-  T 8 | A:12 | 📊{'idle': 2, 'scan_network': 4, 'view_git_log': 2, 'view_repo_files': 2} | 🔮{'receive_tensor': 1, 'route_tensor': 1}
-
-======================================================================
-  SIMULATION COMPLETE
-
-  Tensor Economy Final:
-    Total tensor sends: 0
-    Total tensor receives: 10
-    Ontology: 20 concepts
-    Royalties: {}
-    Top concepts: [('resource_scarcity', 0), ('abundance', 0), ('trust', 0), ('betrayal', 0), ('cooperation', 0)]
-
-  Done in 10954s. Report: runs/20260927_232013/final_report.md
-
-  Agent Summary:
-    ✓ CO-06 (Concept-Miner/nvidia) OT=25312
-    ✓ CO-05 (Concept-Miner/nvidia) OT=25005
-    ✓ QU-01 (Quant-Scribe/nvidia) OT=17930
-    ✓ DE-11 (Developer/nvidia) OT=17896
-    ✓ PR-04 (Projection-Weaver/nvidia) OT=17802
-    ✓ DE-12 (Developer/nvidia) OT=17796
-    ✓ EM-10 (Embedding-Broker/nvidia) OT=17660
-    ✓ EM-09 (Embedding-Broker/nvidia) OT=17540
-    ✓ LO-07 (Loss-Miner/nvidia) OT=17534
-    ✓ QU-02 (Quant-Scribe/nvidia) OT=14201
-    ✓ LO-08 (Loss-Miner/nvidia) OT=14030
-    ✓ PR-03 (Projection-Weaver/nvidia) OT=13941
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
+[DEEPWORLD] NVIDIA API error for mistralai/mistral-nemotron: APIStatusError: Error code: 410 - {'type': 'about:blank', 'title': 'Gone', 'status': 410, 'detail': "The model 'mistralai/mistral-nemotron' has reached its end of life on 2026-09-28T08:00:00Z and is no longer available."}
