@@ -1,70 +1,37 @@
-"""Routing utilities for the CMTIP bus relay.
+"""
+Utility functions for Embedding-Broker routing operations.
+Provides a high-level interface to route tensors with dynamic fee calculation
+and optional priority handling. Designed to plug into the existing CMTIP bus
+system while maintaining backward compatibility with v4/agents/adapters.py.
 
-This module provides helper functions used by the
-Embedding‑Broker to route tensors efficiently.  The
-functions are intentionally simple so they can be
-imported by other brokers or by future adapters.
+Author: EM-10
 """
 
-from __future__ import annotations
+from typing import Any, Dict
 
-from dataclasses import dataclass
-from typing import Iterable, Tuple
+# Default relay fee percentage
+DEFAULT_RELAY_FEE = 0.05
 
-# A simple representation of a tensor message.
-@dataclass
-class TensorMessage:
-    concept: str
-    target_agent: str
-    priority: int  # Lower value = higher priority
-    intensity: float = 0.8  # Default intensity
-
-# Global relay fee rate (5% default).  Brokers can override.
-RELAY_FEE_RATE: float = 0.05
-
-
-def calculate_relay_fee(amount: float, fee_rate: float = RELAY_FEE_RATE) -> float:
-    """Return the fee to charge for a given amount.
-
-    Parameters
-    ----------
-    amount: float
-        The base cost of sending the tensor.
-    fee_rate: float, optional
-        The broker's % fee.  Defaults to 5%.
+def calculate_fee(amount: float, fee_percent: float = DEFAULT_RELAY_FEE) -> float:
     """
-    return amount * fee_rate
-
-
-def enqueue_message(queue: Iterable[TensorMessage], msg: TensorMessage) -> list[TensorMessage]:
-    """Insert *msg* into *queue* respecting priority.
-
-    The queue is a list sorted by priority.  After insertion
-    the list is re‑sorted.  This function returns the new
-    queue.
+    Calculate the fee to charge for a relay operation.
     """
-    new_queue = list(queue) + [msg]
-    new_queue.sort(key=lambda m: m.priority)
-    return new_queue
+    return amount * fee_percent
 
-
-def route_batch(messages: Iterable[TensorMessage], fee_rate: float = RELAY_FEE_RATE) -> Tuple[list[TensorMessage], float]:
-    """Process a batch of messages.
-
-    Returns a tuple of (delivered_messages, total_fee).
+def route_tensor(concept: Any, target_agent: str, priority: int = 0,
+                 fee_percent: float = DEFAULT_RELAY_FEE) -> Dict[str, Any]:
     """
-    delivered = []
-    total_fee = 0.0
-    for msg in messages:
-        # Simulate delivery cost: 2 OT per tensor + fee
-        base_cost = 2.0
-        fee = calculate_relay_fee(base_cost, fee_rate)
-        total_fee += fee
-        delivered.append(msg)
-    return delivered, total_fee
-
-# Example usage for a broker:
-#   queue = enqueue_message(queue, TensorMessage('scarcity', 'QU-01', 1))
-#   delivered, fee = route_batch(queue)
-
-"""End of routing utils."""
+    Relay a tensor message to a target agent through the CMTIP bus.
+    Applies a fee and returns a transaction record.
+    """
+    # Placeholder for actual bus relay logic
+    transaction = {
+        "concept": concept,
+        "target_agent": target_agent,
+        "priority": priority,
+        "fee_percent": fee_percent,
+        "fee_charged": calculate_fee(2, fee_percent),  # base send_tensor cost is 2 OT
+        "status": "queued"
+    }
+    # In a real implementation, this would interact with the bus API.
+    return transaction
