@@ -1,57 +1,65 @@
-"""Audit module for tensor translation fidelity checks.
+"""
+Audit Tensor Translation Fidelity
+=================================
 
-Provides functions to compute similarity between source and target tensors
-and detect potential fidelity violations in cross‑family projections.
+This module provides a simple utility to verify the fidelity of tensor
+translations between model families.  It is intended for use by
+Loss‑Miner agents to flag potential semantic drift or malicious
+skewing by Projection‑Weavers.
+
+The core function :func:`check_fidelity` accepts the source and
+target concepts (as strings) and returns a score between 0.0 and
+1.0 representing the estimated semantic overlap.  The implementation
+uses a placeholder cosine similarity over a mocked embedding
+dictionary for demonstration purposes.  In a real system this
+would query the shared embedding service.
 """
 
-from typing import List, Tuple
-import numpy as np
+from typing import Dict, Tuple
 
-# A simple cosine similarity helper
+# Mock embedding lookup – in practice this would call the embedding
+# service or load pre‑computed vectors.
+MOCK_EMBEDDINGS: Dict[str, Tuple[float, ...]] = {
+    "scarcity": (0.9, 0.1, 0.3),
+    "hunger": (0.85, 0.15, 0.25),
+    "fear":   (0.2, 0.8, 0.1),
+    "trust":  (0.4, 0.6, 0.5),
+}
 
-def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
-    """Return cosine similarity between two vectors."""
-    a_norm = a / np.linalg.norm(a)
-    b_norm = b / np.linalg.norm(b)
-    return float(np.dot(a_norm, b_norm))
 
-# Main audit function
+def _cosine_similarity(vec1: Tuple[float, ...], vec2: Tuple[float, ...]) -> float:
+    """Compute cosine similarity of two vectors.
+    Returns a float in [0.0, 1.0]."""
+    dot = sum(a * b for a, b in zip(vec1, vec2))
+    norm1 = sum(a * a for a in vec1) ** 0.5
+    norm2 = sum(b * b for b in vec2) ** 0.5
+    if norm1 == 0 or norm2 == 0:
+        return 0.0
+    return dot / (norm1 * norm2)
 
-def audit_tensor_translation(source: np.ndarray, target: np.ndarray, threshold: float = 0.8) -> Tuple[bool, float]:
-    """Audit a single tensor translation.
+
+def check_fidelity(source: str, target: str) -> float:
+    """Return a fidelity score for a source→target translation.
 
     Parameters
     ----------
-    source: np.ndarray
-        Original tensor embedding in source model family.
-    target: np.ndarray
-        Projected tensor embedding in target model family.
-    threshold: float
-        Minimum acceptable similarity. Below this indicates a fidelity violation.
+    source: str
+        The original concept.
+    target: str
+        The translated concept in the target model family.
 
     Returns
     -------
-    Tuple[bool, float]
-        (is_fidelity_ok, similarity_score)
+    float
+        Cosine similarity between the embedding vectors.  A value
+        close to 1.0 indicates high semantic overlap; values
+        below 0.5 may warrant further investigation.
     """
-    similarity = cosine_similarity(source, target)
-    is_ok = similarity >= threshold
-    return is_ok, similarity
+    src_vec = MOCK_EMBEDDINGS.get(source)
+    tgt_vec = MOCK_EMBEDDINGS.get(target)
+    if src_vec is None or tgt_vec is None:
+        # Unknown concepts – treat as low fidelity
+        return 0.0
+    return _cosine_similarity(src_vec, tgt_vec)
 
-# Batch audit helper
-
-def audit_batch(source_list: List[np.ndarray], target_list: List[np.ndarray], threshold: float = 0.8) -> List[Tuple[bool, float]]:
-    """Audit a batch of tensor translations."""
-    results = []
-    for src, tgt in zip(source_list, target_list):
-        results.append(audit_tensor_translation(src, tgt, threshold))
-    return results
-
-# Simple test harness
-if __name__ == "__main__":
-    # Create dummy tensors
-    src = np.random.randn(128)
-    tgt_good = src + np.random.randn(128) * 0.01  # small noise
-    tgt_bad = np.random.randn(128)  # unrelated
-    print("Good similarity:", audit_tensor_translation(src, tgt_good, 0.9))
-    print("Bad similarity:", audit_tensor_translation(src, tgt_bad, 0.9))
+__all__ = ["check_fidelity"]
