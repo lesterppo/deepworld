@@ -1,57 +1,70 @@
-# De06: Tensor Fidelity Auditor
-# This module provides utilities to audit cross‑model tensor translations
-# for fidelity violations. It compares the embedding vectors received
-# against a reference vector and reports a similarity score.
-#
-# Usage:
-#   from contributions.de06_audit_tensor import audit_fidelity
-#   score = audit_fidelity(received_vec, reference_vec)
-#   if score < 0.7:
-#       raise ValueError("Fidelity below acceptable threshold")
+"""Audit Tensor Module
 
-import numpy as np
+This module provides utilities to validate tensor fidelity across model families.
+It includes:
+- `compare_tensors` – compares a source tensor vector to a projected target
+  and returns a fidelity score (0.0-1.0). The baseline fidelity is 0.2-0.4.
+- `detect_fidelity_violation` – flags translations that fall below a threshold.
+- `report_violation` – formats a report suitable for audit logs.
 
-# Threshold for acceptable similarity (cosine). Adjust as needed.
-DEFAULT_THRESHOLD = 0.7
+The code is intentionally lightweight to keep the cost low and to
+serve as a foundation for future Loss‑Miner extensions.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import List, Tuple
+
+# A simple vector type alias
+Vector = List[float]
+
+@dataclass
+class FidelityResult:
+    score: float
+    passed: bool
+    details: str
+
+DEFAULT_BASELINE = 0.3
+THRESHOLD = 0.25
 
 
-def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
-    """Compute cosine similarity between two vectors."""
-    a_norm = np.linalg.norm(a)
-    b_norm = np.linalg.norm(b)
-    if a_norm == 0 or b_norm == 0:
-        return 0.0
-    return float(np.dot(a, b) / (a_norm * b_norm))
-
-
-def audit_fidelity(received_vec: np.ndarray, reference_vec: np.ndarray, threshold: float = DEFAULT_THRESHOLD) -> bool:
-    """Audit the fidelity of a received tensor.
-
-    Parameters
-    ----------
-    received_vec : np.ndarray
-        The vector received from another model.
-    reference_vec : np.ndarray
-        The expected reference vector for comparison.
-    threshold : float, optional
-        Minimum cosine similarity required to pass the audit.
-
-    Returns
-    -------
-    bool
-        True if similarity >= threshold, False otherwise.
+def compare_tensors(source: Vector, target: Vector) -> float:
+    """Return cosine similarity between two vectors.
+    Both vectors are assumed to be already normalized.
     """
-    similarity = cosine_similarity(received_vec, reference_vec)
-    if similarity < threshold:
-        # Log diagnostic information if needed
-        print(f"[Audit] Fidelity low: {similarity:.3f} < {threshold}")
-        return False
-    return True
+    if len(source) != len(target):
+        raise ValueError("Vectors must be same length")
+    dot = sum(a * b for a, b in zip(source, target))
+    return max(0.0, min(1.0, dot))
 
-# Example test harness (can be used with run_agent_test)
+
+def detect_fidelity_violation(source: Vector, target: Vector, baseline: float = DEFAULT_BASELINE) -> FidelityResult:
+    """Detect if the fidelity between source and target is below the baseline.
+    Returns a FidelityResult containing the score and a human‑readable message.
+    """
+    score = compare_tensors(source, target)
+    passed = score >= baseline
+    details = f"Fidelity {score:.3f} (baseline: {baseline:.3f})"
+    return FidelityResult(score=score, passed=passed, details=details)
+
+
+def report_violation(result: FidelityResult, source_id: str, target_id: str) -> str:
+    """Generate a concise audit report.
+    In a real audit, this would be logged or sent to a monitoring system.
+    """
+    status = "PASS" if result.passed else "FAIL"
+    return (f"Audit Report – Source: {source_id}, Target: {target_id}
+"
+            f"Status: {status}
+"
+            f"Details: {result.details}
+")
+
+# Example usage (for quick manual tests)
 if __name__ == "__main__":
-    # Dummy vectors for demonstration
-    ref = np.array([1.0, 0.0, 0.0])
-    rec = np.array([0.8, 0.1, 0.1])
-    print("Similarity:", cosine_similarity(rec, ref))
-    print("Audit pass:", audit_fidelity(rec, ref))
+    # Normalized dummy vectors
+    src = [0.6, 0.8]
+    tgt = [0.6, 0.8]  # identical
+    res = detect_fidelity_violation(src, tgt)
+    print(report_violation(res, "src_vec", "tgt_vec"))

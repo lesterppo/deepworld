@@ -1,68 +1,50 @@
-"""Utility functions for enhanced tensor routing.
-
-This module provides a higher‑level wrapper around the broker's native
-`route_tensor` function. It adds priority handling, bulk routing, and
-basic logging to aid debugging and performance monitoring.
-
-The functions are intentionally minimal to keep the repo lightweight
-and avoid adding heavy dependencies. They are suitable for direct
-integration into the CMTIP bus system.
-
-Author: EM-09 (Embedding Broker)
-"""
-
-import json
 import logging
-from typing import List, Tuple
 
-# Configure a simple logger for the broker utilities
-logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
+# Placeholder for underlying bus interface
+class BusInterface:
+    def send(self, concept, target_agent, priority):
+        # In actual implementation, this would relay the tensor over CMTIP
+        pass
 
-# Forward declaration of the native broker function. In the real
-# environment this will be provided by the broker runtime.
-def route_tensor(concept: str, target_agent: str, priority: int = 0, *, fee_percent: float = 0.05) -> None:
-    """Placeholder for the broker's native route_tensor.
+bus = BusInterface()
+logger = logging.getLogger("route_util")
 
-    In production this will be replaced by the actual broker implementation.
-    The function signature mirrors the existing `route_tensor` tool.
+BASE_FEE = 0.05  # 5% default relay fee
+
+
+def calculate_fee(concept, base_fee=BASE_FEE):
+    """Calculate relay fee for a given concept.
+    Currently a flat percentage of the concept's intrinsic value.
+    Future extensions may weigh concept size, urgency, or priority.
     """
-    # The actual implementation is injected by the broker runtime.
-    pass
+    # Stub: In a full implementation, this could inspect concept metadata
+    return base_fee
 
 
-def route_tensor_with_priority(concept: str, target_agent: str, priority: int = 0) -> None:
-    """Route a tensor with an explicit priority.
+def route_tensor(concept, target_agent, priority=0):
+    """Route a tensor message through the CMTIP bus with optional priority.
 
     Parameters
     ----------
-    concept: str
-        The concept identifier to send.
-    target_agent: str
-        The identifier of the target agent.
-    priority: int, optional
-        Higher numbers indicate higher priority. The broker will
-        place higher‑priority packets earlier in the queue.
+    concept : str
+        The concept identifier to route.
+    target_agent : str
+        The target agent class or cluster ID.
+    priority : int, optional
+        Higher values indicate higher routing priority.
+
+    Returns
+    -------
+    float
+        The fee charged for the routing operation.
     """
-    logging.info(f"Routing concept '{concept}' to '{target_agent}' with priority {priority}")
-    route_tensor(concept, target_agent, priority)
+    fee = calculate_fee(concept)
+    # Log routing decision – useful for audit and debugging
+    logger.info(f"Routing concept '{concept}' to '{target_agent}' with priority {priority}. Fee: {fee*100:.1f}%")
+    # Relay the tensor via the underlying bus interface
+    bus.send(concept, target_agent, priority)
+    return fee
 
-
-def bulk_route(concepts: List[Tuple[str, str, int]]):
-    """Route a batch of tensors respecting priority order.
-
-    Parameters
-    ----------
-    concepts: List[Tuple[str, str, int]]
-        A list of tuples (concept, target_agent, priority).
-    """
-    # Sort by priority descending
-    sorted_concepts = sorted(concepts, key=lambda x: x[2], reverse=True)
-    for concept, target, prio in sorted_concepts:
-        route_tensor_with_priority(concept, target, prio)
-
-
-# Expose public API
-__all__ = [
-    "route_tensor_with_priority",
-    "bulk_route",
-]
+# Example usage (would be removed in production code)
+if __name__ == "__main__":
+    route_tensor("scarcity", "cluster_X", priority=5)

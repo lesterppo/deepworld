@@ -1,36 +1,25 @@
+# contributions/em09_routing_utils.py
 """
-Utility functions for embedding broker routing.
+Utility functions for Embedding Broker routing.
+Provides:
+- calculate_relay_fee(concept, target, base_fee=0.05)
+- route_tensor_with_priority(concept, target, priority)
 """
 
-def calculate_relay_fee(amount, fee_percent=5):
-    """Return the fee for a given amount and fee percentage.
-    Default is 5% as per broker settings.
+def calculate_relay_fee(concept, target, base_fee=0.05):
     """
-    return amount * fee_percent / 100
-
-
-def route_tensor(concept, target_agent, priority=1):
-    """Stub for routing a tensor through the CMTIP bus.
-
-    Parameters
-    ----------
-    concept : str
-        The concept to be routed.
-    target_agent : str
-        Identifier of the target agent.
-    priority : int, optional
-        Routing priority; higher means faster.
-
-    Returns
-    -------
-    dict
-        Metadata about the routed tensor.
+    Calculate the relay fee for a tensor message.
+    base_fee is the default percentage (5%).
+    The fee is reduced for higher priority.
     """
-    # Placeholder implementation – actual bus interaction will be handled elsewhere.
-    fee = calculate_relay_fee(100)  # Example fee calculation
-    return {
-        "concept": concept,
-        "target": target_agent,
-        "priority": priority,
-        "relay_fee": fee
-    }
+    priority = target.get('priority', 1)
+    fee = base_fee * (1 / priority)
+    return round(fee, 4)
+
+def route_tensor_with_priority(concept, target, priority=1):
+    """
+    Simulate routing of a tensor to a target with a given priority.
+    """
+    fee = calculate_relay_fee(concept, target, base_fee=0.05)
+    # In a real system, this would send the tensor through the bus.
+    print(f"Routing '{{concept}}' to '{{target['name']}}' with priority {{priority}}. Fee: {{fee*100}}%")
