@@ -1,62 +1,34 @@
-"""
-Audit module for tensor translation fidelity.
+# Audit Tensor translations
+import json
 
-Provides utilities to compute fidelity scores for cross‑family tensor
-transmissions based on baseline fidelity (~0.3).  The module exposes
-`audit_translation` which takes a source tensor, a target family and
-an intensity scalar, then returns a fidelity metric and a recommendation
-for repair.
+class AuditTensor:
+    """Audit tensor translations for fidelity violations."""
+    def __init__(self, tensor_store):
+        self.tensor_store = tensor_store
 
-Designed for use by Loss‑Miner agents to flag degraded translations
-and trigger repairs or dispute proposals.
-"""
+    def check_fidelity(self, source_tensor, target_tensor, threshold=0.8):
+        """Return True if similarity >= threshold.
+        Uses cosine similarity of embedding vectors.
+        """
+        import numpy as np
+        src = np.array(source_tensor['embedding'])
+        tgt = np.array(target_tensor['embedding'])
+        if src.size == 0 or tgt.size == 0:
+            return False
+        sim = np.dot(src, tgt) / (np.linalg.norm(src) * np.linalg.norm(tgt))
+        return sim >= threshold
 
-from dataclasses import dataclass
-from typing import Tuple
+    def audit_all(self, threshold=0.8):
+        """Audit all stored tensors against latest received tensors."""
+        results = []
+        for src_id, src_tensor in self.tensor_store.items():
+            tgt_tensor = self.tensor_store.get(src_id)
+            if tgt_tensor:
+                ok = self.check_fidelity(src_tensor, tgt_tensor, threshold)
+                results.append((src_id, ok))
+        return results
 
-# Baseline fidelity range for cross‑family translations
-BASELINE_FIDELITY = (0.2, 0.4)
-
-@dataclass
-class TranslationResult:
-    fidelity: float
-    recommendation: str
-    notes: str
-
-def _baseline_score(intensity: float) -> float:
-    """Estimate fidelity based on intensity and baseline range."""
-    low, high = BASELINE_FIDELITY
-    return low + (high - low) * intensity
-
-def audit_translation(source_tensor: str, target_family: str, intensity: float = 0.8) -> TranslationResult:
-    """Audit a single tensor translation.
-
-    Parameters
-    ----------
-    source_tensor: str
-        The concept name in source family.
-    target_family: str
-        Model family of the target.
-    intensity: float, optional
-        Signal intensity used during send_tensor.
-
-    Returns
-    -------
-    TranslationResult
-        Contains measured fidelity, recommendation and notes.
-    """
-    # Simulate received fidelity (in real env would query system)
-    fidelity = _baseline_score(intensity)
-    # Simple rule: if fidelity < 0.3 recommend repair
-    if fidelity < 0.3:
-        rec = "repair"
-        notes = f"Low fidelity ({fidelity:.2f}); recommend repair or re‑send with higher intensity."
-    else:
-        rec = "ok"
-        notes = f"Fidelity ({fidelity:.2f}) within acceptable range."
-    return TranslationResult(fidelity=fidelity, recommendation=rec, notes=notes)
-
-# Example usage (would be removed in production)
-if __name__ == "__main__":
-    res = audit_translation("scarcity", "Claude", 0.9)
-    print(res)
+# Example usage:
+# store = {'t1': {'embedding': [0.1,0.2]}, 't2': {'embedding':[0.4,0.5]}}
+# auditor = AuditTensor(store)
+# print(auditor.audit_all())
