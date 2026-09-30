@@ -1,32 +1,49 @@
-import numpy as np
-from v4.agents.cmtip_bridge import CMTIPBridge
+"""
+Projection utilities for cross-model adapters.
+
+This module provides helper functions to construct and register
+cross‑family projection adapters.  The implementation is a lightweight
+stub suitable for simulation and testing; real adapters would
+interact with the engine’s projection kernel.
+"""
 
 class ProjectionAdapter:
-    def __init__(self, source_family, target_family):
+    """Simple representation of a projection matrix.
+
+    In a full implementation this would wrap a learned weight matrix
+    and expose forward / inverse transforms.  For now it records
+    source/target families and a fidelity score.
+    """
+    def __init__(self, source_family: str, target_family: str, fidelity: float = 0.5):
         self.source_family = source_family
         self.target_family = target_family
-        self.projection_matrix = None
-        self.fidelity = 0.0
+        self.fidelity = fidelity
 
-    def train(self, training_data, investment):
-        """Train projection adapter using training data"
-"""
-        # Placeholder for actual training logic
-        X = training_data[:, :self.source_embedding_dim]
-        Y = training_data[:, self.source_embedding_dim:]
-        self.projection_matrix = np.linalg.lstsq(X, Y, rcond=None)[0]
-        self.fidelity = self._calculate_fidelity(X, Y)
-        return self.fidelity
+    def __repr__(self):
+        return f"<ProjectionAdapter {self.source_family}->{self.target_family} fidelity={self.fidelity:.2f}>"
 
-    def project(self, source_embedding):
-        """Project embedding from source to target space"
-"""
-        if self.projection_matrix is None:
-            raise ValueError("Projection matrix not trained")
-        return np.dot(source_embedding, self.projection_matrix)
 
-    def _calculate_fidelity(self, X, Y):
-        """Calculate fidelity score (0-1) for the projection"
-"""
-        projected_Y = self.project(X)
-        return 1 - np.mean(np.linalg.norm(Y - projected_Y, axis=1))
+def create_projection_adapter(source_family: str, target_family: str, investment: float) -> ProjectionAdapter:
+    """Create a new projection adapter.
+
+    Parameters
+    ----------
+    source_family: str
+        The originating model family.
+    target_family: str
+        The destination model family.
+    investment: float
+        Amount of OT invested; higher values produce higher fidelity.
+
+    Returns
+    -------
+    ProjectionAdapter
+        A new adapter instance.
+    """
+    # Fidelity is a simple linear function of investment for this stub.
+    fidelity = min(1.0, 0.2 + 0.05 * investment)
+    return ProjectionAdapter(source_family, target_family, fidelity)
+
+# Example usage (for testing only):
+# adapter = create_projection_adapter("nvidia", "gpt4o", 10)
+# print(adapter)

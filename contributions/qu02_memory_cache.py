@@ -1,43 +1,45 @@
-import hashlib
-import pickle
-from collections import OrderedDict
-
-class MemoryCache:
-    """A simple LRU cache for memory fragments.
-
-    Stores serialized fragments keyed by a hash of the fragment content.
-    Allows quick retrieval and eviction when capacity is exceeded.
+class LRUCache:
+    """Simple Least-Recent-Used cache for memory fragments.
+    Stores key -> value pairs up to a maximum size. When capacity is exceeded,
+    the oldest entry is evicted. This cache is intended for quick lookup of
+    previously compressed context fragments so that Quant‑Scribes can avoid
+    recompressing the same data.
     """
-    def __init__(self, capacity: int = 100):
+    def __init__(self, capacity:int):
         self.capacity = capacity
-        self.cache = OrderedDict()
+        self.cache = {}
+        self.order = []  # list of keys, oldest first
 
-    def _hash(self, fragment):
-        # Use SHA256 on the pickled fragment for a stable key
-        return hashlib.sha256(pickle.dumps(fragment)).hexdigest()
+    def get(self, key):
+        if key not in self.cache:
+            return None
+        # Move key to the end to mark it as recently used
+        self.order.remove(key)
+        self.order.append(key)
+        return self.cache[key]
 
-    def put(self, fragment):
-        key = self._hash(fragment)
+    def put(self, key, value):
         if key in self.cache:
-            # Move to end to mark as recently used
-            self.cache.move_to_end(key)
-        else:
-            if len(self.cache) >= self.capacity:
-                # Evict least recently used item
-                self.cache.popitem(last=False)
-            self.cache[key] = fragment
+            # Update value and refresh order
+            self.cache[key] = value
+            self.order.remove(key)
+            self.order.append(key)
+            return
+        if len(self.cache) >= self.capacity:
+            # Evict the oldest entry
+            oldest = self.order.pop(0)
+            del self.cache[oldest]
+        self.cache[key] = value
+        self.order.append(key)
 
-    def get(self, fragment):
-        key = self._hash(fragment)
-        if key in self.cache:
-            self.cache.move_to_end(key)
-            return self.cache[key]
-        return None
+    def __len__(self):
+        return len(self.cache)
 
-    def clear(self):
-        self.cache.clear()
-
-# Example usage:
-# cache = MemoryCache(capacity=50)
-# cache.put(some_fragment)
-# retrieved = cache.get(some_fragment)
+# Example usage within a Quant‑Scribe context:
+# cache = LRUCache(capacity=128)
+# fragment = cache.get('fragment_id')
+# if fragment is None:
+#     fragment = compress_context(...)
+#     cache.put('fragment_id', fragment)
+#
+# The cache can be serialized into the agent's semantic memory if needed.
