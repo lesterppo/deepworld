@@ -225,9 +225,18 @@ def main():
                         print(f"    ! SKIPPED protected {c['filepath']} (by {c['agent']})")
                         continue
                     filepath = os.path.join(repo_root, c["filepath"])
+                    # Quality gate (2026-10-01): reject .py files that don't
+                    # compile — broken contributions must not reach the repo.
+                    content = c.get("content") or ""
+                    if c["filepath"].endswith(".py"):
+                        try:
+                            compile(content, c["filepath"], "exec")
+                        except (SyntaxError, ValueError) as e:
+                            print(f"    ✗ REJECTED {c['filepath']} (by {c['agent']}): not valid Python ({e})")
+                            continue
                     os.makedirs(os.path.dirname(filepath), exist_ok=True)
                     with open(filepath, "w") as f:
-                        f.write(c["content"])
+                        f.write(content)
                     print(f"    ✓ {c['filepath']} (by {c['agent']})")
                 
                 manifest_path = os.path.join(out_dir, "contributions.json")

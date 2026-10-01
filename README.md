@@ -108,14 +108,14 @@ The richest agents are the best developers.
 
 ---
 
-## NVIDIA Model Pool (5 verified models, random per agent)
+## NVIDIA Model Pool (4 verified models, random per agent)
 
-v5.3 pool — each probed live 2026-09-20 with agent-size prompts
-(catalog presence ≠ account access; gated/EOL models culled):
+v5.3 pool — each probed live 2026-10-01 with agent-size prompts
+(catalog presence ≠ account access; gated/EOL models culled —
+`mistralai/mistral-nemotron` removed 2026-10-01, EOL 2026-09-28):
 
 gpt-oss-20b (~3s, perfect JSON) · nemotron-3-super-120b-a12b (~3s) ·
-glm-5.3-flash (~34s) · mistral-nemotron (~65s, clean JSON) ·
-nemotron-3.5-lightning-30b-a3b (~72s)
+glm-5.3-flash (~34s) · nemotron-3.5-lightning-30b-a3b (~72s)
 
 Override via `DEEPWORLD_MODELS` env. History: 15-model pool (v5.0) →
 stealth/ox-alpha via OpenRouter (v5.2, stealth period ended Aug 2026) →

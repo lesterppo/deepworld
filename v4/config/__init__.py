@@ -58,9 +58,11 @@ DEFAULT_MODEL_POOL = [
     "openai/gpt-oss-20b",                  # ~3s, perfect JSON tool calls
     "nvidia/nemotron-3-super-120b-a12b",   # ~3s
     "z-ai/glm-5.3-flash",                  # ~34s
-    "mistralai/mistral-nemotron",          # ~65s, clean JSON
     "nvidia/nemotron-3.5-lightning-30b-a3b",  # ~72s, chatty CoT
 ]
+# NOTE 2026-10-01: mistralai/mistral-nemotron culled — reached end of life
+# 2026-09-28, API returns 410 Gone. (3/12 agents were assigned it; all 72
+# errors in the 2026-10-01 CI run traced to it.)
 NVIDIA_FREE_MODELS = [
     m.strip() for m in os.environ.get("DEEPWORLD_MODELS", "").split(",")
     if m.strip()

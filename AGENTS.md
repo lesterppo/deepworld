@@ -59,14 +59,16 @@ archive/                    # v1, v2, v3 (preserved, not active)
 
 ---
 
-## NVIDIA Model Pool (5 verified models, v5.3)
+## NVIDIA Model Pool (4 verified models, v5.3)
 
-Each agent randomly assigned from (all probed live 2026-09-20):
+Each agent randomly assigned from (all probed live 2026-10-01):
 - `openai/gpt-oss-20b` — Fast (~3s, perfect JSON tool calls)
 - `nvidia/nemotron-3-super-120b-a12b` — Fast (~3s)
 - `z-ai/glm-5.3-flash` — Medium (~34s)
-- `mistralai/mistral-nemotron` — Slow (~65s, clean JSON)
 - `nvidia/nemotron-3.5-lightning-30b-a3b` — Slow (~72s, chatty)
+
+Culled 2026-10-01: `mistralai/mistral-nemotron` (EOL 2026-09-28, 410 Gone —
+was causing 100% of CI run errors before removal).
 
 Pool lives in `v4/config/__init__.py` (`DEFAULT_MODEL_POOL`, override via
 `DEEPWORLD_MODELS` env). Catalog presence ≠ account access — verify with
