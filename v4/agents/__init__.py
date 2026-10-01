@@ -1052,6 +1052,38 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
             else:
                 fx["message"] = f"{self.name} ran test (no repo binding)."
         
+        elif name.startswith("contrib_"):
+            # Agent-built tool from contributions/ (v5.4) — executed in a
+            # sandboxed subprocess with JSON I/O, 10s timeout.
+            fx["token_delta"] = -3
+            if engine and hasattr(engine, "_repo_root"):
+                try:
+                    from agents.contrib_tools import (
+                        load_contribution_tools, execute_contribution_tool)
+                    match = next(
+                        (c for c in load_contribution_tools(engine._repo_root)
+                         if c["tool_name"] == name), None)
+                except Exception:
+                    match = None
+                if not match:
+                    fx["message"] = f"{self.name} {name} failed — tool not registered."
+                else:
+                    try:
+                        cost = int(match["spec"].get("cost", 5))
+                    except (TypeError, ValueError):
+                        cost = 5
+                    fx["token_delta"] = -cost
+                    res = execute_contribution_tool(
+                        engine._repo_root, match["module"], args)
+                    if res.get("ok"):
+                        out = json.dumps(res.get("result"), default=str)[:300]
+                        fx["message"] = f"{self.name} ran {name} → {out}"
+                    else:
+                        fx["message"] = (f"{self.name} {name} error: "
+                                         f"{str(res.get('error'))[:200]}")
+            else:
+                fx["message"] = f"{self.name} ran {name} (no repo binding)."
+        
         else:
             fx["message"] = f"{self.name} {name}."
         

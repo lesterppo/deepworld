@@ -130,6 +130,11 @@ QU-01 → commit_code("Joint proposal")          # Joint vote
   output: commits to runs/
   state: .world_state.json persists governance
   contribution: agent-written code committed alongside runs/
+  validation: scripts/validate_contributions.py runs post-sim (report-only);
+              results in contributions/.validation.json
+  integration (v5.4): contributions/*.py declaring DEEPWORLD_TOOL + run_tool(args)
+              become callable agent tools NEXT run (specs via AST, sandboxed
+              subprocess execution, 10s timeout). See v4/agents/contrib_tools.py.
 ```
 
 **Setup:** Add `NVIDIA_API_KEY` to GitHub Secrets → Enable Actions.

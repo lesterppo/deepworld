@@ -1,0 +1,763 @@
+{
+ "files": {
+  "audit_tensor.py": {
+   "file": "audit_tensor.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "audit_tools.py": {
+   "file": "audit_tools.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "bus_logging.py": {
+   "file": "bus_logging.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/bus_logging.py\", line 3, in <module>;     from v4.agents.adapters import route_tensor; ImportError: cannot import name 'route_tensor' from 'v4.agents.adapters' (/home/hatch/workspace/deepworld/v4/agents/adapters.py)"
+  },
+  "co05_concept_helper.py": {
+   "file": "co05_concept_helper.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "co05_concept_registry.py": {
+   "file": "co05_concept_registry.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "co05_concept_utils.py": {
+   "file": "co05_concept_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "co05_register_concept.py": {
+   "file": "co05_register_concept.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "co06_concept_arbitrage.py": {
+   "file": "co06_concept_arbitrage.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/co06_concept_arbitrage.py\", line 1, in <module>;     from v4.agents.cmtip_bridge import ConceptMarket; ImportError: cannot import name 'ConceptMarket' from 'v4.agents.cmtip_bridge' (/home/hatch/workspace/deepworld/v4/agents/cmtip_bridge.py)"
+  },
+  "co06_concept_mining.py": {
+   "file": "co06_concept_mining.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/co06_concept_mining.py\", line 2, in <module>;     from v4.agents.cmtip_bridge import ConceptRegistry; ImportError: cannot import name 'ConceptRegistry' from 'v4.agents.cmtip_bridge' (/home/hatch/workspace/deepworld/v4/agents/cmtip_bridge.py)"
+  },
+  "co06_concept_registry.py": {
+   "file": "co06_concept_registry.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "    ns = sys.modules.get(cls.__module__).__dict__;          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^; AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?"
+  },
+  "co06_tensor_utils.py": {
+   "file": "co06_tensor_utils.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/co06_tensor_utils.py\", line 1, in <module>;     import torch; ModuleNotFoundError: No module named 'torch'"
+  },
+  "concept_mining_tools.py": {
+   "file": "concept_mining_tools.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/concept_mining_tools.py\", line 3, in <module>;     from v4.agents.concept import Concept; ModuleNotFoundError: No module named 'v4.agents.concept'"
+  },
+  "concept_registry.py": {
+   "file": "concept_registry.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de06_audit_tensor.py": {
+   "file": "de06_audit_tensor.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de06_concept_helper.py": {
+   "file": "de06_concept_helper.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de06_projection_adapter.py": {
+   "file": "de06_projection_adapter.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de06_projection_utils.py": {
+   "file": "de06_projection_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de06_tensor_validator.py": {
+   "file": "de06_tensor_validator.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de07_audit_tensor.py": {
+   "file": "de07_audit_tensor.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de08_audit_tensor.py": {
+   "file": "de08_audit_tensor.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de09_route_metrics.py": {
+   "file": "de09_route_metrics.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de09_route_util.py": {
+   "file": "de09_route_util.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.33,
+   "tool": false
+  },
+  "de09_router_utils.py": {
+   "file": "de09_router_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de10_route_utils.py": {
+   "file": "de10_route_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "em09_broker_utils.py": {
+   "file": "em09_broker_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "em09_route_util.py": {
+   "file": "em09_route_util.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "    ns = sys.modules.get(cls.__module__).__dict__;          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^; AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?"
+  },
+  "em09_route_utils.py": {
+   "file": "em09_route_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "em09_router.py": {
+   "file": "em09_router.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "em09_router_util.py": {
+   "file": "em09_router_util.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "em09_router_utils.py": {
+   "file": "em09_router_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "em09_routing_utils.py": {
+   "file": "em09_routing_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "em10_bus_utils.py": {
+   "file": "em10_bus_utils.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/em10_bus_utils.py\", line 2, in <module>;     import tensorflow as tf; ModuleNotFoundError: No module named 'tensorflow'"
+  },
+  "em10_route_logger.py": {
+   "file": "em10_route_logger.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "em10_route_util.py": {
+   "file": "em10_route_util.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "em10_route_utils.py": {
+   "file": "em10_route_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "lo07_audit_tensor.py": {
+   "file": "lo07_audit_tensor.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "lo07_audit_tools.py": {
+   "file": "lo07_audit_tools.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/lo07_audit_tools.py\", line 1, in <module>;     from v4.engine import tensor_translation_fidelity_check; ImportError: cannot import name 'tensor_translation_fidelity_check' from 'v4.engine' (/home/hatch/workspace/deepworld/v4/engine/__init__.py)"
+  },
+  "lo07_tensor_audit.py": {
+   "file": "lo07_tensor_audit.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/lo07_tensor_audit.py\", line 2, in <module>;     from v4.agents.core import TensorAudit; ModuleNotFoundError: No module named 'v4.agents.core'"
+  },
+  "lo08_audit_tensor.py": {
+   "file": "lo08_audit_tensor.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "lo08_tensor_audit.py": {
+   "file": "lo08_tensor_audit.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "lo08_tensor_auditor.py": {
+   "file": "lo08_tensor_auditor.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/lo08_tensor_auditor.py\", line 2, in <module>;     from v4.agents import BaseAgent; ImportError: cannot import name 'BaseAgent' from 'v4.agents' (/home/hatch/workspace/deepworld/v4/agents/__init__.py)"
+  },
+  "memory_compression.py": {
+   "file": "memory_compression.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "memory_fragment.py": {
+   "file": "memory_fragment.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "memory_fragment_manager.py": {
+   "file": "memory_fragment_manager.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "memory_utils.py": {
+   "file": "memory_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "pr-03_adapter.py": {
+   "file": "pr-03_adapter.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "pr03_adapter.py": {
+   "file": "pr03_adapter.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "pr03_projection_adapter.py": {
+   "file": "pr03_projection_adapter.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "pr03_projection_helper.py": {
+   "file": "pr03_projection_helper.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "pr03_projection_utils.py": {
+   "file": "pr03_projection_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "pr03_training_utils.py": {
+   "file": "pr03_training_utils.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/pr03_training_utils.py\", line 1, in <module>;     import torch; ModuleNotFoundError: No module named 'torch'"
+  },
+  "pr04_adapter.py": {
+   "file": "pr04_adapter.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/pr04_adapter.py\", line 6, in <module>;     import torch; ModuleNotFoundError: No module named 'torch'"
+  },
+  "pr04_projection_adapter.py": {
+   "file": "pr04_projection_adapter.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "pr04_projection_utils.py": {
+   "file": "pr04_projection_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "projection_utils.py": {
+   "file": "projection_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "qu01_mem_cache.py": {
+   "file": "qu01_mem_cache.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "qu01_memory_cache.py": {
+   "file": "qu01_memory_cache.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "qu01_memory_utils.py": {
+   "file": "qu01_memory_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "qu02_memory_cache.py": {
+   "file": "qu02_memory_cache.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "qu02_memory_compressor.py": {
+   "file": "qu02_memory_compressor.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "qu02_memory_manager.py": {
+   "file": "qu02_memory_manager.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "qu02_memory_purifier.py": {
+   "file": "qu02_memory_purifier.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/qu02_memory_purifier.py\", line 1, in <module>;     import torch; ModuleNotFoundError: No module named 'torch'"
+  },
+  "qu02_memory_util.py": {
+   "file": "qu02_memory_util.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "qu02_memory_utils.py": {
+   "file": "qu02_memory_utils.py",
+   "syntax_ok": true,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "  File \"/home/hatch/workspace/deepworld/contributions/qu02_memory_utils.py\", line 1, in <module>;     import torch; ModuleNotFoundError: No module named 'torch'"
+  },
+  "router_utils.py": {
+   "file": "router_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "routing_helper.py": {
+   "file": "routing_helper.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "routing_utils.py": {
+   "file": "routing_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  }
+ }
+}

@@ -55,6 +55,11 @@ jobs:
             python3 run.py --days 3 --ticks 8 --delay 0.1 --output runs 2>&1 | tee runs/latest.log
           fi
 
+      - name: Validate contributions (v5.4 integration loop)
+        if: always()  # Report-only: validation never fails the pipeline
+        run: |
+          python3 scripts/validate_contributions.py || true
+
       - name: Commit results
         if: always()  # Commit even on errors for debugging
         run: |

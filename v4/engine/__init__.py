@@ -14,6 +14,7 @@ from collections import defaultdict, Counter
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from agents import OmniTokV4Agent
+from agents.contrib_tools import set_repo_root as _set_contrib_repo_root
 try:
     from agents.cmtip_bridge import CMTIPBridge
 except (ImportError, SyntaxError):
@@ -85,6 +86,12 @@ class OmniTokV4Engine:
         self.contribution_proposals: List[Dict[str, Any]] = []
         self._pending_commit = False
         self._repo_root = self._find_repo_root()
+        # Contribution tool integration: agent-built tools in contributions/
+        # become callable by agents (specs loaded via AST, executed sandboxed)
+        try:
+            _set_contrib_repo_root(self._repo_root)
+        except Exception:
+            pass
         
         # ─── Code Sprint (v5.2) ───
         self._code_sprint_active = False

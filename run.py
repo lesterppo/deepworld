@@ -237,8 +237,33 @@ def main():
                     os.makedirs(os.path.dirname(filepath), exist_ok=True)
                     with open(filepath, "w") as f:
                         f.write(content)
+                    c["_written"] = True
                     print(f"    ✓ {c['filepath']} (by {c['agent']})")
-                
+
+                # v5.4: validate newly-written contributions — import test,
+                # self_test, stub detection. Results go into the manifest so
+                # the world can see which contributions actually WORK.
+                written = [c for c in accepted_files if c.get("_written")]
+                validation = {}
+                if written:
+                    sys.path.insert(0, os.path.join(repo_root, "scripts"))
+                    try:
+                        import validate_contributions as _vc
+                        for c in written:
+                            fname = os.path.basename(c["filepath"] or "")
+                            if fname.endswith(".py"):
+                                try:
+                                    validation[c["filepath"]] = _vc.validate_file(fname)
+                                except Exception as e:
+                                    validation[c["filepath"]] = {"file": fname, "error": str(e)}
+                        ok = sum(1 for v in validation.values() if v.get("import_ok"))
+                        print(f"    ✓ Validated {len(validation)} files: {ok} import OK")
+                    except Exception as e:
+                        print(f"    ! validation skipped: {e}")
+                    finally:
+                        if os.path.join(repo_root, "scripts") in sys.path:
+                            sys.path.remove(os.path.join(repo_root, "scripts"))
+
                 manifest_path = os.path.join(out_dir, "contributions.json")
                 with open(manifest_path, "w") as f:
                     json.dump([{
@@ -246,7 +271,8 @@ def main():
                         "filepath": c["filepath"], "description": c.get("description", ""),
                         "action": c["action"], "reward": c.get("reward", 0),
                         "proposal_id": c.get("proposal_id", ""),
-                    } for c in accepted_files], f, indent=2)
+                        "validation": validation.get(c["filepath"], {}),
+                    } for c in written], f, indent=2)
                 print(f"    ✓ Files written. CI will commit.")
 
         # Governance events

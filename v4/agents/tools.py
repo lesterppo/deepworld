@@ -697,6 +697,25 @@ def get_tools_for_agent(agent_class: str, context_level: int,
     # GitHub repo maintenance — available to all agents (v5.1)
     tools.extend(REPO_TOOLS)
     
+    # Agent-built tools from contributions/ (v5.4) — validated modules that
+    # declare the DEEPWORLD_TOOL contract become callable tools next run.
+    # Specs are extracted via AST (no code execution at registration).
+    try:
+        from agents.contrib_tools import load_contribution_tools
+        for ct in load_contribution_tools():
+            spec = ct["spec"]
+            params = spec.get("parameters") or {"type": "object", "properties": {}}
+            tools.append({
+                "type": "function", "function": {
+                    "name": ct["tool_name"],
+                    "description": (spec.get("description", "Agent-built tool.")
+                                    + f" [built by {ct['module']}; runs sandboxed, costs {spec.get('cost', 5)} OT]"),
+                    "parameters": params,
+                }
+            })
+    except Exception:
+        pass  # contributions/ problems must never break tool assembly
+    
     # Fragment-State agents lose complex tools
     if context_level <= 1:
         tools = [t for t in tools if t["function"]["name"] in
