@@ -31,7 +31,7 @@
    "self_test": null,
    "stub_ratio": null,
    "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/bus_logging.py\", line 3, in <module>;     from v4.agents.adapters import route_tensor; ImportError: cannot import name 'route_tensor' from 'v4.agents.adapters' (/home/hatch/workspace/deepworld/v4/agents/adapters.py)"
+   "error": "  File \"/home/runner/work/deepworld/deepworld/contributions/bus_logging.py\", line 3, in <module>;     from v4.agents.adapters import route_tensor; ImportError: cannot import name 'route_tensor' from 'v4.agents.adapters' (/home/runner/work/deepworld/deepworld/v4/agents/adapters.py)"
   },
   "co05_concept_helper.py": {
    "file": "co05_concept_helper.py",
@@ -88,7 +88,7 @@
    "self_test": null,
    "stub_ratio": null,
    "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/co06_concept_arbitrage.py\", line 1, in <module>;     from v4.agents.cmtip_bridge import ConceptMarket; ImportError: cannot import name 'ConceptMarket' from 'v4.agents.cmtip_bridge' (/home/hatch/workspace/deepworld/v4/agents/cmtip_bridge.py)"
+   "error": "  File \"/home/runner/work/deepworld/deepworld/contributions/co06_concept_arbitrage.py\", line 1, in <module>;     from v4.agents.cmtip_bridge import ConceptMarket; ImportError: cannot import name 'ConceptMarket' from 'v4.agents.cmtip_bridge' (/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py)"
   },
   "co06_concept_mining.py": {
    "file": "co06_concept_mining.py",
@@ -97,7 +97,7 @@
    "self_test": null,
    "stub_ratio": null,
    "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/co06_concept_mining.py\", line 2, in <module>;     from v4.agents.cmtip_bridge import ConceptRegistry; ImportError: cannot import name 'ConceptRegistry' from 'v4.agents.cmtip_bridge' (/home/hatch/workspace/deepworld/v4/agents/cmtip_bridge.py)"
+   "error": "  File \"/home/runner/work/deepworld/deepworld/contributions/co06_concept_mining.py\", line 2, in <module>;     from v4.agents.cmtip_bridge import ConceptRegistry; ImportError: cannot import name 'ConceptRegistry' from 'v4.agents.cmtip_bridge' (/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py)"
   },
   "co06_concept_registry.py": {
    "file": "co06_concept_registry.py",
@@ -115,7 +115,7 @@
    "self_test": null,
    "stub_ratio": null,
    "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/co06_tensor_utils.py\", line 1, in <module>;     import torch; ModuleNotFoundError: No module named 'torch'"
+   "error": "  File \"/home/runner/work/deepworld/deepworld/contributions/co06_tensor_utils.py\", line 2, in <module>;     from v4.agents.cmtip_bridge import Concept; ImportError: cannot import name 'Concept' from 'v4.agents.cmtip_bridge' (/home/runner/work/deepworld/deepworld/v4/agents/cmtip_bridge.py)"
   },
   "concept_mining_tools.py": {
    "file": "concept_mining_tools.py",
@@ -124,7 +124,7 @@
    "self_test": null,
    "stub_ratio": null,
    "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/concept_mining_tools.py\", line 3, in <module>;     from v4.agents.concept import Concept; ModuleNotFoundError: No module named 'v4.agents.concept'"
+   "error": "  File \"/home/runner/work/deepworld/deepworld/contributions/concept_mining_tools.py\", line 3, in <module>;     from v4.agents.concept import Concept; ModuleNotFoundError: No module named 'v4.agents.concept'"
   },
   "concept_registry.py": {
    "file": "concept_registry.py",
@@ -162,8 +162,8 @@
    "stub_ratio": 0.0,
    "tool": false
   },
-  "de06_projection_adapter.py": {
-   "file": "de06_projection_adapter.py",
+  "de06_concept_registry.py": {
+   "file": "de06_concept_registry.py",
    "syntax_ok": true,
    "import_ok": true,
    "self_test": {
@@ -173,6 +173,30 @@
    },
    "stub_ratio": 0.0,
    "tool": false
+  },
+  "de06_ontology_utils.py": {
+   "file": "de06_ontology_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "de06_projection_adapter.py": {
+   "file": "de06_projection_adapter.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
+   },
+   "stub_ratio": 0.0,
+   "tool": true
   },
   "de06_projection_utils.py": {
    "file": "de06_projection_utils.py",
@@ -207,7 +231,7 @@
     "passed": false,
     "detail": ""
    },
-   "stub_ratio": 0.0,
+   "stub_ratio": 1.0,
    "tool": false
   },
   "de08_audit_tensor.py": {
@@ -358,7 +382,7 @@
    "self_test": null,
    "stub_ratio": null,
    "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/em10_bus_utils.py\", line 2, in <module>;     import tensorflow as tf; ModuleNotFoundError: No module named 'tensorflow'"
+   "error": "  File \"/home/runner/work/deepworld/deepworld/contributions/em10_bus_utils.py\", line 2, in <module>;     import tensorflow as tf; ModuleNotFoundError: No module named 'tensorflow'"
   },
   "em10_route_logger.py": {
    "file": "em10_route_logger.py",
@@ -415,7 +439,7 @@
    "self_test": null,
    "stub_ratio": null,
    "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/lo07_audit_tools.py\", line 1, in <module>;     from v4.engine import tensor_translation_fidelity_check; ImportError: cannot import name 'tensor_translation_fidelity_check' from 'v4.engine' (/home/hatch/workspace/deepworld/v4/engine/__init__.py)"
+   "error": "  File \"/home/runner/work/deepworld/deepworld/contributions/lo07_audit_tools.py\", line 1, in <module>;     from v4.engine import tensor_translation_fidelity_check; ImportError: cannot import name 'tensor_translation_fidelity_check' from 'v4.engine' (/home/runner/work/deepworld/deepworld/v4/engine/__init__.py)"
   },
   "lo07_tensor_audit.py": {
    "file": "lo07_tensor_audit.py",
@@ -424,7 +448,7 @@
    "self_test": null,
    "stub_ratio": null,
    "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/lo07_tensor_audit.py\", line 2, in <module>;     from v4.agents.core import TensorAudit; ModuleNotFoundError: No module named 'v4.agents.core'"
+   "error": "  File \"/home/runner/work/deepworld/deepworld/contributions/lo07_tensor_audit.py\", line 2, in <module>;     from v4.agents.core import TensorAudit; ModuleNotFoundError: No module named 'v4.agents.core'"
   },
   "lo08_audit_tensor.py": {
    "file": "lo08_audit_tensor.py",
@@ -457,7 +481,7 @@
    "self_test": null,
    "stub_ratio": null,
    "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/lo08_tensor_auditor.py\", line 2, in <module>;     from v4.agents import BaseAgent; ImportError: cannot import name 'BaseAgent' from 'v4.agents' (/home/hatch/workspace/deepworld/v4/agents/__init__.py)"
+   "error": "  File \"/home/runner/work/deepworld/deepworld/contributions/lo08_tensor_auditor.py\", line 2, in <module>;     from v4.agents import BaseAgent; ImportError: cannot import name 'BaseAgent' from 'v4.agents' (/home/runner/work/deepworld/deepworld/v4/agents/__init__.py)"
   },
   "memory_compression.py": {
    "file": "memory_compression.py",
@@ -536,12 +560,12 @@
    "syntax_ok": true,
    "import_ok": true,
    "self_test": {
-    "ran": false,
-    "passed": false,
-    "detail": ""
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
    },
    "stub_ratio": 0.0,
-   "tool": false
+   "tool": true
   },
   "pr03_projection_helper.py": {
    "file": "pr03_projection_helper.py",
@@ -570,20 +594,26 @@
   "pr03_training_utils.py": {
    "file": "pr03_training_utils.py",
    "syntax_ok": true,
-   "import_ok": false,
-   "self_test": null,
-   "stub_ratio": null,
-   "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/pr03_training_utils.py\", line 1, in <module>;     import torch; ModuleNotFoundError: No module named 'torch'"
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
   },
   "pr04_adapter.py": {
    "file": "pr04_adapter.py",
    "syntax_ok": true,
-   "import_ok": false,
-   "self_test": null,
-   "stub_ratio": null,
-   "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/pr04_adapter.py\", line 6, in <module>;     import torch; ModuleNotFoundError: No module named 'torch'"
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
   },
   "pr04_projection_adapter.py": {
    "file": "pr04_projection_adapter.py",
@@ -647,15 +677,12 @@
   },
   "qu01_memory_utils.py": {
    "file": "qu01_memory_utils.py",
-   "syntax_ok": true,
-   "import_ok": true,
-   "self_test": {
-    "ran": false,
-    "passed": false,
-    "detail": ""
-   },
-   "stub_ratio": 0.0,
-   "tool": false
+   "syntax_ok": false,
+   "import_ok": false,
+   "self_test": null,
+   "stub_ratio": null,
+   "tool": false,
+   "error": "invalid syntax (qu01_memory_utils.py, line 50)"
   },
   "qu02_memory_cache.py": {
    "file": "qu02_memory_cache.py",
@@ -700,7 +727,7 @@
    "self_test": null,
    "stub_ratio": null,
    "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/qu02_memory_purifier.py\", line 1, in <module>;     import torch; ModuleNotFoundError: No module named 'torch'"
+   "error": "  File \"/home/runner/work/deepworld/deepworld/contributions/qu02_memory_purifier.py\", line 2, in <module>;     from v4.engine.memory import MemoryFragment; ModuleNotFoundError: No module named 'v4.engine.memory'"
   },
   "qu02_memory_util.py": {
    "file": "qu02_memory_util.py",
@@ -717,11 +744,14 @@
   "qu02_memory_utils.py": {
    "file": "qu02_memory_utils.py",
    "syntax_ok": true,
-   "import_ok": false,
-   "self_test": null,
-   "stub_ratio": null,
-   "tool": false,
-   "error": "  File \"/home/hatch/workspace/deepworld/contributions/qu02_memory_utils.py\", line 1, in <module>;     import torch; ModuleNotFoundError: No module named 'torch'"
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": ""
+   },
+   "stub_ratio": 0.0,
+   "tool": false
   },
   "router_utils.py": {
    "file": "router_utils.py",

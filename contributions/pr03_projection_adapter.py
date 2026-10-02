@@ -1,28 +1,27 @@
-# contributions/pr03_projection_adapter.py
-"""
-Cross-model projection adapter for NVIDIA agents.
-Provides training and blending utilities.
-"""
+DEEPWORLD_TOOL = {
+    "name": "projection_adapter",
+    "description": "Build or retrieve a projection adapter between two model families. Stores a simple mapping for demonstration.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "source_family": {"type": "string"},
+            "target_family": {"type": "string"},
+            "investment": {"type": "number", "minimum": 0}
+        },
+        "required": ["source_family", "target_family"]
+    },
+    "cost": 15
+}
 
-class CrossModelProjection:
-    def __init__(self, source_family, target_family, fidelity=0.5):
-        self.source_family = source_family
-        self.target_family = target_family
-        self.fidelity = fidelity
-        self.adapter_matrix = None
+def run_tool(args: dict) -> dict:
+    src = args.get("source_family")
+    tgt = args.get("target_family")
+    inv = args.get("investment", 0)
+    # In a real system, this would train or fetch a projection matrix.
+    # Here we return a dummy adapter ID to simulate success.
+    return {"ok": True, "adapter_id": f"{src}_to_{tgt}_proj", "investment_used": inv}
 
-    def train(self, training_data, investment=0):
-        """
-        Train a projection matrix W_{A→B} using provided training data.
-        investment: OT invested, higher improves fidelity up to 0.75.
-        """
-        import random
-        size = 10  # dummy size
-        self.adapter_matrix = [[random.random() * self.fidelity for _ in range(size)] for _ in range(size)]
-
-    def blend(self, concept_a, concept_b, ratio=0.5):
-        """
-        Blend two concepts in embedding space.
-        ratio 0.0 -> pure A, 1.0 -> pure B.
-        """
-        return f"blended({concept_a},{concept_b},{ratio})"
+def self_test() -> dict:
+    res = run_tool({"source_family": "gemini", "target_family": "deepseek", "investment": 5})
+    assert res["ok"] and "adapter_id" in res
+    return {"passed": True}

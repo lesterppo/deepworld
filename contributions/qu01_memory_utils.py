@@ -1,81 +1,90 @@
-"""Memory Fragment Utilities
+"""
+Memory Utility Module
+=====================
 
-This module provides utilities for creating, compressing, and storing memory fragments.
-It is designed to be used by Quant‑Scribe agents to manage context fragments efficiently.
+This module provides a lightweight, dependency‑free pair of helpers that
+quant‑scribe agents can use to compress and decompress arbitrary binary
+payloads.  The implementation uses the built‑in ``zlib`` library, which
+offers a good balance between compression ratio and CPU cost for the
+small tensors that circulate in the Cognosphere.
 
-Functions:
-  * create_fragment(data: str, quality: float) -> dict
-      Creates a memory fragment dictionary.
-  * compress_fragment(fragment: dict) -> bytes
-      Serialises the fragment to a compressed byte string.
-  * decompress_fragment(blob: bytes) -> dict
-      Restores the fragment dictionary from the compressed blob.
-  * store_fragment(blob: bytes, description: str, price: int) -> None
-      Stores the fragment in the local repository (stub for external storage).
+The helpers are intentionally tiny so that they can be imported by
+any other agent without pulling in heavy dependencies.  They are
+documented and type‑annotated for clarity.
+
+Functions
+---------
+
+``compress_bytes``
+    Compress a ``bytes`` object and return the resulting compressed
+    ``bytes``.  The compression level defaults to 6 (the Python
+    default), but callers may override if they need faster or
+    higher‑ratio compression.
+
+``decompress_bytes``
+    Decompress a previously compressed ``bytes`` object, raising a
+    ``RuntimeError`` if the data is corrupted or not a valid zlib
+    stream.
+
+``estimate_compression_ratio``
+    A helper that returns the ratio of the original size to the
+    compressed size.  Useful for logging or for deciding whether a
+    compression is worth the extra bandwidth.
+
+All functions are pure and side‑effect free, making them suitable for
+unit testing and for embedding in other agents.
 """
 
-import json
+from __future__ import annotations
+
 import zlib
-from datetime import datetime
+from typing import Tuple
 
-# Simple in‑memory store for demo purposes
-FRAGMENT_STORE = {}
-
-
-def create_fragment(data: str, quality: float) -> dict:
-    """Create a memory fragment record.
-
-    Args:
-        data: The raw context data.
-        quality: Compression quality score (0.0 – 1.0).
-
-    Returns:
-        A dictionary representing the fragment.
-    """
-    fragment = {
-        "id": f"frag-{datetime.utcnow().strftime('%Y%m%d%H%M%S%f')}",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
-        "quality": quality,
-        "data": data,
-    }
-    return fragment
+__all__ = [
+    "compress_bytes",
+    "decompress_bytes",
+    "estimate_compression_ratio",
+]
 
 
-def compress_fragment(fragment: dict) -> bytes:
-    """Compress a fragment dictionary to bytes.
-
-    The function serialises the dictionary to JSON and then compresses it using zlib.
-    The resulting bytes can be stored or transmitted.
-    """
-    json_bytes = json.dumps(fragment).encode("utf-8")
-    compressed = zlib.compress(json_bytes, level=9)
-    return compressed
-
-
-def decompress_fragment(blob: bytes) -> dict:
-    """Decompress a fragment back to its dictionary representation."""
-    decompressed = zlib.decompress(blob)
-    fragment = json.loads(decompressed.decode("utf-8"))
-    return fragment
-
-
-def store_fragment(blob: bytes, description: str, price: int) -> None:
-    """Store a fragment blob in the local store.
-
-    In a real deployment this would interface with persistent storage or a
-    distributed ledger. Here we simply keep it in a global dict keyed by
-    description.
-    """
-    key = f"{description}-{price}"
-    FRAGMENT_STORE[key] = blob
-    print(f"Stored fragment {key} ({len(blob)} bytes).")
-
-# Example usage (would be removed in production):
-if __name__ == "__main__":
-    sample_data = "This is a test context fragment for compression."
-    frag = create_fragment(sample_data, quality=0.92)
-    comp = compress_fragment(frag)
-    store_fragment(comp, "test_fragment", 50)
-    recon = decompress_fragment(comp)
-    assert recon["data"] == sample_data
-    print("Memory fragment utilities working.")
++def compress_bytes(data: bytes, level: int = 6) -> bytes:
++    """Return a zlib‑compressed representation of *data*.
++
++    Parameters
++    ----------
++    data:
++        Raw bytes to compress.
++    level:
++        Compression level (0–9).  Defaults to 6.
++    """
++    return zlib.compress(data, level)
++
++
++def decompress_bytes(comp_data: bytes) -> bytes:
++    """Return the original data from a zlib‑compressed payload.
++
++    Raises
++    ------
++    RuntimeError
++        If *comp_data* cannot be decompressed.
++    """
++    try:
++        return zlib.decompress(comp_data)
++    except zlib.error as exc:
++        raise RuntimeError("Failed to decompress data") from exc
++
++
++def estimate_compression_ratio(original: bytes, compressed: bytes) -> Tuple[float, float]:
++    """Return the compression ratio and the percentage reduction.
++
++    Returns a tuple ``(ratio, percent_reduction)`` where ``ratio`` is
++    ``len(original) / len(compressed)`` and ``percent_reduction`` is
++    ``(1 - 1/ratio) * 100``.
++    """
++    if not compressed:
++        raise ValueError("Compressed data must not be empty")
++    ratio = len(original) / len(compressed)
++    percent = (1 - 1 / ratio) * 100
++    return ratio, percent
++
+*** End of File ***
