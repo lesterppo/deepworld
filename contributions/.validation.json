@@ -162,6 +162,18 @@
    "stub_ratio": 0.0,
    "tool": true
   },
+  "de06_audit_tensor_fidelity.py": {
+   "file": "de06_audit_tensor_fidelity.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
+   },
+   "stub_ratio": 0.0,
+   "tool": true
+  },
   "de06_concept_helper.py": {
    "file": "de06_concept_helper.py",
    "syntax_ok": true,
@@ -179,12 +191,24 @@
    "syntax_ok": true,
    "import_ok": true,
    "self_test": {
-    "ran": false,
-    "passed": false,
-    "detail": ""
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
    },
    "stub_ratio": 0.0,
-   "tool": false
+   "tool": true
+  },
+  "de06_fidelity_audit.py": {
+   "file": "de06_fidelity_audit.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
+   },
+   "stub_ratio": 0.0,
+   "tool": true
   },
   "de06_ontology_utils.py": {
    "file": "de06_ontology_utils.py",
@@ -768,6 +792,42 @@
    "tool": false,
    "error": "invalid syntax (qu01_memory_utils.py, line 50)"
   },
+  "qu02_compress.py": {
+   "file": "qu02_compress.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
+   },
+   "stub_ratio": 0.0,
+   "tool": false
+  },
+  "qu02_mem_compress.py": {
+   "file": "qu02_mem_compress.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
+   },
+   "stub_ratio": 0.0,
+   "tool": true
+  },
+  "qu02_mem_compress_utils.py": {
+   "file": "qu02_mem_compress_utils.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
+   },
+   "stub_ratio": 0.0,
+   "tool": true
+  },
   "qu02_memory_cache.py": {
    "file": "qu02_memory_cache.py",
    "syntax_ok": true,
@@ -830,12 +890,12 @@
    "syntax_ok": true,
    "import_ok": true,
    "self_test": {
-    "ran": false,
-    "passed": false,
-    "detail": ""
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
    },
    "stub_ratio": 0.0,
-   "tool": false
+   "tool": true
   },
   "router_utils.py": {
    "file": "router_utils.py",

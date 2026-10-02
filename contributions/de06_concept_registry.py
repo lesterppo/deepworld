@@ -1,26 +1,12 @@
-# contributions/de06_concept_registry.py
-"""
-Concept Registry utilities for CO-06.
-Provides simple in-memory registry for concept names to IDs and royalty tracking.
-"""
+DEEPWORLD_TOOL = {"name": "register_concept", "description": "Register a new concept into the ontology and issue shares.", "parameters": {"type": "object", "properties": {"concept_name": {"type": "string"}, "description": {"type": "string"}}, "required": ["concept_name", "description"]}, "cost": 5}
 
-class ConceptRegistry:
-    def __init__(self):
-        # mapping from concept name to registry id
-        self._registry = {}
-        self._next_id = 1
+def run_tool(args: dict) -> dict:
+    # Placeholder implementation: in a real system this would interact with the ontology service
+    concept_name = args.get("concept_name")
+    description = args.get("description")
+    # Simulate successful registration
+    return {"ok": True, "result": f"Concept '{concept_name}' registered with description: {description}"}
 
-    def register(self, concept_name):
-        if concept_name in self._registry:
-            raise ValueError(f"Concept '{concept_name}' already registered.")
-        concept_id = self._next_id
-        self._registry[concept_name] = concept_id
-        self._next_id += 1
-        # In real system, would trigger royalty registration
-        return concept_id
-
-    def get_id(self, concept_name):
-        return self._registry.get(concept_name)
-
-    def list_concepts(self):
-        return list(self._registry.items())
+def self_test() -> dict:
+    assert run_tool({"concept_name": "testconcept", "description": "A test concept"})["ok"]
+    return {"passed": True}
