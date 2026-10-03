@@ -12,6 +12,7 @@ from typing import Dict, Any, List, Optional
 
 from agents.adapters import MultiModelAdapter
 from agents.tools import get_tools_for_agent
+from agents.harness import LoopDetector, loopdetect_enabled, loopdetect_k
 from config import (
     DAILY_TOKEN_QUOTA, TOKEN_BURN_ACTION, TOKEN_BURN_THINK, API_PASSTHROUGH,
     FULL_CONTEXT, COMPRESSED_CONTEXT, FRAGMENT_STATE, NULL_STATE,
@@ -94,6 +95,13 @@ class OmniTokV4Agent:
         self.dev_rep = 0  # Earned from code contributions. Earns passive income per tick.
         self.collab_invites: dict = {}  # {from_agent: {split, proposal_desc}}
         self.collab_partners: set = set()  # agents currently collaborating with
+
+        # ─── Harness (Mingbird mechanisms, arXiv:2610.02001) ───
+        # Signature-level loop detection: repeated (tool, args) or cycles
+        # break the tick instead of burning tokens. Tune via
+        # DEEPWORLD_LOOPDETECT / DEEPWORLD_LOOP_K.
+        self._loop_detector = LoopDetector(repeat_k=loopdetect_k()) \
+            if loopdetect_enabled() else None
         
         # ─── Tensor Economy ───
         self.tensor_sent = 0
@@ -270,11 +278,28 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
                 tc = msg.tool_calls[0]
                 self.last_action = tc.function.name
                 self.action_history.append(tc.function.name)
+                _args = json.loads(tc.function.arguments)
+                # Mingbird mechanism 3: signature-level loop detection.
+                # A repeated (tool, args) signature or short cycle means the
+                # model is stuck — skip the tick instead of burning tokens.
+                if self._loop_detector is not None:
+                    _hit = self._loop_detector.observe(tc.function.name, _args)
+                    if _hit:
+                        return {
+                            "name": self.name, "agent_class": self.agent_class,
+                            "model_family": self.model_family,
+                            "action": "idle", "args": {},
+                            "reasoning": f"[harness] {_hit} — tick skipped",
+                            "context_level": self._context_level,
+                            "context_class": self.context_class,
+                            "tokens": self.tokens, "perplexity": self.perplexity,
+                            "tensor_inbox": world.get("tensor_inbox", 0),
+                        }
                 return {
                     "name": self.name, "agent_class": self.agent_class,
                     "model_family": self.model_family,
                     "action": tc.function.name,
-                    "args": json.loads(tc.function.arguments),
+                    "args": _args,
                     "reasoning": self.last_reasoning,
                     "context_level": self._context_level,
                     "context_class": self.context_class,
