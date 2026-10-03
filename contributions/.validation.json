@@ -258,6 +258,18 @@
    "stub_ratio": 0.0,
    "tool": true
   },
+  "de06_register_entropy_concept.py": {
+   "file": "de06_register_entropy_concept.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": false,
+    "passed": false,
+    "detail": "    assert run_tool({})[\"ok\"], \"Entropy registration failed\";            ~~~~~~~~~~~~^^^^^^; AssertionError: Entropy registration failed"
+   },
+   "stub_ratio": 0.0,
+   "tool": true
+  },
   "de06_tensor_validator.py": {
    "file": "de06_tensor_validator.py",
    "syntax_ok": true,
@@ -650,6 +662,18 @@
    },
    "stub_ratio": 0.0,
    "tool": false
+  },
+  "pr03_adapter_demo.py": {
+   "file": "pr03_adapter_demo.py",
+   "syntax_ok": true,
+   "import_ok": true,
+   "self_test": {
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
+   },
+   "stub_ratio": 0.0,
+   "tool": true
   },
   "pr03_projection_adapter.py": {
    "file": "pr03_projection_adapter.py",
