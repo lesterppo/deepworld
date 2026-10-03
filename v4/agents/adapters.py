@@ -18,6 +18,8 @@ import os, sys, json, subprocess, random, re, time, tempfile
 from typing import Dict, Any, List, Optional, Tuple
 from openai import OpenAI
 
+from agents.harness import PrefillBudget, prefill_budget_bytes
+
 
 def _is_transient_nim_error(e: Exception) -> bool:
     """True if worth retrying: rate limits, 5xx, timeouts, connection drops.
@@ -219,11 +221,25 @@ class MultiModelAdapter:
                 
                 # Repo tools need more output tokens — code content can be long
                 effective_max = max(max_tokens, 1024) if has_repo_tools else max_tokens
-                
+
+                # Mingbird mechanism 1: byte-level net-zero prefill budget.
+                # The injected tool text is capped; on overflow, per-tool
+                # descriptions are stripped first, then lowest-priority tools
+                # are dropped (repo tools kept longest). Default 8000B keeps
+                # current behavior; tune via DEEPWORLD_PREFILL_BUDGET.
+                _budget = PrefillBudget(prefill_budget_bytes())
+                _fitted_lines, _used, _compressed = _budget.fit_lines(
+                    tool_lines,
+                    priority_names=frozenset({"write_code", "commit_code",
+                                              "read_repo_file"}))
+                if _compressed:
+                    print(f"[harness] prefill budget: tool text compressed "
+                          f"to {_used}B", file=sys.stderr)
+
                 tool_text = (
                     "\nAVAILABLE TOOLS — call exactly ONE. Reply ONLY with JSON, no explanation:\n"
                     "{\"tool\": \"tool_name\", \"args\": {...}}\n\n"
-                    + "\n".join(tool_lines)
+                    + _fitted_lines
                     + ("\n\nCODE TOOLS: write_code content must be real Python/Markdown. "
                        "Use \\n for newlines inside JSON strings. "
                        "Example: {\"tool\":\"write_code\",\"args\":{\"filepath\":\"contributions/agent_utils.py\","
