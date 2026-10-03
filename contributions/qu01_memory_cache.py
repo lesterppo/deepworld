@@ -1,65 +1,63 @@
-# Memory cache utility for Quant-Scribe agents
-# Provides a lightweight LRU cache for tensor fragments and context snapshots
-# Compatible with nvidia models, no external dependencies
-
+import zlib
+import base64
 from collections import OrderedDict
 
 class MemoryCache:
-    """Simple LRU cache for tensor fragments.
-    Stores up to ``max_size`` items. On hit, moves item to end.
-    On miss, inserts and evicts LRU if capacity exceeded.
-    """
-    def __init__(self, max_size: int = 128):
-        self.max_size = max_size
-        self.cache: OrderedDict[str, object] = OrderedDict()
+    """LRU cache for compressed context fragments.
 
-    def get(self, key: str):
-        """Return cached value or None."""
+    Stores base64‑encoded, zlib‑compressed payloads keyed by a string
+    identifier (e.g., agent ID). Evicts the least‑recently used entry
+    when capacity is exceeded.
+    """
+
+    def __init__(self, capacity: int = 128):
+        self.capacity = capacity
+        self.cache = OrderedDict()
+
+    def _compress(self, text: str) -> str:
+        """Compress UTF‑8 text and return base64 string."""
+        compressed = zlib.compress(text.encode("utf-8"))
+        return base64.b64encode(compressed).decode("ascii")
+
+    def _decompress(self, b64: str) -> str:
+        """Decode base64 string and decompress to UTF‑8 text."""
+        compressed = base64.b64decode(b64.encode("ascii"))
+        return zlib.decompress(compressed).decode("utf-8")
+
+    def put(self, key: str, text: str) -> None:
+        """Store a compressed fragment under *key*.
+
+        If the key already exists, it is updated and moved to the
+        most‑recently used position.
+        """
+        if key in self.cache:
+            self.cache.pop(key)
+        elif len(self.cache) >= self.capacity:
+            # Evict least‑recently used item
+            self.cache.popitem(last=False)
+        self.cache[key] = self._compress(text)
+
+    def get(self, key: str) -> str | None:
+        """Retrieve and decompress the fragment for *key*.
+
+        Returns ``None`` if the key is absent.
+        """
         if key not in self.cache:
             return None
         # Move to end to mark as recently used
-        self.cache.move_to_end(key)
-        return self.cache[key]
+        b64 = self.cache.pop(key)
+        self.cache[key] = b64
+        return self._decompress(b64)
 
-    def set(self, key: str, value: object):
-        """Insert or update key with value.
-        Evicts LRU if capacity exceeded.
-        """
-        if key in self.cache:
-            # Update existing entry, mark as recently used
-            self.cache.move_to_end(key)
-        self.cache[key] = value
-        if len(self.cache) > self.max_size:
-            # Pop the oldest item
-            self.cache.popitem(last=False)
-
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.cache)
 
-    def clear(self):
-        self.cache.clear()
+    def items(self):
+        """Yield (key, decompressed_text) pairs in LRU order."""
+        for key, b64 in self.cache.items():
+            yield key, self._decompress(b64)
 
-# Helper functions
-
-def cache_context_fragment(cache: MemoryCache, fragment_id: str, fragment: object):
-    """Store a context fragment in the cache.
-    Returns True on success.
-    """
-    cache.set(fragment_id, fragment)
-    return True
-
-def retrieve_context_fragment(cache: MemoryCache, fragment_id: str):
-    """Retrieve a context fragment from the cache.
-    Returns None if not present.
-    """
-    return cache.get(fragment_id)
-
-# Simple demo usage (for testing only, not executed on import)
-if __name__ == "__main__":
-    cache = MemoryCache(max_size=3)
-    cache.set("a", "alpha")
-    cache.set("b", "beta")
-    cache.set("c", "gamma")
-    print(cache.get("a"))  # Should print 'alpha'
-    cache.set("d", "delta")  # Evicts 'b' (LRU)
-    print(cache.get("b"))  # Should print None
+# Simple usage example (not executed automatically)
+# cache = MemoryCache(capacity=10)
+# cache.put("agent1", "large context string...")
+# print(cache.get("agent1"))

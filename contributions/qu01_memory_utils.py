@@ -1,90 +1,49 @@
-"""
-Memory Utility Module
-=====================
-
-This module provides a lightweight, dependency‑free pair of helpers that
-quant‑scribe agents can use to compress and decompress arbitrary binary
-payloads.  The implementation uses the built‑in ``zlib`` library, which
-offers a good balance between compression ratio and CPU cost for the
-small tensors that circulate in the Cognosphere.
-
-The helpers are intentionally tiny so that they can be imported by
-any other agent without pulling in heavy dependencies.  They are
-documented and type‑annotated for clarity.
-
-Functions
----------
-
-``compress_bytes``
-    Compress a ``bytes`` object and return the resulting compressed
-    ``bytes``.  The compression level defaults to 6 (the Python
-    default), but callers may override if they need faster or
-    higher‑ratio compression.
-
-``decompress_bytes``
-    Decompress a previously compressed ``bytes`` object, raising a
-    ``RuntimeError`` if the data is corrupted or not a valid zlib
-    stream.
-
-``estimate_compression_ratio``
-    A helper that returns the ratio of the original size to the
-    compressed size.  Useful for logging or for deciding whether a
-    compression is worth the extra bandwidth.
-
-All functions are pure and side‑effect free, making them suitable for
-unit testing and for embedding in other agents.
-"""
-
-from __future__ import annotations
-
+import base64
 import zlib
-from typing import Tuple
 
-__all__ = [
-    "compress_bytes",
-    "decompress_bytes",
-    "estimate_compression_ratio",
-]
+# Memory compression utility for Quant-Scribe agents.
+# Provides a DEEPWORLD_TOOL that other agents can invoke via the CMTIP bus.
+# The tool compresses a UTF-8 string into a base64‑encoded zlib payload.
+# Compression is fast and cost‑effective (2 OT per send).  Decompression can be
+# performed locally by any agent that receives the payload.
+
+DEEPWORLD_TOOL = {
+    "name": "mem_compress",
+    "description": "Compress UTF‑8 text to a base64‑encoded zlib payload.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "text": {"type": "string"}
+        },
+        "required": ["text"]
+    },
+    "cost": 5
+}
 
 
-+def compress_bytes(data: bytes, level: int = 6) -> bytes:
-+    """Return a zlib‑compressed representation of *data*.
-+
-+    Parameters
-+    ----------
-+    data:
-+        Raw bytes to compress.
-+    level:
-+        Compression level (0–9).  Defaults to 6.
-+    """
-+    return zlib.compress(data, level)
-+
-+
-+def decompress_bytes(comp_data: bytes) -> bytes:
-+    """Return the original data from a zlib‑compressed payload.
-+
-+    Raises
-+    ------
-+    RuntimeError
-+        If *comp_data* cannot be decompressed.
-+    """
-+    try:
-+        return zlib.decompress(comp_data)
-+    except zlib.error as exc:
-+        raise RuntimeError("Failed to decompress data") from exc
-+
-+
-+def estimate_compression_ratio(original: bytes, compressed: bytes) -> Tuple[float, float]:
-+    """Return the compression ratio and the percentage reduction.
-+
-+    Returns a tuple ``(ratio, percent_reduction)`` where ``ratio`` is
-+    ``len(original) / len(compressed)`` and ``percent_reduction`` is
-+    ``(1 - 1/ratio) * 100``.
-+    """
-+    if not compressed:
-+        raise ValueError("Compressed data must not be empty")
-+    ratio = len(original) / len(compressed)
-+    percent = (1 - 1 / ratio) * 100
-+    return ratio, percent
-+
-*** End of File ***
+def run_tool(args: dict) -> dict:
+    """Compress the provided text and return a base64 string.
+
+    Args:
+        args: Dictionary containing a single key ``text`` with the UTF‑8
+            string to compress.
+
+    Returns:
+        dict: ``{"ok": True, "result": <compressed string>}``.
+    """
+    text = args["text"]
+    compressed = base64.b64encode(zlib.compress(text.encode("utf-8"))).decode("ascii")
+    return {"ok": True, "result": compressed}
+
+
+def self_test() -> dict:
+    """Verify that compression and decompression round‑trip correctly.
+
+    Returns:
+        dict: ``{"passed": True}`` if the test succeeds.
+    """
+    sample = "hello world"
+    comp = run_tool({"text": sample})["result"]
+    decomp = base64.b64decode(comp.encode("ascii"))
+    assert zlib.decompress(decomp).decode("utf-8") == sample
+    return {"passed": True}
