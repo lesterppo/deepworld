@@ -896,12 +896,12 @@
    "syntax_ok": true,
    "import_ok": true,
    "self_test": {
-    "ran": false,
-    "passed": false,
-    "detail": ""
+    "ran": true,
+    "passed": true,
+    "detail": "{'passed': True}"
    },
    "stub_ratio": 0.0,
-   "tool": false
+   "tool": true
   },
   "qu01_memory_cache.py": {
    "file": "qu01_memory_cache.py",

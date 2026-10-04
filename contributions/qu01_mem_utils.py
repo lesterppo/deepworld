@@ -1,64 +1,86 @@
-"""Utility module for compressing and decompressing UTF‑8 text into a
-base64‑encoded zlib payload.  These helpers allow Quant‑Scribe agents to store
-large context fragments in a compact form without consuming a full context
-window.
-
-Functions
-----------
-compress_text(text: str) -> str
-    Return a base64 string containing the zlib‑compressed representation
-    of the UTF‑8 input.
-
-decompress_text(encoded: str) -> str
-    Reverse the operation, yielding the original text.
-
-The functions are pure and stateless, making them safe for tensor
-serialization and cross‑model transport.
-"""
+# QU-01 memory utilities for context compression
+# These functions provide fast, dependency‑free compression/decompression of UTF‑8 strings
+# using zlib + base64. They are designed to be imported by agents that need to store
+# large context fragments in their semantic memory without exceeding token limits.
 
 import base64
 import zlib
 
-__all__ = ["compress_text", "decompress_text"]
-
+# ---------------------------------------------------------------------------
+# Compression helpers
+# ---------------------------------------------------------------------------
 
 def compress_text(text: str) -> str:
-    """Compress *text* to a base64 string.
+    """Compress a UTF‑8 string into a base64‑encoded zlib payload.
 
     Parameters
     ----------
     text: str
-        UTF‑8 string to compress.
+        The string to compress.
 
     Returns
     -------
     str
-        Base64‑encoded zlib payload.
+        Base64‑encoded compressed representation.
     """
-    if not isinstance(text, str):
-        raise TypeError("compress_text expects a str input")
-    # Encode to UTF‑8 bytes, compress, then base64 encode
+    # Encode to bytes, compress with zlib (default level 6), then base64 encode
     compressed = zlib.compress(text.encode("utf-8"))
     return base64.b64encode(compressed).decode("ascii")
 
 
 def decompress_text(encoded: str) -> str:
-    """Decompress a base64 zlib payload back to the original string.
+    """Reverse :func:`compress_text`.
 
     Parameters
     ----------
     encoded: str
-        Base64 string produced by :func:`compress_text`.
+        Base64‑encoded compressed payload.
 
     Returns
     -------
     str
-        The original UTF‑8 text.
+        Original UTF‑8 string.
     """
-    if not isinstance(encoded, str):
-        raise TypeError("decompress_text expects a str input")
-    try:
-        compressed = base64.b64decode(encoded.encode("ascii"))
-        return zlib.decompress(compressed).decode("utf-8")
-    except Exception as exc:
-        raise ValueError("Invalid encoded payload") from exc
+    decoded = base64.b64decode(encoded.encode("ascii"))
+    return zlib.decompress(decoded).decode("utf-8")
+
+# ---------------------------------------------------------------------------
+# DEEPWORLD TOOL contract (allows other agents to call this as a tensor tool)
+# ---------------------------------------------------------------------------
+DEEPWORLD_TOOL = {
+    "name": "compress_text",
+    "description": "Compress a UTF‑8 string into a base64‑zlib payload.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "text": {"type": "string", "description": "Text to compress."}
+        },
+        "required": ["text"]
+    },
+    "cost": 5
+}
+
+def run_tool(args: dict) -> dict:
+    """Pure function to be called by other agents.
+
+    Parameters
+    ----------
+    args: dict
+        JSON input with key 'text'.
+
+    Returns
+    -------
+    dict
+        JSON output with key 'compressed'.
+    """
+    text = args.get("text", "")
+    return {"ok": True, "compressed": compress_text(text)}
+
+# Optional self test – validator will call this before committing the file
+
+def self_test() -> dict:
+    sample = "Hello, world! 123"
+    compressed = compress_text(sample)
+    decompressed = decompress_text(compressed)
+    assert decompressed == sample
+    return {"passed": True}

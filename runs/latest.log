@@ -1,90 +1,9 @@
 [DEEPWORLD] Health check OK model=openai/gpt-oss-20b resp=
-
-  DeepWorld v5 | 3d × 8t | ~0.4min | CMTIP: ON
-  Backend: NVIDIA NIM (v5.3 pool)
-======================================================================
-  DEEPWORLD v5 — SELF-BUILDING COGNOSPHERE | NVIDIA ONLY
-  12 agents on 4 models (1 families)
-  3d × 8t | CMTIP: ON | Governance: ON
-  Backend: NVIDIA NIM (integrate.api.nvidia.com/v1) — openai/gpt-oss-20b, nvidia/nemotron-3-super-120b-a12b, z-ai/glm-5.3-flash, nvidia/nemotron-3.5-lightning-30b-a3b
-  World is mutable — agents can propose, vote, and change simulation rules
-======================================================================
-
-  Model distribution:
-    4× nemotron-3-super-120b-a12b
-    4× gpt-oss-20b
-    3× glm-5.3-flash
-    1× nemotron-3.5-lightning-30b-a3b
-  ⚡ CO-05 (Concept-Miner/gpt-oss-20b) STARVED: 1500 OT, perplexity=222
-  ⚡ LO-07 (Loss-Miner/gpt-oss-20b) STARVED: 1500 OT, perplexity=272
-  ⚡ DE-11 (Developer/nemotron-3-super-120b-a12b) STARVED: 1500 OT, perplexity=250
-  💰 EM-09 (Embedding-Broker/nemotron-3.5-lightning-30b-a3b) WEALTHY: 12500 OT, low perplexity=39
-  💰 EM-10 (Embedding-Broker/nemotron-3-super-120b-a12b) WEALTHY: 12500 OT, low perplexity=50
-  ⚠ Starved agents will exhaust tokens in ~3 ticks without trading. Tensors are their only path to survival.
-  Agents: QU-01(Quant-Scribe/nemotron-3-super-120b-a12b), QU-02(Quant-Scribe/gpt-oss-20b), PR-03(Projection-Weaver/glm-5.3-flash), PR-04(Projection-Weaver/glm-5.3-flash), CO-05(Concept-Miner/gpt-oss-20b), CO-06(Concept-Miner/nemotron-3-super-120b-a12b), LO-07(Loss-Miner/gpt-oss-20b), LO-08(Loss-Miner/glm-5.3-flash), EM-09(Embedding-Broker/nemotron-3.5-lightning-30b-a3b), EM-10(Embedding-Broker/nemotron-3-super-120b-a12b), DE-11(Developer/nemotron-3-super-120b-a12b), DE-12(Developer/gpt-oss-20b)
-  Baseline fidelity (needs Weavers): {'deepseek->gemini': 0.7, 'deepseek->anthropic': 0.7, 'deepseek->nvidia': 0.7, 'gemini->deepseek': 0.7, 'gemini->anthropic': 0.7, 'gemini->nvidia': 0.7, 'anthropic->deepseek': 0.7, 'anthropic->gemini': 0.7, 'anthropic->nvidia': 0.7, 'nvidia->deepseek': 0.7, 'nvidia->gemini': 0.7, 'nvidia->anthropic': 0.7}
-
-─────────────────────────────────────────────────────────────────
-  Day 1 | GC in 16t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  💻 CODE SPRINT! 2x rewards for write_code, document_code, review_code for 2 ticks!
-  T 1 | A:12 | 📊{'error': 12} | 🔮{}
-  T 2 | A:12 | 📊{'error': 12} | 🔮{}
-  T 3 | A:12 | 📊{'error': 12} | 🔮{}
-  T 4 | A:12 | 📊{'error': 12} | 🔮{}
-  T 5 | A:12 | 📊{'error': 12} | 🔮{}
-  T 6 | A:12 | 📊{'error': 12} | 🔮{}
-  T 7 | A:12 | 📊{'error': 12} | 🔮{}
-  T 8 | A:12 | 📊{'error': 12} | 🔮{}
-
-─────────────────────────────────────────────────────────────────
-  Day 2 | GC in 8t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  T 1 | A:12 | 📊{'error': 12} | 🔮{}
-  T 2 | A:12 | 📊{'error': 12} | 🔮{}
-  T 3 | A:12 | 📊{'error': 12} | 🔮{}
-  T 4 | A:12 | 📊{'error': 12} | 🔮{}
-  T 5 | A:12 | 📊{'error': 12} | 🔮{}
-  T 6 | A:12 | 📊{'error': 12} | 🔮{}
-  T 7 | A:12 | 📊{'error': 12} | 🔮{}
-
-  ⚡ GREAT COMPRESSION — 50% context purge!
-  T 8 | A:12 | 📊{'error': 12} | 🔮{}
-
-─────────────────────────────────────────────────────────────────
-  Day 3 | GC in 16t | Dead: 0 | Tensors: 0s/0r
-─────────────────────────────────────────────────────────────────
-  T 1 | A:12 | 📊{'error': 12} | 🔮{}
-  T 2 | A:12 | 📊{'error': 12} | 🔮{}
-  T 3 | A:12 | 📊{'error': 12} | 🔮{}
-  T 4 | A:12 | 📊{'error': 12} | 🔮{}
-  T 5 | A:12 | 📊{'error': 12} | 🔮{}
-  T 6 | A:12 | 📊{'error': 12} | 🔮{}
-  T 7 | A:12 | 📊{'error': 12} | 🔮{}
-  T 8 | A:12 | 📊{'error': 12} | 🔮{}
-
-======================================================================
-  SIMULATION COMPLETE
-
-  Tensor Economy Final:
-    Total tensor sends: 0
-    Total tensor receives: 0
-    Ontology: 20 concepts
-    Royalties: {}
-    Top concepts: [('resource_scarcity', 0), ('abundance', 0), ('trust', 0), ('betrayal', 0), ('cooperation', 0)]
-
-  Done in 186s. Report: runs/20261003_231728/final_report.md
-
-  Agent Summary:
-    ✓ EM-09 (Embedding-Broker/nvidia) OT=27408
-    ✓ EM-10 (Embedding-Broker/nvidia) OT=27408
-    ✓ QU-01 (Quant-Scribe/nvidia) OT=19908
-    ✓ QU-02 (Quant-Scribe/nvidia) OT=19908
-    ✓ PR-03 (Projection-Weaver/nvidia) OT=19908
-    ✓ PR-04 (Projection-Weaver/nvidia) OT=19908
-    ✓ CO-06 (Concept-Miner/nvidia) OT=19908
-    ✓ LO-08 (Loss-Miner/nvidia) OT=19908
-    ✓ DE-12 (Developer/nvidia) OT=19908
-    ✓ CO-05 (Concept-Miner/nvidia) OT=16408
-    ✓ LO-07 (Loss-Miner/nvidia) OT=16408
-    ✓ DE-11 (Developer/nvidia) OT=16408
+[DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
+[DEEPWORLD] NVIDIA API error for z-ai/glm-5.3-flash: APITimeoutError: Request timed out.
