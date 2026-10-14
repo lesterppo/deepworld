@@ -13,6 +13,18 @@ from typing import Dict, Any, List, Optional
 from agents.adapters import MultiModelAdapter
 from agents.tools import get_tools_for_agent
 from agents.harness import LoopDetector, loopdetect_enabled, loopdetect_k
+try:
+    from agents.rated_retrieval import (
+        DiscountedLinUCB, rerank_hybrid, execution_reward, cosine_topk,
+    )
+    _RATED_AVAILABLE = True
+except Exception:  # RATED must never break the sim if the module is missing
+    _RATED_AVAILABLE = False
+try:
+    from agents.competence_orch import CompetenceTracker, select_mode
+    _COMP_AVAILABLE = True
+except Exception:  # competence must never break the sim if missing
+    _COMP_AVAILABLE = False
 from config import (
     DAILY_TOKEN_QUOTA, TOKEN_BURN_ACTION, TOKEN_BURN_THINK, API_PASSTHROUGH,
     FULL_CONTEXT, COMPRESSED_CONTEXT, FRAGMENT_STATE, NULL_STATE,
@@ -102,6 +114,32 @@ class OmniTokV4Agent:
         # DEEPWORLD_LOOPDETECT / DEEPWORLD_LOOP_K.
         self._loop_detector = LoopDetector(repeat_k=loopdetect_k()) \
             if loopdetect_enabled() else None
+
+        # ─── RATED reliability-aware tool retrieval (arXiv:2610.13889) ───
+        # Vendored mechanism in agents/rated_retrieval.py. Before prompt
+        # injection, the tool list is re-ranked by the hybrid
+        # semantic+reliability score; a per-agent discounted-LinUCB bandit
+        # learns online from execution outcomes (paper defaults:
+        # success +1 / picked-a-failing-tool -2). Disable with
+        # DEEPWORLD_RATED=0.
+        self._rated_enabled = _RATED_AVAILABLE and \
+            os.environ.get("DEEPWORLD_RATED", "1") == "1"
+        self._rated_bandit = None
+        self._rated_tool_ids: Dict[str, int] = {}
+        self._rated_tool_vecs: Dict[str, Any] = {}
+        self._rated_embedder = None
+        self._rated_pending = None  # stashed by act() for the update step
+
+        # ─── Competence-aware orchestration (arXiv:2610.13144) ───
+        # Vendored mechanism in agents/competence_orch.py. Before the LLM
+        # call, the tick's task type is estimated from the agent class and
+        # the prompt is adapted to the competence mode (solo: unchanged;
+        # pair: +verifier instruction; deliberate: +planning-budget note).
+        # Outcomes feed the EWMA tracker via apply_effects. Disable with
+        # DEEPWORLD_COMPETENCE=0.
+        self._comp_enabled = _COMP_AVAILABLE and \
+            os.environ.get("DEEPWORLD_COMPETENCE", "1") == "1"
+        self._comp_tracker = None  # lazy CompetenceTracker
         
         # ─── Tensor Economy ───
         self.tensor_sent = 0
@@ -224,6 +262,186 @@ DECIDE: Your action. Remember your class role, your model family, and the tensor
 
 CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and read_repo_file to explore the repo, then write_code to contribute. CODE SPRINT active = {world.get('code_sprint', False)} (2x rewards when active)."""
 
+    # ─── RATED (arXiv:2610.13889) helpers ───
+    def _rated_embed_backend(self):
+        if self._rated_embedder is None:
+            from agents.real_backends import SentenceTransformerBackend
+            self._rated_embedder = SentenceTransformerBackend(self.model_family)
+        return self._rated_embedder
+
+    def _rated_tool_id(self, tool_name: str) -> int:
+        """Stable per-tool bandit arm id, warm-started from static reliability."""
+        tid = self._rated_tool_ids.get(tool_name)
+        if tid is None:
+            tid = len(self._rated_tool_ids)
+            self._rated_tool_ids[tool_name] = tid
+            if self._rated_bandit is not None:
+                self._rated_bandit.initialize(tid, 0.75)  # paper default
+        return tid
+
+    def _rated_rerank_tools(self, tools: List[Dict[str, Any]],
+                            query_text: str) -> List[Dict[str, Any]]:
+        """Re-rank tools by the RATED hybrid score before prompt injection.
+
+        Frozen semantic stage (cosine over tool name+description) re-ranked
+        by 0.75*semantic + 0.10*static + 0.15*bandit. All tools are kept —
+        only the order changes, so the action space is untouched. The
+        (context, scores) needed for the online update are stashed for
+        apply_effects. Never raises: on any problem the original order
+        is returned.
+        """
+        if not getattr(self, "_rated_enabled", False) or not tools:
+            return tools
+        try:
+            import numpy as np
+            emb = self._rated_embed_backend()
+            q = np.asarray(emb.embed(query_text or ""), dtype=float)
+            dim = int(q.shape[0])
+            if self._rated_bandit is None or self._rated_bandit.dim != dim:
+                self._rated_bandit = DiscountedLinUCB(dim)
+                for _nm, _tid in self._rated_tool_ids.items():
+                    self._rated_bandit.initialize(_tid, 0.75)
+            names, vecs = [], []
+            for t in tools:
+                fn = t.get("function", {}) if isinstance(t, dict) else {}
+                nm = fn.get("name", "?")
+                names.append(nm)
+                v = self._rated_tool_vecs.get(nm)
+                if v is None or np.asarray(v).shape[0] != dim:
+                    v = np.asarray(
+                        emb.embed(nm + ": " + str(fn.get("description", ""))),
+                        dtype=float)
+                    self._rated_tool_vecs[nm] = v
+                vecs.append(v)
+            M = np.stack(vecs)
+            idx, sem = cosine_topk(q, M, len(names))  # idx: tool positions
+            arm_ids = np.array([self._rated_tool_id(names[int(p)])
+                                for p in idx])
+            sorted_arms, _ = rerank_hybrid(arm_ids, sem, self._rated_bandit, q)
+            arm_to_pos = {int(a): int(p) for p, a in zip(idx, arm_ids)}
+            ranked = [tools[arm_to_pos[int(a)]] for a in sorted_arms]
+            self._rated_pending = {
+                "q": q,
+                "sem": {names[int(p)]: float(s)
+                        for p, s in zip(idx, sem)},
+            }
+            return ranked
+        except Exception:
+            return tools
+
+    def _rated_observe(self, tool_name: str, success: bool) -> None:
+        """Online bandit update from a tool execution outcome.
+
+        success=True: dispatch completed without exception.
+        success=False: the picked tool raised during execution
+        (paper's "picked a failing tool", reward -2). Non-tool actions
+        (idle/dead/error) are not learned from. Never raises.
+        """
+        if not getattr(self, "_rated_enabled", False):
+            return
+        pend, self._rated_pending = self._rated_pending, None
+        if not pend or self._rated_bandit is None:
+            return
+        if tool_name in ("idle", "dead", "error", "", None):
+            return
+        try:
+            tid = self._rated_tool_ids.get(tool_name)
+            if tid is None:
+                return
+            sem = float(pend["sem"].get(tool_name, 0.0))
+            reward = execution_reward(sem, 0.75, success,
+                                      picked_failed_tool=not success)
+            self._rated_bandit.update(tid, pend["q"], reward)
+        except Exception:
+            pass
+
+    def rated_stats(self) -> Dict[str, Any]:
+        """Debug view of the agent's RATED bandit state."""
+        return {
+            "enabled": bool(getattr(self, "_rated_enabled", False)),
+            "n_tools": len(self._rated_tool_ids),
+            "n_arms": self._rated_bandit.n_arms
+            if self._rated_bandit is not None else 0,
+        }
+
+    # ─── Competence-aware orchestration (arXiv:2610.13144) helpers ───
+    _COMP_TASK_BY_CLASS = {
+        "Developer": "code",
+        "Quant-Scribe": "memory",
+        "Concept-Miner": "memory",
+        "Loss-Miner": "nav",
+        "Projection-Weaver": "nav",
+        "Embedding-Broker": "nav",
+    }
+
+    def _comp_task_type(self) -> str:
+        """Tick task type approximated from the agent class."""
+        return self._COMP_TASK_BY_CLASS.get(self.agent_class, "nav")
+
+    def _comp_tracker_lazy(self):
+        if self._comp_tracker is None:
+            try:
+                self._comp_tracker = CompetenceTracker()
+            except Exception:
+                return None
+        return self._comp_tracker
+
+    def _comp_adapt_prompt(self, system: str) -> str:
+        """Adapt the system prompt to the competence mode (paper stage 2).
+
+        solo (est >= 0.85): prompt unchanged; pair: +verifier instruction;
+        deliberate: +planning-budget note. Never raises.
+        """
+        if not getattr(self, "_comp_enabled", False):
+            return system
+        try:
+            tracker = self._comp_tracker_lazy()
+            if tracker is None:
+                return system
+            task_type = self._comp_task_type()
+            est = tracker.estimate(self.name, task_type)
+            mode = select_mode(est)
+            if mode == "pair":
+                system += (
+                    "\n\n[COMPETENCE-ORCHESTRATION: estimated competence "
+                    f"for {task_type} tasks is {est:.2f} (medium). After "
+                    "choosing your tool call, briefly verify the arguments "
+                    "are valid and the action serves your class role before "
+                    "finalizing.]")
+            elif mode == "deliberate":
+                system += (
+                    "\n\n[COMPETENCE-ORCHESTRATION: estimated competence "
+                    f"for {task_type} tasks is {est:.2f} (low). Think step by "
+                    "step: consider 2-3 candidate actions, weigh their token "
+                    "costs and likely effects, then commit to the best one.]")
+            return system
+        except Exception:
+            return system
+
+    def _comp_observe(self, tool_name: str, success: bool) -> None:
+        """Feed a tool execution outcome into the competence tracker."""
+        if not getattr(self, "_comp_enabled", False):
+            return
+        if tool_name in ("idle", "dead", "error", "", None):
+            return
+        try:
+            tracker = self._comp_tracker_lazy()
+            if tracker is None:
+                return
+            tracker.observe(self.name, self._comp_task_type(), bool(success))
+        except Exception:
+            pass
+
+    def competence_stats(self) -> Dict[str, Any]:
+        """Debug view of the agent's competence tracker state."""
+        tracker = self._comp_tracker
+        return {
+            "enabled": bool(getattr(self, "_comp_enabled", False)),
+            "task_type": self._comp_task_type(),
+            "estimate": tracker.estimate(self.name, self._comp_task_type())
+            if tracker is not None else None,
+        }
+
     def act(self, world: Dict[str, Any], cmtip_bridge=None) -> Dict[str, Any]:
         if not self.alive:
             return {"name": self.name, "action": "dead", "reasoning": "Null-State"}
@@ -239,6 +457,9 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
             return {"name": self.name, "action": "dead", "reasoning": "Token exhaustion"}
         
         system = self._build_system_prompt(world)
+        # Competence-aware orchestration (arXiv:2610.13144): adapt the prompt
+        # to the estimated competence mode before the LLM call.
+        system = self._comp_adapt_prompt(system)
         near_dead = len(world.get("dead_agents", [])) > 0
         tools = get_tools_for_agent(self.agent_class, self._context_level,
                                      self.model_family, near_dead)
@@ -256,6 +477,13 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
             "Developer": f"View git log → read source → write patch → test → commit. REPO: {total_contribs} contribs.{sprint_hint}",
         }
         urgency = urgencies.get(self.agent_class, "")
+        
+        # RATED (arXiv:2610.13889): reliability-aware re-rank of the tool
+        # list before prompt injection. Order only — the action space is
+        # unchanged. Disable with DEEPWORLD_RATED=0.
+        tick_prompt = (f"Tick {world.get('tick')}. Model: {self.model_family}. "
+                       f"GC in {world.get('gc_in','?')}t. {urgency}")
+        tools = self._rated_rerank_tools(tools, tick_prompt)
         
         try:
             from agents.adapters import MultiModelAdapter
@@ -324,6 +552,27 @@ CODE CONTRIBUTIONS: Code is the most profitable action. Use view_repo_files and 
 
     def apply_effects(self, action: Dict[str, Any], engine: Any,
                       cmtip_bridge=None) -> Dict[str, Any]:
+        """RATED-observing wrapper around the tool dispatch.
+
+        Records each execution outcome into the agent's reliability bandit
+        (arXiv:2610.13889): clean dispatch -> success reward, exception ->
+        "picked a failing tool" penalty. Exceptions propagate unchanged, so
+        the engine's graceful-degradation behavior is identical.
+        """
+        name = action.get("action", "idle") if isinstance(action, dict) else "idle"
+        try:
+            fx = self._apply_effects_inner(action, engine, cmtip_bridge)
+        except Exception:
+            self._rated_observe(name, success=False)
+            self._comp_observe(name, success=False)
+            raise
+        ok = name not in ("idle", "dead", "error", "", None)
+        self._rated_observe(name, success=ok)
+        self._comp_observe(name, success=ok)
+        return fx
+
+    def _apply_effects_inner(self, action: Dict[str, Any], engine: Any,
+                             cmtip_bridge=None) -> Dict[str, Any]:
         """Apply action effects with v4 tensor-native mechanics."""
         name = action.get("action", "idle")
         args = action.get("args", {})
